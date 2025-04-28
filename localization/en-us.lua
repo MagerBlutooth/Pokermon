@@ -2380,6 +2380,7 @@ return {
 					"{C:mult}+#2# mult{} for each {C:clubs}Club{} in your deck",
 					"{C:inactive}(Currently #3#)"
                 } 
+            },
             j_poke_heracross = {
                 name = 'Heracross',
                 text = {
