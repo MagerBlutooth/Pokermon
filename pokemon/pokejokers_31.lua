@@ -1,4 +1,62 @@
 -- Ursaluna 901
+local ursaluna={
+  name = "ursaluna",
+  pos = {x = 2, y = 8},
+  config = {extra = {card_limit = 2, club_mod = 1, clubs_in_deck = 0}},
+  loc_vars = function(self, info_queue, center)
+    type_tooltip(self, info_queue, center)
+	center.ability.extra.clubs_in_deck = 0
+	if center.area == G.jokers and G.playing_cards and #G.playing_cards > 0 then
+		for k, v in pairs(G.playing_cards) do
+			if v.base.suit == 'Clubs' then
+				center.ability.extra.clubs_in_deck = center.ability.extra.clubs_in_deck + 1
+			end
+		end
+	end
+    return {vars = {center.ability.extra.card_limit, center.ability.extra.club_mod, center.ability.extra.clubs_in_deck}}
+  end,
+  rarity = "poke_safari",
+  cost = 12,
+  stage = "Two",
+  ptype = "Earth",
+  atlas = "Pokedex8",
+  perishable_compat = true,
+  blueprint_compat = true,
+  eternal_compat = true,
+  calculate = function(self, card, context)
+    if context.before and G.GAME.current_round.hands_played == 0 then
+		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("poke_ursaluna_ex")})
+		for k, v in pairs(context.scoring_hand) do
+			if v.base.suit ~= 'Clubs' then 
+               v:change_suit('Clubs')
+			end
+		end
+		card.ability.extra.clubs_in_deck = 0
+		for k, v in pairs(G.playing_cards) do
+			if v.base.suit == 'Clubs' then
+				card.ability.extra.clubs_in_deck = card.ability.extra.clubs_in_deck + 1
+			end
+		end
+	end
+	if context.cardarea == G.jokers and context.scoring_hand and context.joker_main then
+	  return {
+		message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.club_mod * card.ability.extra.clubs_in_deck}}, 
+		  colour = G.C.MULT,
+		  mult_mod = card.ability.extra.club_mod * card.ability.extra.clubs_in_deck
+	  }
+	end
+  end,
+  add_to_deck = function(self, card, from_debuff)
+    G.E_MANAGER:add_event(Event({func = function()
+      G.consumeables.config.card_limit = G.consumeables.config.card_limit - card.ability.extra.card_limit
+      return true end }))
+  end,
+  remove_from_deck = function(self, card, from_debuff)
+    G.E_MANAGER:add_event(Event({func = function()
+      G.consumeables.config.card_limit = G.consumeables.config.card_limit + card.ability.extra.card_limit
+      return true end }))
+  end, 
+}
 -- Basculegion 902
 -- Sneasler 903
 -- Overqwil 904
@@ -363,5 +421,5 @@ local dachsbun={
 -- Dolliv 929
 -- Arboliva 930
 return {name = "Pokemon Jokers 901-930", 
-        list = {tarountula, spidops, fidough, dachsbun},
+        list = {ursaluna, tarountula, spidops, fidough, dachsbun},
 }

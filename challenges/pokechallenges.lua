@@ -245,7 +245,188 @@ local hammertime = {
     },
 }
 
+local bunnelby_test = {
+    object_type = "Challenge",
+    key = "bunnelby_test",
+    rules = {
+        modifiers = {
+            {id = 'joker_slots', value = 5},
+			{id = 'discards', value = 2},
+        }
+    },
+    jokers = {
+      {id = "j_poke_bunnelby", eternal = true},
+    },
+    restrictions = {
+        banned_cards = {
+        },
+        banned_tags = {
+        },
+        banned_other = {
+        },
+    },
+    deck = {
+      type = 'Challenge Deck',
+    },
+}
+
+local wailmer_test = {
+    object_type = "Challenge",
+    key = "wailmer_test",
+    rules = {
+        modifiers = {
+            {id = 'joker_slots', value = 5},
+        }
+    },
+    jokers = {
+      {id = "j_poke_wailmer", eternal = true},
+    },
+    restrictions = {
+        banned_cards = {
+        },
+        banned_tags = {
+        },
+        banned_other = {
+        },
+    },
+    deck = {
+      type = 'Challenge Deck',
+    },
+}
+
+local kecleon_test = {
+    object_type = "Challenge",
+    key = "kecleon_test",
+    rules = {
+        modifiers = {
+            {id = 'joker_slots', value = 5},
+			{id = 'dollars', value = 100}
+        }
+    },
+    jokers = {
+      {id = "j_poke_kecleon", eternal = true},
+	  {id = "j_poke_wailord", eternal = false},
+    },
+    restrictions = {
+        banned_cards = {
+        },
+        banned_tags = {
+        },
+        banned_other = {
+        },
+    },
+    deck = {
+      type = 'Challenge Deck',
+    },
+}
+
+local wimpod_test = {
+    object_type = "Challenge",
+    key = "wimpod_test",
+    rules = {
+        modifiers = {
+            {id = 'joker_slots', value = 5},
+        }
+    },
+    jokers = {
+      {id = "j_poke_wimpod", eternal = false},
+    },
+    restrictions = {
+        banned_cards = {
+        },
+        banned_tags = {
+        },
+        banned_other = {
+        },
+    },
+    deck = {
+      type = 'Challenge Deck',
+    },
+}
+
+local sawk_throh = {
+    object_type = "Challenge",
+    key = "sawk_throh",
+    rules = {
+        modifiers = {
+            {id = 'joker_slots', value = 3},
+			{id = 'discards', value = 2}
+        }
+    },
+    jokers = {
+      {id = "j_poke_sawk", eternal = true},
+	  {id = "j_poke_psyduck", eternal = true},
+	  {id = "j_poke_throh", eternal = true},
+    },
+    restrictions = {
+        banned_cards = {
+        },
+        banned_tags = {
+		{id = 'tag_negative'},
+        },
+        banned_other = {
+        },
+    },
+    deck = {
+      type = 'Challenge Deck',
+    },
+}
+
+local teddy_bear = {
+    object_type = "Challenge",
+    key = "teddy_bear",
+    rules = {
+        modifiers = {
+            {id = 'joker_slots', value = 5},
+			{id = 'discards', value = 2},
+        }
+    },
+    jokers = {
+      {id = "j_poke_teddiursa", eternal = true},
+    },
+	consumeables = {
+		{id = 'c_moon'},
+	},
+    restrictions = {
+        banned_cards = {
+        },
+        banned_tags = {
+        },
+        banned_other = {
+        },
+    },
+    deck = {
+      type = 'Challenge Deck',
+    },
+}
+
+local furfrou = {
+    object_type = "Challenge",
+    key = "furfrou",
+    rules = {
+        modifiers = {
+            {id = 'joker_slots', value = 5},
+			{id = 'discards', value = 2},
+        }
+    },
+    jokers = {
+      {id = "j_poke_furfrou", eternal = true},
+    },
+	consumeables = {
+	},
+    restrictions = {
+        banned_cards = {
+        },
+        banned_tags = {
+        },
+        banned_other = {
+        },
+    },
+    deck = {
+      type = 'Challenge Deck',
+    },
+}
 
 return {name = "Challenges", 
-        list = {nuzlocke, goodasgold, parenthood, littlecup, hammertime}
+        list = {nuzlocke, goodasgold, parenthood, littlecup, hammertime, bunnelby_test, wailmer_test, kecleon_test, wimpod_test, sawk_throh, teddy_bear, furfrou}
 }

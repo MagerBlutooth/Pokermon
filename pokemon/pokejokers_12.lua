@@ -82,6 +82,82 @@ local milotic={
 }
 -- Castform 351
 -- Kecleon 352
+-- Minor bug causes Kecleon to proc automatically the first time after purchased, if there is a Joker of a different color.
+-- Possibly specific to challenges since you can automatically start with Jokers. It might not identify there are two at the time you take it.
+local kecleon={
+  name = "kecleon",
+  pos = {x = 3, y = 10},
+  config = {extra = {mult_gain = 2, mult = 0, joker_tally = (G.jokers and #G.jokers or 0), latest_type = "Colorless"}},
+  loc_vars = function(self, info_queue, center)
+    type_tooltip(self, info_queue, center)
+    return {vars = {center.ability.extra.mult_gain, center.ability.extra.mult}}
+  end,
+  rarity = 3,
+  cost = 8,
+  stage = "Basic",
+  ptype = "Colorless",
+  atlas = "Pokedex3",
+  perishable_compat = true,
+  blueprint_compat = false,
+  eternal_compat = true,
+  calculate = function(self, card, context)
+    if context.cardarea == G.jokers and context.scoring_hand then
+      if context.joker_main then
+        return {
+          message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.mult}}, 
+          colour = G.C.MULT,
+          mult_mod = card.ability.extra.mult
+        }
+      end
+    end
+
+	--Update Kecleon if a new Joker is obtained for any reason
+	if #G.jokers.cards > card.ability.extra.joker_tally then
+		local newest_joker = G.jokers.cards[#G.jokers.cards]
+		if has_type(newest_joker) and not is_type(card, newest_joker.ability.extra.ptype) then
+			apply_type_sticker(card, newest_joker.ability.extra.ptype)
+			card.ability.extra.joker_tally = #G.jokers.cards
+		end
+	elseif #G.jokers.cards < card.ability.extra.joker_tally then
+		card.ability.extra.joker_tally = #G.jokers.cards
+	end
+	  
+  -- --Increase Kecleon's mult if it changes type for any reason
+  if not is_type(card, card.ability.extra.latest_type) then
+	card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
+	card.ability.extra.latest_type = get_type(card)
+	card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('poke_kecleon_ex'), colour = G.C.FILTER})
+	card:juice_up()
+	--Set sprite depending on type
+		if is_type(card, "Dark") then
+		  card.children.center:set_sprite_pos({x = 0, y = 16})
+		elseif is_type(card, "Dragon") then
+		  card.children.center:set_sprite_pos({x = 1, y = 16})
+		elseif is_type(card, "Earth") then
+		  card.children.center:set_sprite_pos({x = 2, y = 16})
+		elseif is_type(card, "Fairy") then
+		  card.children.center:set_sprite_pos({x = 3, y = 16})
+		elseif is_type(card, "Fighting") then
+		  card.children.center:set_sprite_pos({x = 4, y = 16})
+		elseif is_type(card, "Fire") then
+		  card.children.center:set_sprite_pos({x = 5, y = 16})
+		elseif is_type(card, "Grass") then
+		  card.children.center:set_sprite_pos({x = 6, y = 16})
+		elseif is_type(card, "Lightning") then
+		  card.children.center:set_sprite_pos({x = 0, y = 17})
+		elseif is_type(card, "Metal") then
+		  card.children.center:set_sprite_pos({x = 1, y = 17})
+		elseif is_type(card, "Psychic") then
+		  card.children.center:set_sprite_pos({x = 2, y = 17})
+		elseif is_type(card, "Water") then
+		  card.children.center:set_sprite_pos({x = 3, y = 17})
+		else
+		  card.children.center:set_sprite_pos({x = 3, y = 10})
+		end
+	end
+  end
+}
+
 -- Shuppet 353
 -- Banette 354
 -- Duskull 355
@@ -131,5 +207,5 @@ local wynaut={
   end,
 }
 return {name = "Pokemon Jokers 331-360", 
-        list = {feebas, milotic, wynaut},
+        list = {feebas, milotic, kecleon, wynaut},
 }

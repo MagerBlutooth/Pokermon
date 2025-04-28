@@ -140,7 +140,83 @@ local aggron = {
 -- Carvanha 318
 -- Sharpedo 319
 -- Wailmer 320
+local wailmer = {
+  name = "wailmer",
+  pos = { x = 8, y = 6 },
+  config = { extra = { mult = 3, hands_played = 0}, evo_rqmt = 15},
+  rarity = 2,
+  cost = 6,
+  stage = "Basic",
+  atlas = "Pokedex3",
+  ptype = "Water",
+  blueprint_compat = true,
+  loc_vars = function(self, info_queue, center)
+    type_tooltip(self, info_queue, center)
+	info_queue[#info_queue+1] = {set = 'Other', key = 'rank'}
+	local hands_left = math.max(0, self.config.evo_rqmt - center.ability.extra.hands_played)
+	local rank = get_poker_hand_rank(get_largest_poker_hand_name())
+    return { vars = { center.ability.extra.mult*rank, hands_left, center.ability.extra.mult, get_largest_poker_hand_name()} }
+  end,
+  calculate = function(self, card, context)
+    if context.before then
+		if get_poker_hand_rank(context.scoring_name) == get_poker_hand_rank(get_largest_poker_hand_name()) then
+			if card.ability.extra.rank  ~= get_poker_hand_rank(context.scoring_name) then
+				card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex')})
+			end	
+		end
+	end
+    if context.cardarea == G.jokers and context.scoring_hand then
+      local rank = get_poker_hand_rank(get_largest_poker_hand_name())
+		if context.joker_main and get_poker_hand_rank(context.scoring_name) == rank then
+			card.ability.extra.hands_played = card.ability.extra.hands_played + 1
+			  return {
+				message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.extra.mult*rank } },
+				colour = G.C.MULT,
+				mult_mod = card.ability.extra.mult*rank
+			  }
+		end
+    end
+    return scaling_evo(self, card, context, "j_poke_wailord", card.ability.extra.hands_played, self.config.evo_rqmt)
+  end
+}
 -- Wailord 321
+local wailord = {
+  name = "wailord",
+  pos = { x = 9, y = 6 },
+  config = { extra = { mult = 4, Xmult = 0.2}},
+  rarity = 2,
+  cost = 6,
+  stage = "Basic",
+  atlas = "Pokedex3",
+  ptype = "Water",
+  blueprint_compat = true,
+  loc_vars = function(self, info_queue, center)
+    type_tooltip(self, info_queue, center)
+	info_queue[#info_queue+1] = {set = 'Other', key = 'rank'}
+	local rank = get_poker_hand_rank(get_largest_poker_hand_name())
+    return { vars = { rank*center.ability.extra.mult, 1+center.ability.extra.Xmult*rank, center.ability.extra.mult, center.ability.extra.Xmult, get_largest_poker_hand_name()} }
+  end,
+  calculate = function(self, card, context)
+    if context.before then
+		if get_poker_hand_rank(context.scoring_name) == get_poker_hand_rank(get_largest_poker_hand_name()) then
+			if card.ability.extra.rank  ~= get_poker_hand_rank(context.scoring_name) then
+				card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex')})
+			end	
+		end
+	end
+	if context.cardarea == G.jokers and context.scoring_hand then
+	local rank = get_poker_hand_rank(get_largest_poker_hand_name())
+		if context.joker_main and get_poker_hand_rank(context.scoring_name) == rank then
+			  return {
+				message = localize("poke_wailmer_ex"), 
+				colour = G.C.XMULT,
+				mult_mod = card.ability.extra.mult*rank,
+				Xmult_mod = 1+card.ability.extra.Xmult*rank
+			  }
+		 end
+    end
+  end
+}
 -- Numel 322
 -- Camerupt 323
 -- Torkoal 324
@@ -152,5 +228,5 @@ local aggron = {
 -- Flygon 330
 return {
   name = "Pokemon Jokers 301-330",
-  list = {aron, lairon, aggron},
+  list = {aron, lairon, aggron, wailmer,wailord},
 }

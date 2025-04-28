@@ -50,6 +50,7 @@ family = {
     {"goldeen","seaking"},
     {"staryu","starmie"},
     {"scyther", "scizor"},
+	  {"teddiursa", "ursaring","ursaluna"},
     {"mimejr", "mrmime"},
     {"tauros", "taurosh"},
     {"kangaskhan", "mega_kangaskhan"},
@@ -101,6 +102,7 @@ family = {
     {"zigzagoon", "linoone"},
     {"shroomish", "breloom"},
     {"aron","lairon","aggron"},
+	  {"wailmer","wailord"},
     {"buizel", "floatzel"},
     {"gothita", "gothorita", "gothitelle"},
     {"vanillite", "vanillish", "vanilluxe"},
@@ -113,8 +115,10 @@ family = {
     {"roggenrola", "boldore", "gigalith"},
     {"zorua", "zoroark"},
     {"deino", "zweilous", "hydreigon"},
+	  {"bunnelby", "diggersby"},
     {"litleo", "pyroar"},
     {"grubbin", "charjabug", "vikavolt"},
+	  {"wimpod", "golisopod"},
     {"dreepy", "drakloak", "dragapult", "dreepy_dart"},
     {"hisuian_qwilfish", "overqwil"},
     {"yamper","boltund"},
@@ -125,6 +129,7 @@ family = {
     {"gimmighoul", "gholdengo", "gimmighoulr"},
   --{{key = "oricorio", form = "Hearts"}, {key = "oricorio", form = "Clubs"}, {key = "oricorio", form = "Diamonds"}, {key = "oricorio", form = "Spades"}},
     {{key = "rival", form = 0},{key = "rival", form = 1},{key = "rival", form = 2}},
+	  {{key = "furfrou", form = 0},{key = "furfrou", form = 1},{key = "furfrou", form = 2},{key = "furfrou", form = 3},{key = "furfrou", form = 4},{key = "furfrou", form = 5},{key = "furfrou", form = 6},{key = "furfrou", form = 7},{key = "furfrou", form = 8},{key = "furfrou", form = 9}}
 }
 
 extended_family = {
@@ -515,6 +520,24 @@ deck_seal_evo = function (self, card, context, forced_key, seal, percentage, fla
   end
 end
 
+deck_out_evo = function (self, card, context, forced_key, will_evolve)
+  if card.debuff then return end
+  if can_evolve(self, card, context, forced_key) and will_evolve then
+	return {
+	  message = poke_evolve(card, forced_key)
+	}
+	end
+end
+
+carry_mult_evo = function (self, card, context, forced_key, old_mult, will_evolve)
+  if card.debuff then return end
+  if can_evolve(self, card, context, forced_key) and will_evolve then
+	return {
+	  message = poke_evolve(card, forced_key)
+	}
+	end
+end
+
 get_highest_evo = function(card)
   local name = nil
   local found = nil
@@ -894,6 +917,51 @@ apply_type_sticker = function(card, sticker_type)
       }, true)
     end
   end
+end
+
+get_largest_poker_hand_name = function()
+	local largest_rank = 1
+	local largest_hand_name = 'High Card'
+	if G.GAME then
+		for k, v in pairs(G.GAME.hands) do
+			if v.played > 0 and get_poker_hand_rank(k) > largest_rank then
+				largest_rank = get_poker_hand_rank(k)
+				largest_hand_name = k
+			end
+		end
+	end
+	return largest_hand_name
+end
+
+
+get_poker_hand_rank = function(hand_name)
+	local rank = 1
+	if hand_name == 'High Card' then
+		rank = 1
+	elseif hand_name == 'Pair' then
+		rank = 2
+	elseif hand_name == 'Two Pair' then
+		rank = 3
+	elseif hand_name == 'Three of a Kind' then
+		rank = 4
+	elseif hand_name == 'Straight' then
+		rank = 5
+	elseif hand_name == 'Flush' then
+		rank = 6
+	elseif hand_name== 'Full House' then
+		rank = 7
+	elseif hand_name == 'Four of a Kind' then
+		rank = 8
+	elseif hand_name == 'Straight Flush' then
+		rank = 9
+	elseif hand_name == 'Five of a Kind' then
+		rank = 10
+	elseif hand_name == 'Flush House' then
+		rank = 11
+	elseif hand_name == 'Flush Five' then
+		rank = 12
+	end
+	return rank
 end
 
 get_random_poke_key = function(pseed, stage, pokerarity, area, poketype, exclude_keys)

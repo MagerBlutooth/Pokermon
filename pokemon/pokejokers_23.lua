@@ -100,6 +100,138 @@ local pyroar={
 -- Pancham 674
 -- Pangoro 675
 -- Furfrou 676
+local furfrou={
+  name = "furfrou",
+  pos = {x = 12, y = 1},
+  config = {extra = {mult = 0, mult_mod = 0, form = 0}},
+  loc_vars = function(self, info_queue, center)
+    type_tooltip(self, info_queue, center)
+	info_queue[#info_queue+1] = {set = 'Other', key = 'trim'}
+	local alt_key = nil
+	if center.ability.extra.form == 1 then
+      alt_key = "j_poke_furfrou_heart"
+	  center.ability.extra.mult_mod = 1
+    elseif center.ability.extra.form == 2 then
+      alt_key = "j_poke_furfrou_star"
+	  center.ability.extra.mult_mod = 1
+	elseif center.ability.extra.form == 3 then
+      alt_key = "j_poke_furfrou_diamond"
+	  center.ability.extra.mult_mod = 1
+	elseif center.ability.extra.form == 4 then
+	  alt_key = "j_poke_furfrou_debutante"
+	  center.ability.extra.mult_mod = 1
+	elseif center.ability.extra.form == 5 then
+	  alt_key = "j_poke_furfrou_dandy"
+	  center.ability.extra.mult_mod = 3
+	elseif center.ability.extra.form == 6 then
+	  alt_key = "j_poke_furfrou_matron"
+	  center.ability.extra.mult_mod = 3
+	elseif center.ability.extra.form == 7 then
+	  alt_key = "j_poke_furfrou_pharaoh"
+	  center.ability.extra.mult_mod = 1
+	elseif center.ability.extra.form == 8 then
+	  alt_key = "j_poke_furfrou_kabuki"
+	  center.ability.extra.mult_mod = 4
+	elseif center.ability.extra.form == 9 then
+	  alt_key = "j_poke_furfrou_lareine"
+	  center.ability.extra.mult_mod = 3
+    end
+    return {vars = {center.ability.extra.mult, center.ability.extra.mult_mod}, key = alt_key}
+  end,
+  rarity = 3,
+  cost = 8,
+  stage = "Basic",
+  ptype = "Colorless",
+  atlas = "Pokedex6",
+  perishable_compat = true,
+  blueprint_compat = true,
+  eternal_compat = true,
+  calculate = function(self, card, context)
+	if context.setting_blind and card.ability.extra.form == 0 then
+		local furfrou_form = pseudorandom('fform')
+		card.ability.extra.form = math.ceil(furfrou_form * 9)
+		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('poke_furfrou_ex'), colour = G.C.FILTER})
+		card:juice_up()
+		
+		--Change Trim
+		if card.ability and card.ability.extra and card.ability.extra.form == 1 then --Heart Form
+		  card.children.center:set_sprite_pos({x = 1, y = 7})
+		elseif card.ability and card.ability.extra and card.ability.extra.form == 2 then --Star Form
+		  card.children.center:set_sprite_pos({x = 3, y = 7})
+		elseif card.ability and card.ability.extra and card.ability.extra.form == 3 then --Diamond Form
+		  card.children.center:set_sprite_pos({x = 4, y = 7})
+		elseif card.ability and card.ability.extra and card.ability.extra.form == 4 then --Debutante Form
+		  card.children.center:set_sprite_pos({x = 5, y = 7})
+		elseif card.ability and card.ability.extra and card.ability.extra.form == 5 then --Dandy Form
+		  card.children.center:set_sprite_pos({x = 7, y = 7})
+		elseif card.ability and card.ability.extra and card.ability.extra.form == 6 then --Matron Form
+		  card.children.center:set_sprite_pos({x = 6, y = 7})
+		elseif card.ability and card.ability.extra and card.ability.extra.form == 7 then --Pharaoh Form
+		  card.children.center:set_sprite_pos({x = 2, y = 7})
+		elseif card.ability and card.ability.extra and card.ability.extra.form == 8 then --Kabuki Form
+		  card.children.center:set_sprite_pos({x = 8, y = 7})
+		elseif card.ability and card.ability.extra and card.ability.extra.form == 9 then --La Reine Form
+		  card.children.center:set_sprite_pos({x = 9, y = 7})
+		end
+	end
+		
+	--Heart, Star, Diamond, and Debutante Effects
+	if context.before and card.ability.extra.form <= 4 then
+		local suit = nil
+			if card.ability.extra.form == 1 then
+				suit = 'Hearts'
+			elseif card.ability.extra.form == 2 then
+				suit = 'Clubs'
+			elseif card.ability.extra.form == 3 then
+				suit = 'Diamonds'
+			elseif card.ability.extra.form == 4 then
+				suit = 'Spades'
+			end
+			for i = 1, #context.scoring_hand do
+				   if context.scoring_hand[i]:is_suit(suit, true) then
+						card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
+						card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("k_upgrade_ex")})
+						break
+				   end
+			end
+	end
+	--Matron, La Reine, and Dandy Effects
+	if context.using_consumeable and context.consumeable and context.consumeable.ability then
+      if card.ability.extra.form == 9 and context.consumeable.ability.set == 'Planet' then
+		card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
+		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("k_upgrade_ex")})
+	  elseif card.ability.extra.form == 6 and context.consumeable.ability.set == 'Tarot' then
+		card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
+		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("k_upgrade_ex")})
+	  elseif card.ability.extra.form == 5 and (context.consumeable.ability.set == 'Item' or context.consumeable.ability.set == 'Energy') then
+		card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
+		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("k_upgrade_ex")})
+	  end
+	end
+	--Kabuki and Pharaoh Effects
+	if context.playing_card_added and card.ability.extra.form == 8 then
+		card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
+		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("k_upgrade_ex")})
+	end
+	if context.selling_card and card.ability.extra.form == 7 then
+		card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
+		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("k_upgrade_ex")})
+	end
+    if context.cardarea == G.jokers and context.scoring_hand and context.joker_main then
+		  return {
+			message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.mult}}, 
+			colour = G.C.MULT,
+			mult_mod = card.ability.extra.mult
+		  }
+	end
+	if context.end_of_round and G.GAME.blind.boss and card.ability.extra.form ~= 0 and not context.game_over then
+		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('poke_furfrou_revert_ex'), colour = G.C.FILTER})
+		card:juice_up()
+		card.ability.extra.form = 0
+		card.children.center:set_sprite_pos({x = 12, y = 1})
+	end
+  end
+}
 -- Espurr 677
 -- Meowstic 678
 -- Honedge 679
@@ -115,5 +247,5 @@ local pyroar={
 -- Barbaracle 689
 -- Skrelp 690
 return {name = "Pokemon Jokers 661-690", 
-        list = {litleo, pyroar},
+        list = {litleo, pyroar, furfrou},
 }

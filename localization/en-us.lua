@@ -2320,6 +2320,33 @@ return {
                     "{C:inactive}(Currently {C:mult}+#1#{} {C:inactive}Mult, {C:chips}+#2#{} {C:inactive}Chips, {X:red,C:white}X#3#{} {C:inactive}Mult)"
                 } 
             },
+			j_poke_teddiursa = {
+                name = 'Teddiursa',
+                text = {
+                    "When you play a hand, destroy your leftmost",
+					"consumable and this gains {C:mult}+#2# Mult.",
+					"{C:inactive}(Evolves at {C:mult}+#1#/{C:inactive}#3# Mult)"
+                } 
+            },
+			j_poke_ursaring = {
+                name = 'Ursaring',
+                text = {
+                    "When you play a hand, destroy your leftmost",
+					"consumable and this gains {C:mult}+#2# Mult.",
+					"{C:inactive}(Currently {C:mult}+#1# Mult)",
+					"{C:inactive}(Evolves after this Joker destroys a Moon card)"
+                } 
+            },
+			j_poke_ursaluna = {
+                name = 'Ursaluna',
+                text = {
+					"{C:attention}-#1#{} consumable slots",
+                    "Your first played hand each round converts",
+					"all scoring cards into {C:clubs}Clubs{}.",
+					"{C:mult}+#2# mult{} for each {C:clubs}Club{} in your deck",
+					"{C:inactive}(Currently #3#)"
+                } 
+            },
             j_poke_corsola = {
               name = 'Corsola',
               text = {
@@ -2644,6 +2671,22 @@ return {
                     "{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive} Mult)"
                 }
             },
+			j_poke_wailmer = {
+                name = 'Wailmer',
+                text = {
+                    "{C:mult}+#1#{} Mult if playing a {C:attention}#4#{}",
+					"{C:inactive,s:0.8}(Always the largest played poker hand. Mult increased by {C:mult}+#3#{} {C:inactive,s:0.8}per {C:attention}rank{})",
+					"{C:inactive,s:0.8}(Evolves after triggering {C:attention,s:0.8}#2#{C:inactive,s:0.8} times)"
+                }
+            },
+			j_poke_wailord = {
+                name = 'Wailord',
+                text = {
+                    "{C:mult}+#1#{} Mult and {X:mult,C:white}X#2#{} Mult if playing a {C:attention}#5#{}",
+					"{C:inactive,s:0.8}(Always the largest played poker hand)",
+					"{C:inactive,s:0.8}(Mult increased by {C:mult}+#3#{} {C:inactive,s:0.8}and Xmult increased by {C:mult}+#4#{} {C:inactive,s:0.8}per {C:attention}rank{}{C:inactive,s:0.8})"
+                }
+            },
             j_poke_feebas = {
                 name = 'Feebas',
                 text = {
@@ -2666,6 +2709,15 @@ return {
                     "Create a {C:attention}Fool{} card with",
                     "{C:dark_edition}Negative{} at end of round",
                     "{C:inactive,s:0.8}(Evolves after {C:attention,s:0.8}#2#{C:inactive,s:0.8} rounds)",
+                }
+            },
+			j_poke_kecleon = {
+                name = 'Kecleon',
+                text = {
+                    "When you gain a joker,",
+                    "this changes to the same type. When this joker",
+                    "changes type, it gains {C:mult}+#1#{} Mult",
+                    "{C:inactive,s:0.8}(Currently {C:attention,s:0.8}#+2#{C:inactive,s:0.8})"
                 }
             },
             j_poke_snorunt = {
@@ -3044,6 +3096,24 @@ return {
                     "gives {C:mult}+#3#{} Mult and retriggers",
                 }
             },
+			j_poke_throh = {
+                name = "Throh",
+                text = {
+                    "Gains {C:mult}+#2# mult{} each time you discard",
+					"{C:inactive} (Currently {C:mult}+#1#{} mult)",
+					"{C:attention}(Volatile Left)",
+					"{C:mult}-#3#{} mult and {C:mult}+#4# discard",
+                }
+            },
+			j_poke_sawk = {
+                name = "Sawk",
+                text = {
+                    "Gains {C:chips}+#2# chips{} each time you play a hand",
+					"{C:inactive} (Currently {C:chips}+#1#{} chips)",
+					"{C:attention}(Volatile Right)",
+					"{C:chips}-#3#{} chips and {C:chips}+#4# hand",
+                }
+            },
             j_poke_zorua = {
                 name = "Zorua",
                 text = {
@@ -3209,6 +3279,25 @@ return {
                   "{C:inactive,s:0.8}(Evolves after triggering {C:attention,s:0.8}#2#{C:inactive,s:0.8} Times){}"
                 }
             },
+			j_poke_bunnelby = {
+                name = "Bunnelby",
+                text = {
+                    "{C:attention}+#1#{} hand size",
+                    "Discard your remaining hand after",
+					"each played hand or discard",
+					"{C:inactive,s:0.8}(Evolves after emptying your deck {C:attention,s:0.8}#2#{C:inactive,s:0.8} times)"
+                }
+            },
+			j_poke_diggersby = {
+                name = "Diggersby",
+                text = {
+                    "{C:attention}+#1#{} hand size",
+                    "Discard your remaining hand after",
+					"each played hand or discard.",
+					"Gains {X:mult,C:white}X#2#{} Mult each time your deck is emptied.",
+					"{C:inactive}(Currently {X:mult,C:white}X#3#{}{C:inactive} Mult, {C:attention,s:0.8}#4#{C:inactive,s:0.8} times){}"
+                }
+            },
             j_poke_litleo = {
                 name = "Litleo",
                 text = {
@@ -3224,6 +3313,86 @@ return {
                     "{br:2}ERROR - CONTACT STEAK",
                     "Create an {C:pink}Energy{} card if it",
                     "also contains a {C:attention}King{} or {C:attention}Queen{}"
+                } 
+            },
+			j_poke_furfrou = {
+                name = "Furfrou",
+                text = {
+                    "When {C:attention}Blind{} is selected, this Joker",
+					"gains a random {C:attention}Trim",
+					"{C:inactive}(Currently {C:mult}+#1#{} Mult)"
+                } 
+            },
+			j_poke_furfrou_heart = {
+                name = "Furfrou (Heart Trim)",
+                text = {
+                    "When you play a hand with a {C:hearts}Heart{} suit,",
+					"this Joker gains {C:mult}+#2#{} Mult",
+					"{C:inactive}(Currently {C:mult}+#1#{} Mult)"
+                } 
+            },
+			j_poke_furfrou_pharaoh = {
+                name = "Furfrou (Pharaoh Trim)",
+                text = {
+                    "When you sell a card,",
+					"this Joker gains {C:mult}+#2#{} Mult",
+					"{C:inactive}(Currently {C:mult}+#1#{} Mult)"
+                } 
+            },
+			j_poke_furfrou_star = {
+                name = "Furfrou (Star Trim)",
+                text = {
+                    "When you play a hand with a scoring {C:clubs}Club{} suit,",
+					"this Joker gains {C:mult}+#2#{} Mult",
+					"{C:inactive}(Currently {C:mult}+#1#{} Mult)"
+                } 
+            },
+			j_poke_furfrou_diamond = {
+                name = "Furfrou (Diamond Trim)",
+                text = {
+                    "When you play a hand with a scoring {C:diamonds}Diamond{} suit,",
+					"this Joker gains {C:mult}+#2#{} Mult",
+					"{C:inactive}(Currently {C:mult}+#1#{} Mult)"
+                } 
+            },
+			j_poke_furfrou_debutante = {
+                name = "Furfrou (Debutante Trim)",
+                text = {
+                     "When you play a hand with a scoring {C:spades}Spade{} suit,",
+					"this Joker gains {C:mult}+#2#{} Mult",
+					"{C:inactive}(Currently {C:mult}+#1#{} Mult)"
+                } 
+            },
+			j_poke_furfrou_matron = {
+                name = "Furfrou (Matron Trim)",
+                text = {
+                    "When you play a {C:tarot}Tarot{} card",
+					"this Joker gains {C:mult}+#2#{} Mult",
+					"{C:inactive}(Currently {C:mult}+#1#{} Mult)"
+                } 
+            },
+			j_poke_furfrou_dandy = {
+                name = "Furfrou (Dandy Trim)",
+                text = {
+                    "When you play an {C:item}Item{} or {C:energy}Energy{} card",
+					"this Joker gains {C:mult}+#2#{} Mult",
+					"{C:inactive}(Currently {C:mult}+#1#{} Mult)"
+                } 
+            },
+			j_poke_furfrou_kabuki = {
+                name = "Furfrou (Kabuki Trim)",
+                text = {
+                    "When you add a card to your deck",
+					"this Joker gains {C:mult}+#2#{} Mult",
+					"{C:inactive}(Currently {C:mult}+#1#{} Mult)"
+                } 
+            },
+			j_poke_furfrou_lareine = {
+                name = "Furfrou (La Reine Trim)",
+                text = {
+                    "When you play a {C:planet}Planet{} card",
+					"this Joker gains {C:mult}+#2#{} Mult",
+					"{C:inactive}(Currently {C:mult}+#1#{} Mult)"
                 } 
             },
             j_poke_sylveon = {
@@ -3261,6 +3430,22 @@ return {
                     "{X:red,C:white} X#1# {} Mult for each other",
                     "{X:lightning, C:black}Lightning{} Joker you have",
                     "{C:inactive}(Currently {X:red,C:white} X#2# {C:inactive} Mult)",
+                }
+            },
+			j_poke_wimpod = {
+                name = "Wimpod",
+                text = {
+                  "{C:chips}+#1#{} Chips",
+                  "Self-destructs when using your final hand or discard",
+				  "{C:inactive,s:0.8}(Must use at least two hands/discards to trigger)",
+				  "{C:inactive,s:0.8}(Evolves after {C:attention,s:0.8}#2#{C:inactive,s:0.8} rounds)",
+                }
+            },
+			j_poke_golisopod = {
+                name = "Golisopod",
+                text = {
+                  "{C:mult}+#1#{} Mult",
+                  "Debuffed when using your final hand or discard",
                 }
             },
             j_poke_mimikyu = {
@@ -4034,6 +4219,29 @@ return {
                     "Joker, {C:attention}debuff{} this Joker"
                 }
             },
+			least_played = {
+                name = "Least Played",
+                text = {
+                    "The poker hand which has", 
+					"been played the least",
+                    "and has been played", 
+					"at least once",
+                }
+            },
+			rank = {
+                name = "Rank",
+                text = {
+                    "Poker hand ranks listed in",
+					"Run Info in ascending order"
+                }
+            },
+			trim = {
+                name = "Trim",
+                text = {
+                    "Refers to Furfrou's current form",
+					"Resets after each boss blind"
+                }
+            },
             nature = {
                 name = "Nature",
                 text = {
@@ -4474,7 +4682,14 @@ return {
             c_poke_goodasgold = "Good As Gold",
             c_poke_parenthood = "Parenthood",
             c_poke_littlecup = "Little Cup",
-            c_poke_hammertime = "Hammertime"
+            c_poke_hammertime = "Hammertime",
+			c_poke_bunnelby_test = "Dig",
+			c_poke_wailmer_test = "Whale",
+			c_poke_kecleon_test = "Color",
+			c_poke_wimpod_test = "Don't Wimp Out",
+			c_poke_sawk_throh = "Sawk and Throh",
+			c_poke_teddy_bear = "Teddy Bear",
+			c_poke_furfrou = "Best In Show"
         },
         dictionary = {
             k_energy = "Energy",
@@ -4568,11 +4783,27 @@ return {
             poke_x_scissor = "X Scissor",
             --From Kingdra
             poke_twister_ex = "Twister!",
-            --From Mime Jr.
+            --From Wailmer
+			poke_wailmer_ex = "Water Spout!",
+			--From Kecleon
+			poke_kecleon_ex = "Color Change!",
+			--From Mime Jr.
             poke_mime_ex = "Mime!",
             --From Magmortar
             poke_fire_blast_ex = "Fire Blast!",
+			--From Bunnelby
+			poke_bunnelby_ex = "Dig!",
+			--From Throh and Sawk
+			poke_throh_ex = "Superpower!",
+			poke_sawk_ex = "Close Combat!",
             --From Vikavolt
+			--From Wimpod Line
+			poke_wimpod_ex = "Wimp Out!",
+			poke_golisopod_ex = "Emergency Exit!",
+			poke_ursaring_ex = "Full Moon!",
+			poke_ursaluna_ex = "Moonblast!",
+			poke_furfrou_ex = "Trim!",
+			poke_furfrou_revert_ex = "Revert!",
             --If it's not 100% accurate...
             poke_thunder_ex = "Thunder!",
             poke_gift_ex = "Present!",

@@ -141,7 +141,86 @@ local scizor={
 -- Heracross 214
 -- Sneasel 215
 -- Teddiursa 216
+local teddiursa={
+  name = "teddiursa",
+  pos = {x = 4, y = 6},
+  config = {extra = {mult = 0, mult_mod = 1}, evo_rqmt = 8},
+  loc_vars = function(self, info_queue, center)
+    type_tooltip(self, info_queue, center)
+    return {vars = {center.ability.extra.mult, center.ability.extra.mult_mod, self.config.evo_rqmt}}
+  end,
+  rarity = 2,
+  cost = 4,
+  stage = "Basic",
+  ptype = "Colorless",
+  atlas = "Pokedex2",
+  perishable_compat = true,
+  blueprint_compat = true,
+  eternal_compat = true,
+  calculate = function(self, card, context)
+	if context.before and G.consumeables and G.consumeables.cards and #G.consumeables.cards > 0 then
+		card:juice_up()
+		local eaten_card = G.consumeables.cards[1]
+		card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
+		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("k_upgrade_ex")})
+		eaten_card.getting_sliced = true
+		eaten_card:start_dissolve({HEX("57ecab")}, nil, 1.6)
+		play_sound('slice1', 0.96+math.random()*0.08)
+	end
+    if context.cardarea == G.jokers and context.scoring_hand and context.joker_main then
+		  return {
+			message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.mult}}, 
+			  colour = G.C.MULT,
+			  mult_mod = card.ability.extra.mult
+		  }
+	end
+    return scaling_evo(self, card, context, "j_poke_ursaring", card.ability.extra.mult, self.config.evo_rqmt)
+  end
+}
 -- Ursaring 217
+local ursaring={
+  name = "ursaring",
+  pos = {x = 5, y = 6},
+  config = {extra = {mult = 0, mult_mod = 3, destroyed_moon = false}},
+  loc_vars = function(self, info_queue, center)
+    type_tooltip(self, info_queue, center)
+    return {vars = {center.ability.extra.mult, center.ability.extra.mult_mod}}
+  end,
+  rarity = 3,
+  cost = 8,
+  stage = "One",
+  ptype = "Colorless",
+  atlas = "Pokedex2",
+  perishable_compat = true,
+  blueprint_compat = true,
+  eternal_compat = true,
+  calculate = function(self, card, context)
+    if context.before and G.consumeables and G.consumeables.cards and #G.consumeables.cards > 0 then
+		card:juice_up()
+		local eaten_card = G.consumeables.cards[1]
+		if G.consumeables.cards[1].ability.name == 'The Moon' then
+			card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("poke_ursaring_ex")})
+			local eval = function(card) return not card.REMOVED and not G.RESET_JIGGLES end
+			juice_card_until(card, eval, true)
+			card.ability.extra.destroyed_moon = true
+		else
+			card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("k_upgrade_ex")})
+		end
+		card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
+		eaten_card.getting_sliced = true
+		eaten_card:start_dissolve({HEX("57ecab")}, nil, 1.6)
+		play_sound('slice1', 0.96+math.random()*0.08)
+	end
+    if context.cardarea == G.jokers and context.scoring_hand and context.joker_main then
+		  return {
+			message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.mult}}, 
+			  colour = G.C.MULT,
+			  mult_mod = card.ability.extra.mult
+		  }
+	end
+	return deck_out_evo(self, card, context, "j_poke_ursaluna", card.ability.extra.destroyed_moon)
+  end,
+}
 -- Slugma 218
 -- Magcargo 219
 -- Swinub 220
@@ -1027,5 +1106,5 @@ local magby={
   end
 }
 return {name = "Pokemon Jokers 211-240", 
-        list = {qwilfish, scizor, corsola, remoraid, octillery, delibird, mantine, skarmory, kingdra, phanpy, donphan, porygon2, stantler, smeargle, tyrogue, hitmontop, smoochum, elekid, magby},
+        list = {qwilfish, scizor, teddiursa, ursaring, corsola, remoraid, octillery, delibird, mantine, skarmory, kingdra, phanpy, donphan, porygon2, stantler, smeargle, tyrogue, hitmontop, smoochum, elekid, magby},
 }

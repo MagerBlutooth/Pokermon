@@ -527,6 +527,7 @@ if pokermon_config.pokemon_aprilfools then
   }
 else
   return {name = "Other Jokers",
-        list = {pokedex, everstone, tall_grass, jelly_donut, treasure_eatery, mystery_egg, rival}
+        --list = {pokedex, everstone, tall_grass, jelly_donut, treasure_eatery, mystery_egg, rival}
+		list = {tall_grass, mystery_egg}
   }
 end
