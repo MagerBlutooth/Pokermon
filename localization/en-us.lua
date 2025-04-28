@@ -1389,9 +1389,9 @@ return {
             j_poke_kingler = {
                 name = 'Kingler',      
                 text = {
-                    "All played unenhanced {C:attention}face{} cards",
-                    "become {C:attention}Bonus{} cards and give",
-                    "{C:chips}+#1#{} Chips when scored",
+                    "All played {C:attention}face{} cards give",
+                    "{C:chips}+#1#{} Chips when scored and become",
+                    "{C:attention}Bonus{} cards if unenhanced",
                 } 
             },
             j_poke_voltorb = {
@@ -2133,7 +2133,7 @@ return {
             j_poke_xatu = {
                 name = 'Xatu',
                 text = {
-                    "{C:planet}Planet{} cards give {C:attention}#1#{} extra level",
+                    "{C:planet}Planet{} cards give an extra level",
                     "{C:planet}Celestial Packs{} contain every {C:planet}Planet{} card",
                 }
             },
@@ -2193,6 +2193,23 @@ return {
                     "{C:attention}+#1#{} hand size",
                     "All {C:attention}discarded cards{} become {C:dark_edition}Wild{}",
                     "{S:1.1,C:red,E:2}self destructs{} on discard",
+                }
+            },
+            j_poke_sunkern = {
+                name = 'Sunkern',
+                text = {
+                    "Earn {C:money}$#1#{} when {C:attention}Blind{} is selected",
+                    "and when hand is {C:attention}played{}",
+                    "{C:inactive,s:0.8}(Evolves with a {C:attention,s:0.8}Sun Stone{C:inactive,s:0.8})"
+                }
+            },
+            j_poke_sunflora = {
+                name = 'Sunflora',
+                text = {
+                    "Earn {C:money}$#1#{} when {C:attention}Blind{} is selected,",
+                    "hand is {C:attention}played{}, hand is {C:attention}discarded{},",
+                    "consumable is {C:attention}used{}, card is {C:attention}sold{},",
+                    "and at end of round"
                 }
             },
             j_poke_espeon = {
@@ -2298,6 +2315,23 @@ return {
                     "{C:attention}Stone{} cards {C:attention}held in hand{} become {C:attention}Steel{}"
                 } 
             },
+            j_poke_snubbull = {
+                name = 'Snubbull',
+                text = {
+                    "First played {C:attention}face{} card",
+                    "gives {X:mult,C:white}X#2#{} Mult when scored if it",
+                    "is a {C:attention}Queen{} and {X:mult,C:white}X#1#{} Mult otherwise",
+                    "{C:inactive,s:0.8}(Evolves after {C:attention,s:0.8}#3#{C:inactive,s:0.8} rounds)",
+                }
+            },
+            j_poke_granbull = {
+                name = 'Granbull',
+                text = {
+                    "First played {C:attention}face{} card",
+                    "gives {X:mult,C:white}X#2#{} Mult when scored if it",
+                    "is a {C:attention}Queen{} and {X:mult,C:white}X#1#{} Mult otherwise",
+                }
+            },
             j_poke_qwilfish = {
                 name = 'Qwilfish',
                 text = {
@@ -2346,6 +2380,13 @@ return {
 					"{C:mult}+#2# mult{} for each {C:clubs}Club{} in your deck",
 					"{C:inactive}(Currently #3#)"
                 } 
+            j_poke_heracross = {
+                name = 'Heracross',
+                text = {
+                    "{X:mult,C:white} X#1# {} Mult if no scored cards",
+                    "have the {C:attention}same rank{} as",
+                    "a card {C:attention}held in hand{}"
+                }
             },
             j_poke_corsola = {
               name = 'Corsola',

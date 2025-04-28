@@ -91,10 +91,12 @@ family = {
     {"murkrow", "honchkrow"},
     {"bonsly", "sudowoodo"},
     {"hoppip", "skiploom", "jumpluff"},
+    {"sunkern", "sunflora"},
     {"misdreavus", "mismagius"},
     {"wynaut", "wobbuffet"},
     {"pineco", "forretress"},
     {"dunsparce", {key = "dudunsparce", form = 0}, {key = "dudunsparce", form = 1}},
+    {"snubbull", "granbull"},
     {"mantyke", "mantine"},
     {"treecko", "grovyle", "sceptile"},
     {"torchic", "combusken", "blaziken"},
@@ -295,7 +297,7 @@ poke_backend_evolve = function(card, to_key)
     card.ability.perish_tally = G.GAME.perishable_rounds
   end
 
-  local names_to_keep = {"targets", "rank", "id", "cards_scored", "upgrade", "hazards_drawn", "energy_count", "c_energy_count"}
+  local names_to_keep = {"targets", "rank", "id", "cards_scored", "upgrade", "hazards_drawn", "energy_count", "c_energy_count", "ptype"}
   local values_to_keep = copy_scaled_values(card)
   if type(card.ability.extra) == "table" then
     for _, k in pairs(names_to_keep) do
