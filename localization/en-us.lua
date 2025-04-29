@@ -2717,7 +2717,7 @@ return {
                 name = 'Wailmer',
                 text = {
                     "{C:mult}+#1#{} Mult if playing a {C:attention}#4#{}",
-					"{C:inactive,s:0.8}(Always the largest played poker hand. Mult increased by {C:mult}+#3#{} {C:inactive,s:0.8}per {C:attention}rank{})",
+					"{C:inactive,s:0.8}(Always the largest played poker hand. Mult increased by {C:mult}+#3#{} {C:inactive,s:0.8}per {C:attention}tier{})",
 					"{C:inactive,s:0.8}(Evolves after triggering {C:attention,s:0.8}#2#{C:inactive,s:0.8} times)"
                 }
             },
@@ -2726,7 +2726,7 @@ return {
                 text = {
                     "{C:mult}+#1#{} Mult and {X:mult,C:white}X#2#{} Mult if playing a {C:attention}#5#{}",
 					"{C:inactive,s:0.8}(Always the largest played poker hand)",
-					"{C:inactive,s:0.8}(Mult increased by {C:mult}+#3#{} {C:inactive,s:0.8}and Xmult increased by {C:mult}+#4#{} {C:inactive,s:0.8}per {C:attention}rank{}{C:inactive,s:0.8})"
+					"{C:inactive,s:0.8}(Mult increased by {C:mult}+#3#{} {C:inactive,s:0.8}and Xmult increased by {C:mult}+#4#{} {C:inactive,s:0.8}per {C:attention}tier{}{C:inactive,s:0.8})"
                 }
             },
             j_poke_feebas = {
@@ -3141,19 +3141,21 @@ return {
 			j_poke_throh = {
                 name = "Throh",
                 text = {
-                    "Gains {C:mult}+#2# mult{} each time you discard",
-					"{C:inactive} (Currently {C:mult}+#1#{} mult)",
+                    "Gains {C:mult}+#2# Mult{} each time you discard",
+					"{C:inactive} (Currently {C:mult}+#1#{} Mult)",
 					"{C:attention}(Volatile Left)",
-					"{C:mult}-#3#{} mult and {C:mult}+#4# discard",
+					"{C:mult}+#4# discard{} and loses {C:mult}-#3# Mult{}",
+					"{C:inactive}(Debuffed after volatile effect {C:attention}#5#{} {C:inactive}used times this round)",
                 }
             },
 			j_poke_sawk = {
                 name = "Sawk",
                 text = {
-                    "Gains {C:chips}+#2# chips{} each time you play a hand",
-					"{C:inactive} (Currently {C:chips}+#1#{} chips)",
+                    "Gains {C:chips}+#2# Chips{} each time you play a hand",
+					"{C:inactive} (Currently {C:chips}+#1#{} Chips)",
 					"{C:attention}(Volatile Right)",
-					"{C:chips}-#3#{} chips and {C:chips}+#4# hand",
+					"{C:chips}+#4# hand{} and loses {C:chips}-#3# Chips{}",
+					"{C:inactive}(Debuffed after volatile effect {C:attention}#5#{} {C:inactive}used times this round)",
                 }
             },
             j_poke_zorua = {
@@ -3293,6 +3295,31 @@ return {
                   "{C:purple}+#1# Hazards {C:inactive}(1 per #2# cards)",
                   "Every {C:attention}third{} card {C:attention}held{} in hand",
                   "gives {X:mult,C:white}X#3#{} Mult",
+                }
+            },
+			j_poke_pawniard = {
+                name = "Pawniard",
+                text = {
+                  "Gains {C:mult}+#3# Mult{} if you play a {C:attention}#1#",
+                  "{C:inactive,s:0.8}(Poker hand increases each time this effect triggers)",
+                  "{C:inactive,s:0.8}(Evolves at {C:mult}+#2#{C:inactive} / +#4# Mult)"
+                }
+            },
+			j_poke_bisharp = {
+                name = "Bisharp",
+                text = {
+                  "Gains {C:mult}+#3# Mult{} if you play a {C:attention}#1#{})",
+				  "(Currently {C:mult}+#2# Mult{})",
+				  "{C:inactive,s:0.8}(Poker hand changes after each hand is played)",
+                  "{C:inactive,s:0.8}(Evolves when this effect triggers {C:attention}#4#{} {C:inactive,s:0.8}times in one round)"
+                }
+            },
+			j_poke_kingambit = {
+                name = "Kingambit",
+                text = {
+                  "When you discard a hand, gains double the mult of that hand.",
+				  "{C:inactive}(Currently {C:mult}+#1# Mult{C:inactive})",
+				  "{C:inactive}(Resets to {C:mult}+#2# Mult{} {C:inactive}at end of round)"
                 }
             },
             j_poke_zweilous = {
@@ -4270,11 +4297,11 @@ return {
 					"at least once",
                 }
             },
-			rank = {
-                name = "Rank",
+			tier = {
+                name = "Tier",
                 text = {
-                    "Poker hand ranks listed in",
-					"Run Info in ascending order"
+                    "Poker hand tiers listed in",
+					"Run Info in ascending order",
                 }
             },
 			trim = {
@@ -4731,7 +4758,8 @@ return {
 			c_poke_wimpod_test = "Don't Wimp Out",
 			c_poke_sawk_throh = "Sawk and Throh",
 			c_poke_teddy_bear = "Teddy Bear",
-			c_poke_furfrou = "Best In Show"
+			c_poke_furfrou = "Best In Show",
+			c_poke_checkmate = "Checkmate",
         },
         dictionary = {
             k_energy = "Energy",
@@ -4846,6 +4874,7 @@ return {
 			poke_ursaluna_ex = "Moonblast!",
 			poke_furfrou_ex = "Trim!",
 			poke_furfrou_revert_ex = "Revert!",
+			poke_bisharp_ex = "Guillotine!",
             --If it's not 100% accurate...
             poke_thunder_ex = "Thunder!",
             poke_gift_ex = "Present!",

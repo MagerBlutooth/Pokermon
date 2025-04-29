@@ -427,6 +427,33 @@ local furfrou = {
     },
 }
 
+local checkmate = {
+    object_type = "Challenge",
+    key = "checkmate",
+    rules = {
+        modifiers = {
+            {id = 'joker_slots', value = 5},
+			{id = 'discards', value = 2},
+        }
+    },
+    jokers = {
+      {id = "j_poke_bisharp", eternal = true},
+    },
+	consumeables = {
+	},
+    restrictions = {
+        banned_cards = {
+        },
+        banned_tags = {
+        },
+        banned_other = {
+        },
+    },
+    deck = {
+      type = 'Challenge Deck',
+    },
+}
+
 return {name = "Challenges", 
-        list = {nuzlocke, goodasgold, parenthood, littlecup, hammertime, bunnelby_test, wailmer_test, kecleon_test, wimpod_test, sawk_throh, teddy_bear, furfrou}
+        list = {nuzlocke, goodasgold, parenthood, littlecup, hammertime, bunnelby_test, wailmer_test, kecleon_test, wimpod_test, sawk_throh, teddy_bear, furfrou, checkmate}
 }

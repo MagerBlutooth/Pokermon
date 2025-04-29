@@ -114,6 +114,7 @@ family = {
     {"pansear", "simisear"},
     {"panpour", "simipour"},
     {"golett", "golurk"},
+	  {"pawniard", "bisharp", "kingambit"},
     {"roggenrola", "boldore", "gigalith"},
     {"zorua", "zoroark"},
     {"deino", "zweilous", "hydreigon"},
@@ -922,12 +923,12 @@ apply_type_sticker = function(card, sticker_type)
 end
 
 get_largest_poker_hand_name = function()
-	local largest_rank = 1
+	local largest_tier = 1
 	local largest_hand_name = 'High Card'
 	if G.GAME then
 		for k, v in pairs(G.GAME.hands) do
-			if v.played > 0 and get_poker_hand_rank(k) > largest_rank then
-				largest_rank = get_poker_hand_rank(k)
+			if v.played > 0 and get_poker_hand_tier(k) > largest_tier then
+				largest_tier = get_poker_hand_tier(k)
 				largest_hand_name = k
 			end
 		end
@@ -936,34 +937,62 @@ get_largest_poker_hand_name = function()
 end
 
 
-get_poker_hand_rank = function(hand_name)
-	local rank = 1
+get_poker_hand_tier = function(hand_name)
+	local tier = 1
 	if hand_name == 'High Card' then
-		rank = 1
+		tier = 1
 	elseif hand_name == 'Pair' then
-		rank = 2
+		tier = 2
 	elseif hand_name == 'Two Pair' then
-		rank = 3
+		tier = 3
 	elseif hand_name == 'Three of a Kind' then
-		rank = 4
+		tier = 4
 	elseif hand_name == 'Straight' then
-		rank = 5
+		tier = 5
 	elseif hand_name == 'Flush' then
-		rank = 6
+		tier = 6
 	elseif hand_name== 'Full House' then
-		rank = 7
+		tier = 7
 	elseif hand_name == 'Four of a Kind' then
-		rank = 8
+		tier = 8
 	elseif hand_name == 'Straight Flush' then
-		rank = 9
+		tier = 9
 	elseif hand_name == 'Five of a Kind' then
-		rank = 10
+		tier = 10
 	elseif hand_name == 'Flush House' then
-		rank = 11
+		tier = 11
 	elseif hand_name == 'Flush Five' then
-		rank = 12
+		tier = 12
 	end
-	return rank
+	return tier
+end
+
+get_next_poker_hand_name = function(hand_name)
+	local next = 'Pair'
+	if hand_name == 'High Card' then
+		next = 'Pair'
+	elseif hand_name == 'Pair' then
+		next = 'Two Pair'
+	elseif hand_name == 'Two Pair' then
+		next = 'Three of a Kind'
+	elseif hand_name == 'Three of a Kind' then
+		next = 'Straight'
+	elseif hand_name == 'Straight' then
+		next = 'Flush'
+	elseif hand_name == 'Flush' then
+		next = 'Full House'
+	elseif hand_name== 'Full House' then
+		next = 'Four of a Kind'
+	elseif hand_name == 'Four of a Kind' then
+		next = 'Straight Flush'
+	elseif hand_name == 'Straight Flush' then
+		next = 'Five of a Kind'
+	elseif hand_name == 'Five of a Kind' then
+		next = 'Flush House'
+	else
+		next = 'Flush Five'
+	end
+	return next
 end
 
 get_random_poke_key = function(pseed, stage, pokerarity, area, poketype, exclude_keys)
@@ -1065,6 +1094,19 @@ get_poke_target_card_ranks = function(seed, num, default, use_deck)
   local sort_function = function(card1, card2) return card1.id < card2.id end
   table.sort(target_ranks, sort_function)
   return target_ranks
+end
+
+get_new_random_poker_hand = function(old_hand_name)
+  local visible_hands = {}
+  for k, v in pairs(G.GAME.hands) do
+	if v.visible and k ~= old_hand_name then
+	  local hand = v
+	  hand.handname = k
+	  table.insert(visible_hands, hand.handname)
+	end
+   end
+  local random_num = math.ceil(#visible_hands * pseudorandom('bisharp'))
+  return visible_hands[random_num]
 end
 
 add_target_cards_to_vars = function(vars, targets)

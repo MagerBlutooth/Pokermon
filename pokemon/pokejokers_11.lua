@@ -156,27 +156,27 @@ local wailmer = {
   blueprint_compat = true,
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
-	info_queue[#info_queue+1] = {set = 'Other', key = 'rank'}
+	info_queue[#info_queue+1] = {set = 'Other', key = 'tier'}
 	local hands_left = math.max(0, self.config.evo_rqmt - center.ability.extra.hands_played)
-	local rank = get_poker_hand_rank(get_largest_poker_hand_name())
-    return { vars = { center.ability.extra.mult*rank, hands_left, center.ability.extra.mult, get_largest_poker_hand_name()} }
+	local tier = get_poker_hand_tier(get_largest_poker_hand_name())
+    return { vars = { center.ability.extra.mult*tier, hands_left, center.ability.extra.mult, get_largest_poker_hand_name()} }
   end,
   calculate = function(self, card, context)
     if context.before then
-		if get_poker_hand_rank(context.scoring_name) == get_poker_hand_rank(get_largest_poker_hand_name()) then
-			if card.ability.extra.rank  ~= get_poker_hand_rank(context.scoring_name) then
+		if get_poker_hand_tier(context.scoring_name) == get_poker_hand_tier(get_largest_poker_hand_name()) then
+			if card.ability.extra.tier  ~= get_poker_hand_tier(context.scoring_name) then
 				card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex')})
 			end	
 		end
 	end
     if context.cardarea == G.jokers and context.scoring_hand then
-      local rank = get_poker_hand_rank(get_largest_poker_hand_name())
-		if context.joker_main and get_poker_hand_rank(context.scoring_name) == rank then
+      local tier = get_poker_hand_tier(get_largest_poker_hand_name())
+		if context.joker_main and get_poker_hand_tier(context.scoring_name) == tier then
 			card.ability.extra.hands_played = card.ability.extra.hands_played + 1
 			  return {
-				message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.extra.mult*rank } },
+				message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.extra.mult*tier } },
 				colour = G.C.MULT,
-				mult_mod = card.ability.extra.mult*rank
+				mult_mod = card.ability.extra.mult*tier
 			  }
 		end
     end
@@ -196,26 +196,26 @@ local wailord = {
   blueprint_compat = true,
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
-	info_queue[#info_queue+1] = {set = 'Other', key = 'rank'}
-	local rank = get_poker_hand_rank(get_largest_poker_hand_name())
-    return { vars = { rank*center.ability.extra.mult, 1+center.ability.extra.Xmult*rank, center.ability.extra.mult, center.ability.extra.Xmult, get_largest_poker_hand_name()} }
+	info_queue[#info_queue+1] = {set = 'Other', key = 'tier'}
+	local tier = get_poker_hand_tier(get_largest_poker_hand_name())
+    return { vars = { tier*center.ability.extra.mult, 1+center.ability.extra.Xmult*tier, center.ability.extra.mult, center.ability.extra.Xmult, get_largest_poker_hand_name()} }
   end,
   calculate = function(self, card, context)
     if context.before then
-		if get_poker_hand_rank(context.scoring_name) == get_poker_hand_rank(get_largest_poker_hand_name()) then
-			if card.ability.extra.rank  ~= get_poker_hand_rank(context.scoring_name) then
+		if get_poker_hand_tier(context.scoring_name) == get_poker_hand_tier(get_largest_poker_hand_name()) then
+			if G.GAME.hands[context.scoring_name].played == 1 then --If the largest hand has only been played once, the largest hand just increased 
 				card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex')})
 			end	
 		end
 	end
 	if context.cardarea == G.jokers and context.scoring_hand then
-	local rank = get_poker_hand_rank(get_largest_poker_hand_name())
-		if context.joker_main and get_poker_hand_rank(context.scoring_name) == rank then
+	local tier = get_poker_hand_tier(get_largest_poker_hand_name())
+		if context.joker_main and get_poker_hand_tier(context.scoring_name) == tier then
 			  return {
 				message = localize("poke_wailmer_ex"), 
 				colour = G.C.XMULT,
-				mult_mod = card.ability.extra.mult*rank,
-				Xmult_mod = 1+card.ability.extra.Xmult*rank
+				mult_mod = card.ability.extra.mult*tier,
+				Xmult_mod = 1+card.ability.extra.Xmult*tier
 			  }
 		 end
     end

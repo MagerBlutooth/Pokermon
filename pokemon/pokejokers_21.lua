@@ -434,12 +434,99 @@ local golurk={
   end,
 }
 -- Pawniard 624
+local pawniard={
+  name = "pawniard",
+  pos = {x = 4, y = 9},
+  config = {extra = {target_hand_name = 'High Card', mult = 0, mult_mod = 2}, evo_rqmt = 16},
+  loc_vars = function(self, info_queue, center)
+    type_tooltip(self, info_queue, center)
+	info_queue[#info_queue+1] = {set = 'Other', key = 'tier'}
+    return {vars = {center.ability.extra.target_hand_name, center.ability.extra.mult, center.ability.extra.mult_mod, self.config.evo_rqmt}}
+  end,
+  rarity = 2,
+  cost = 4,
+  stage = "Basic",
+  ptype = "Metal",
+  atlas = "Pokedex5",
+  perishable_compat = true,
+  blueprint_compat = true,
+  eternal_compat = true,
+  calculate = function(self, card, context)
+    if context.before and context.scoring_name == card.ability.extra.target_hand_name then
+		card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
+		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("k_upgrade_ex")})
+		-- --Set new target hand
+		 for k, v in pairs(G.GAME.hands) do
+			if v.visible then
+			  local hand = v
+			  hand.handname = k
+			  if hand.handname == card.ability.extra.target_hand_name then
+				card.ability.extra.target_hand_name = get_next_poker_hand_name(k)
+				break
+			  end
+			end
+         end
+	 end
+	 if context.cardarea == G.jokers and context.scoring_hand and context.joker_main then
+		 return {
+			  message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.mult}}, 
+			  colour = G.C.MULT,
+			  mult_mod = card.ability.extra.mult
+			}
+	 end
+	return scaling_evo(self, card, context, "j_poke_bisharp", card.ability.extra.mult, self.config.evo_rqmt)
+  end,
+}
 -- Bisharp 625
+local bisharp={
+  name = "bisharp",
+  pos = {x = 5, y = 9},
+  config = {extra = {target_hand_name = 'Straight Flush', mult = 16, mult_mod = 2, times_triggered = 0}, evo_rqmt = 1},
+  loc_vars = function(self, info_queue, center)
+    type_tooltip(self, info_queue, center)
+	info_queue[#info_queue+1] = {set = 'Other', key = 'tier'}
+    return {vars = {center.ability.extra.target_hand_name, center.ability.extra.mult, center.ability.extra.mult_mod, self.config.evo_rqmt - center.ability.extra.times_triggered}}
+  end,
+  rarity = "poke_safari",
+  cost = 4,
+  stage = "One",
+  ptype = "Metal",
+  atlas = "Pokedex5",
+  perishable_compat = true,
+  blueprint_compat = true,
+  eternal_compat = true,
+  calculate = function(self, card, context)
+    if context.before then
+		if context.scoring_name == card.ability.extra.target_hand_name then
+			card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("poke_bisharp_ex")})
+			card.ability.extra.times_triggered = card.ability.extra.times_triggered + 1
+			card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
+		end
+		card.ability.extra.target_hand_name = get_new_random_poker_hand(card.ability.extra.target_hand_name)
+		card_eval_status_text(card, 'extra', nil, nil, nil, {message = "Next: " .. card.ability.extra.target_hand_name})
+	end
+	
+	if context.cardarea == G.jokers and context.scoring_hand and context.joker_main then
+		card.ability.extra.hit = false
+		 return {
+			  message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.mult}}, 
+			  colour = G.C.MULT,
+			  mult_mod = card.ability.extra.mult
+			}
+	end
+	if context.end_of_round and card.ability.extra.times_triggered < self.config.evo_rqmt then
+		card.ability.extra.times_triggered = 0
+	end
+	
+	return scaling_evo(self, card, context, "j_poke_kingambit", card.ability.extra.times_triggered, self.config.evo_rqmt)
+
+  end,
+}
 -- Bouffalant 626
 -- Rufflet 627
 -- Braviary 628
 -- Vullaby 629
 -- Mandibuzz 630
 return {name = "Pokemon Jokers 601-630", 
-        list = {elgyem, beheeyem, litwick, lampent, chandelure, golett, golurk},
+        list = {elgyem, beheeyem, litwick, lampent, chandelure, golett, golurk, pawniard, bisharp},
 }
