@@ -454,6 +454,90 @@ local checkmate = {
     },
 }
 
+local ruin = {
+    object_type = "Challenge",
+    key = "ruin",
+    rules = {
+        modifiers = {
+            {id = 'joker_slots', value = 5},
+			{id = 'discards', value = 2},
+        }
+    },
+    jokers = {
+      {id = "j_poke_chi_yu", eternal = true},
+	  {id = "j_poke_ting_lu", eternal = true},
+	  {id = "j_poke_wo_chien", eternal = true},
+	  {id = "j_poke_chien_pao", eternal = true},
+    },
+	consumeables = {
+	},
+    restrictions = {
+        banned_cards = {
+        },
+        banned_tags = {
+        },
+        banned_other = {
+        },
+    },
+    deck = {
+      type = 'Challenge Deck',
+    },
+}
+
+local no_retreat = {
+    object_type = "Challenge",
+    key = "no_retreat",
+    rules = {
+        modifiers = {
+            {id = 'joker_slots', value = 5},
+			{id = 'discards', value = 2},
+        }
+    },
+    jokers = {
+      {id = "j_poke_falinks", eternal = true},
+    },
+	consumeables = {
+	},
+    restrictions = {
+        banned_cards = {
+        },
+        banned_tags = {
+        },
+        banned_other = {
+        },
+    },
+    deck = {
+      type = 'Challenge Deck',
+    },
+}
+
+local speed = {
+    object_type = "Challenge",
+    key = "speed",
+    rules = {
+        modifiers = {
+            {id = 'joker_slots', value = 5},
+			{id = 'discards', value = 2},
+        }
+    },
+    jokers = {
+      {id = "j_poke_accelgor", eternal = true},
+    },
+	consumeables = {
+	},
+    restrictions = {
+        banned_cards = {
+        },
+        banned_tags = {
+        },
+        banned_other = {
+        },
+    },
+    deck = {
+      type = 'Challenge Deck',
+    },
+}
+
 return {name = "Challenges", 
-        list = {nuzlocke, goodasgold, parenthood, littlecup, hammertime, bunnelby_test, wailmer_test, kecleon_test, wimpod_test, sawk_throh, teddy_bear, furfrou, checkmate}
+        list = {nuzlocke, goodasgold, parenthood, littlecup, hammertime, bunnelby_test, wailmer_test, kecleon_test, wimpod_test, sawk_throh, teddy_bear, furfrou, ruin, no_retreat, speed}
 }

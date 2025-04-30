@@ -303,7 +303,76 @@ local chandelure={
 -- Beartic 614
 -- Cryogonal 615
 -- Shelmet 616
+local shelmet = {
+  name = "shelmet",
+  pos = { x = 10, y = 8 },
+  config = { extra = {mult_mod = 20}},
+  loc_vars = function(self, info_queue, card)
+    type_tooltip(self, info_queue, card)
+    return { vars = {card.ability.extra.mult_mod} }
+  end,
+  rarity = 3,
+  cost = 9,
+  stage = "Basic",
+  ptype = "Grass",
+  atlas = "Pokedex5",
+  volatile = true,
+  blueprint_compat = false,
+  perishable_compat = true,
+  eternal_compat = true,
+  calculate = function(self, card, context)
+	if context.cardarea == G.jokers and context.scoring_hand and context.joker_main and G.GAME.current_round.hands_played == 0 then
+		return {
+			  message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.mult}}, 
+			  colour = G.C.MULT,
+			  mult_mod = card.ability.extra.mult
+			}
+	end
+  end,
+}
 -- Accelgor 617
+local accelgor = {
+  name = "accelgor",
+  pos = { x = 11, y = 8 },
+  config = { extra = {Xmult_mod = 2.5, tag = nil}},
+  loc_vars = function(self, info_queue, card)
+    type_tooltip(self, info_queue, card)
+    return { vars = {card.ability.extra.Xmult_mod}}
+  end,
+  rarity = "poke_safari",
+  cost = 9,
+  stage = "Basic",
+  ptype = "Grass",
+  atlas = "Pokedex5",
+  volatile = true,
+  blueprint_compat = false,
+  perishable_compat = true,
+  eternal_compat = true,
+  calculate = function(self, card, context)
+    if context.setting_blind then
+		if G.GAME.blind_on_deck == 'Small' then
+			card.ability.extra.tag = G.GAME.round_resets.blind_tags['Small']
+			card_eval_status_text(card, 'extra', nil, nil, nil, {message = "Add Tag"})
+		elseif G.GAME.blind_on_deck == 'Big' then
+			card.ability.extra.tag = G.GAME.round_resets.blind_tags['Big']
+			card_eval_status_text(card, 'extra', nil, nil, nil, {message = "Add Tag"})
+		end
+	end
+	if context.cardarea == G.jokers and context.scoring_hand and context.joker_main and G.GAME.current_round.hands_played == 0 then
+		return {
+			  message = localize{type = 'variable', key = 'a_xmult', vars = {card.ability.extra.Xmult_mod}}, 
+			  colour = G.C.MULT,
+			  Xmult_mod = card.ability.extra.Xmult_mod
+			}
+	end
+	 if context.end_of_round and not context.individual and not context.repetition and not context.blueprint and G.GAME.current_round.hands_played == 1 then
+		if card.ability.extra.tag then
+			add_tag(Tag(G.GAME.round_resets.blind_tags['Small']))
+			card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('poke_accelgor_ex'), colour = G.C.FILTER})
+		end
+	 end
+  end,
+}
 -- Stunfisk 618
 -- Mienfoo 619
 -- Mienshao 620
@@ -528,5 +597,5 @@ local bisharp={
 -- Vullaby 629
 -- Mandibuzz 630
 return {name = "Pokemon Jokers 601-630", 
-        list = {elgyem, beheeyem, litwick, lampent, chandelure, golett, golurk, pawniard, bisharp},
+        list = {elgyem, beheeyem, litwick, lampent, chandelure, shelmet, accelgor, golett, golurk, pawniard, bisharp},
 }

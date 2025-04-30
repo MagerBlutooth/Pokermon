@@ -3280,6 +3280,22 @@ return {
                     "{C:inactive}(Currently {C:mult}+#3#{C:inactive} Mult){}",
                 }
             },
+			j_poke_shelmet = {
+                name = "Shelmet",
+                text = {
+                    "{C:mult}+#1#{C:inactive} Mult{} when playing your first hand",
+                    "{C:inactive,s:0.8}(Evolves with Link Cable if you have another Grass Joker)"
+                }
+            },
+			j_poke_accelgor = {
+                name = "Accelgor",
+                text = {
+                    "{X:mult,C:white} X#1# {} Mult if playing your first {C:chips}hand",
+                    "If you clear a {C:attention}Small{} or {C:attention}Big Blind{} on the first {C:chips}hand{},",
+					"gain its {C:attention}Skip Tag{}",
+					--"{C:inactive,s:0.8}(Currently #2#)"
+                }
+            },
             j_poke_golett = {
                 name = "Golett",
                 text = {
@@ -3735,6 +3751,14 @@ return {
                 "if played hand contains a {C:attention}Two Pair{}",
               }
             },
+			j_poke_falinks = {
+              name = "Falinks",
+              text = {
+				"{C:chips}+#1# Chips{}, {C:mult}+#2# Mult{}, and {X:mult,C:white}X#3#{} Mult",
+                "When {C:attention}Blind{} is selected, set your {C:chips}hands{} to {C:attention}#4#",
+				"and gain {C:attention}+#4#{} hand size and {C:red}+#4# discard{}"
+              }
+            },
             j_poke_gimmighoul = {
                 name = "Gimmighoul (Chest)",
                 text = {
@@ -3761,6 +3785,37 @@ return {
                   "This Joker can't be debuffed",
                   "{C:inactive}(Currently {X:red,C:white}X#1#{C:inactive} Mult)",
                   "{C:inactive,s:0.8}(Resets at end of round)",
+                }
+            },
+			j_poke_wo_chien = {
+                name = "Wo-Chien",
+                text = {
+				  "{C:mult}Wild{} cards add either {C:chips}+#1# Chips{}, {C:mult}+#2# Mult{} or {X:red,C:white}x#3#{} Mult",
+                  "When you play an unenhanced card,",
+				  "convert it to {C:attention}Wild{} and destroy it."
+                }
+            },
+			j_poke_ting_lu = {
+                name = "Ting-Lu",
+                text = {
+				  "{C:attention}Stone{} cards add {C:chips}+#1# Chips{}",
+                  "When you play an unenhanced card,",
+				  "convert it to {C:attention}Stone{} and destroy it."
+                }
+            },
+			j_poke_chien_pao = {
+                name = "Chien-Pao",
+                text = {
+                  "When you play an unenhanced card,",
+				  "convert it to {C:attention}Glass{} and destroy it."
+                }
+            },
+			j_poke_chi_yu = {
+                name = "Chi-Yu",
+                text = {
+				  "{C:mult}Mult{} cards add {C:mult}+#1# Mult{}",
+                  "When you play an unenhanced card,",
+				  "convert it to {C:mult}Mult{} and destroy it."
                 }
             },
             j_poke_missingno = {
@@ -4760,6 +4815,9 @@ return {
 			c_poke_teddy_bear = "Teddy Bear",
 			c_poke_furfrou = "Best In Show",
 			c_poke_checkmate = "Checkmate",
+			c_poke_ruin = "Challenge of Ruin",
+			c_poke_no_retreat = "No Retreat",
+			c_poke_speed = "Speed"
         },
         dictionary = {
             k_energy = "Energy",
@@ -4861,6 +4919,8 @@ return {
             poke_mime_ex = "Mime!",
             --From Magmortar
             poke_fire_blast_ex = "Fire Blast!",
+			--From Accelgor
+			poke_accelgor_ex = "Swift!",
 			--From Bunnelby
 			poke_bunnelby_ex = "Dig!",
 			--From Throh and Sawk
@@ -4875,6 +4935,11 @@ return {
 			poke_furfrou_ex = "Trim!",
 			poke_furfrou_revert_ex = "Revert!",
 			poke_bisharp_ex = "Guillotine!",
+			poke_falinks_ex = "No Retreat!",
+			poke_wo_chien_ex = "Tablets of Ruin!",
+			poke_chien_pao_ex = "Sword of Ruin!",
+			poke_chi_yu_ex = "Beads of Ruin!",
+			poke_ting_lu_ex = "Vessel of Ruin!",
             --If it's not 100% accurate...
             poke_thunder_ex = "Thunder!",
             poke_gift_ex = "Present!",

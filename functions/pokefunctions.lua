@@ -110,6 +110,7 @@ family = {
     {"vanillite", "vanillish", "vanilluxe"},
     {"elgyem", "beheeyem"},
     {"litwick", "lampent", "chandelure"},
+	  {"shelmet", "accelgor"},
     {"pansage", "simisage"},
     {"pansear", "simisear"},
     {"panpour", "simipour"},
@@ -993,6 +994,15 @@ get_next_poker_hand_name = function(hand_name)
 		next = 'Flush Five'
 	end
 	return next
+end
+
+table_contains = function(table, value)
+  for i = 1,#table do
+    if (table[i] == value) then
+      return true
+    end
+  end
+  return false
 end
 
 get_random_poke_key = function(pseed, stage, pokerarity, area, poketype, exclude_keys)

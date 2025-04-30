@@ -439,7 +439,6 @@ local throh = {
     end,
 }
 -- Sawk 539
-
 local sawk = {
   name = "sawk",
   pos = { x = 3, y = 3 },

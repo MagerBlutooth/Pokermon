@@ -177,9 +177,249 @@ local gholdengo={
   end
 }
 -- Wo-Chien 1001
+local wo_chien={
+  name = "wo_chien",
+  pos = {x = pokermon_config.pokemon_altart and 0, y = pokermon_config.pokemon_altart and 9},
+  soul_pos = {x = 1, y = 9},
+  config = {extra = {chips = 75, mult = 8, Xmult = 1.5}},
+  loc_vars = function(self, info_queue, center)
+    type_tooltip(self, info_queue, center)
+    return {vars = {center.ability.extra.chips, center.ability.extra.mult, center.ability.extra.Xmult}}
+  end,
+  rarity = "Legendary",
+  cost = 8,
+  stage = "Basic",
+  ptype = "Grass",
+  atlas = "Pokedex9",
+  perishable_compat = true,
+  blueprint_compat = true,
+  eternal_compat = true,
+  calculate = function(self, card, context)
+	if context.individual and not context.other_card.debuff and context.cardarea == G.play then
+      if context.other_card.config.center == G.P_CENTERS.m_wild then
+	    local option = math.random(1, 3)
+		context.other_card.ruined_card = true
+		if option == 1 then
+			return {
+				mult = card.ability.extra.mult,
+				colour = G.C.MULT,
+				card = card
+			}
+		elseif option == 2 then
+			return {
+				x_mult = card.ability.extra.Xmult,
+				colour = G.C.XMULT,
+				card = card
+			}
+		elseif option == 3 then
+			return {
+				chips = card.ability.extra.chips,
+				colour = G.C.CHIPS,
+				card = card
+			}
+		end
+      end
+    end
+     if context.cardarea == G.jokers and context.scoring_hand and not context_blueprint and context.before then
+        local target = {}
+		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("poke_wo_chien_ex")})
+        for k, v in pairs(context.scoring_hand) do
+          if v.config.center == G.P_CENTERS.c_base then
+            v:set_ability(G.P_CENTERS.m_wild, nil, true)
+		  end
+        end
+	 elseif context.destroying_card then
+		  local ruin = context.destroying_card.config.center == G.P_CENTERS.m_wild
+		  return not context.blueprint and ruin and context.destroying_card.ruined_card
+    end
+  end,
+}
 -- Chien-Pao 1002
+local chien_pao={
+  name = "chien_pao",
+  pos = {x = pokermon_config.pokemon_altart and 2, y = pokermon_config.pokemon_altart and 9},
+  soul_pos = {x = 3, y = 9},
+  config = {extra = {chips = 100}},
+  loc_vars = function(self, info_queue, center)
+    type_tooltip(self, info_queue, center)
+    return {vars = {center.ability.extra.chips}}
+  end,
+  rarity = "Legendary",
+  cost = 8,
+  stage = "Basic",
+  ptype = "Water",
+  atlas = "Pokedex9",
+  perishable_compat = true,
+  blueprint_compat = true,
+  eternal_compat = true,
+  calculate = function(self, card, context)
+	if context.individual and not context.other_card.debuff and context.cardarea == G.play then
+      if context.other_card.config.center == G.P_CENTERS.m_glass then
+		context.other_card.ruined_card = true
+      end
+    end
+     if context.cardarea == G.jokers and context.scoring_hand and not context_blueprint and context.before then
+        local target = {}
+		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("poke_chien_pao_ex")})
+        for k, v in pairs(context.scoring_hand) do
+          if v.config.center == G.P_CENTERS.c_base then
+            v:set_ability(G.P_CENTERS.m_glass, nil, true)
+		  end
+        end
+	 elseif context.destroying_card then
+		  local ruin = context.destroying_card.config.center == G.P_CENTERS.m_glass
+		  return not context.blueprint and ruin and context.destroying_card.ruined_card
+    end
+  end,
+}
 -- Ting-Lu 1003
+local ting_lu={
+  name = "ting_lu",
+  pos = {x = pokermon_config.pokemon_altart and 4, y = pokermon_config.pokemon_altart and 9},
+  soul_pos = {x = 5, y = 9},
+  config = {extra = {chips = 100}},
+  loc_vars = function(self, info_queue, center)
+    type_tooltip(self, info_queue, center)
+	info_queue[#info_queue+1] = G.P_CENTERS.m_stone
+    return {vars = {center.ability.extra.chips}}
+  end,
+  rarity = "Legendary",
+  cost = 8,
+  stage = "Basic",
+  ptype = "Earth",
+  atlas = "Pokedex9",
+  perishable_compat = true,
+  blueprint_compat = true,
+  eternal_compat = true,
+  calculate = function(self, card, context)
+	if context.individual and not context.other_card.debuff and context.cardarea == G.play then
+      if context.other_card.config.center == G.P_CENTERS.m_stone then
+		 context.other_card.ruined_card = true
+        return {
+            chips = card.ability.extra.chips,
+            colour = G.C.CHIPS,
+            card = card
+        }
+      end
+    end
+     if context.cardarea == G.jokers and context.scoring_hand and not context_blueprint and context.before then
+        local target = {}
+		  card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("poke_ting_lu_ex")})
+        for k, v in pairs(context.scoring_hand) do
+          if v.config.center == G.P_CENTERS.c_base then
+            v:set_ability(G.P_CENTERS.m_stone, nil, true)
+		  end
+        end
+	 elseif context.destroying_card then
+		  local ruin = context.destroying_card.config.center == G.P_CENTERS.m_stone
+		  return not context.blueprint and ruin and context.destroying_card.ruined_card
+    end
+  end,
+}
+
+local gholdengo={
+  name = "gholdengo",
+  pos = {x = 13, y = 6},
+  config = {extra = {Xmult = 1, money_minus = 3, oXmult = 1, Xmult_multi = 1.5, future_dollars = 0}},
+  loc_vars = function(self, info_queue, center)
+    type_tooltip(self, info_queue, center)
+    return {vars = {center.ability.extra.Xmult, center.ability.extra.money_minus, center.ability.extra.Xmult_multi}}
+  end,
+  rarity = "poke_safari",
+  cost = 8,
+  stage = "One",
+  ptype = "Metal",
+  atlas = "Pokedex9",
+  perishable_compat = false,
+  blueprint_compat = true,
+  eternal_compat = true,
+  calculate = function(self, card, context)
+    if context.cardarea == G.jokers and context.scoring_hand then
+      if context.before then
+        card.ability.extra.future_dollars = G.GAME.dollars
+      end
+      if context.joker_main then
+        return {
+          message = localize('poke_make_it_rain'), 
+          colour = G.C.MONEY,
+          Xmult_mod = card.ability.extra.Xmult
+        }
+      end
+    end
+    if context.individual and not context.end_of_round and context.cardarea == G.play and context.other_card.ability.name == 'Gold Card' then
+      if (SMODS.Mods["Talisman"] or {}).can_load then
+        card.ability.extra.future_dollars = to_big(card.ability.extra.future_dollars) - to_big(card.ability.extra.money_minus)
+        if to_big(card.ability.extra.future_dollars) >= to_big(0) then
+          card.ability.extra.Xmult = to_big(card.ability.extra.Xmult) * to_big(card.ability.extra.Xmult_multi)
+          return {
+            dollars = -card.ability.extra.money_minus,
+            card = card
+          }
+        end
+      else
+        card.ability.extra.future_dollars = card.ability.extra.future_dollars - card.ability.extra.money_minus
+        if card.ability.extra.future_dollars >= 0 then
+          card.ability.extra.Xmult = card.ability.extra.Xmult * card.ability.extra.Xmult_multi
+          return {
+            dollars = -card.ability.extra.money_minus,
+            card = card
+          }
+        end
+      end
+    end
+    if context.end_of_round and not context.individual and not context.repetition then
+      card.ability.extra.Xmult = card.ability.extra.oXmult
+      return {
+        message = localize('k_reset'),
+        colour = G.C.RED
+      }
+    end
+  end
+}
 -- Chi-Yu 1004
+local chi_yu={
+  name = "chi_yu",
+  pos = {x = pokermon_config.pokemon_altart and 6, y = pokermon_config.pokemon_altart and 9},
+  soul_pos = {x = 7, y = 9},
+  config = {extra = {mult_multi = 12}},
+  loc_vars = function(self, info_queue, center)
+    type_tooltip(self, info_queue, center)
+	info_queue[#info_queue+1] = G.P_CENTERS.m_mult
+    return {vars = {center.ability.extra.mult_multi}}
+  end,
+  rarity = "Legendary",
+  cost = 8,
+  stage = "Basic",
+  ptype = "Fire",
+  atlas = "Pokedex9",
+  perishable_compat = true,
+  blueprint_compat = true,
+  eternal_compat = true,
+  calculate = function(self, card, context)
+	if context.individual and not context.other_card.debuff and context.cardarea == G.play then
+      if context.other_card.config.center == G.P_CENTERS.m_mult then
+		context.other_card.ruined_card = true
+        return {
+            mult = card.ability.extra.mult_multi,
+            colour = G.C.MULT,
+            card = card
+        }
+      end
+    end
+     if context.cardarea == G.jokers and context.scoring_hand and not context_blueprint and context.before then
+        local target = {}
+		  card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("poke_chi_yu_ex")})
+        for k, v in pairs(context.scoring_hand) do
+          if v.config.center == G.P_CENTERS.c_base then
+            v:set_ability(G.P_CENTERS.m_mult, nil, true)
+		  end
+        end
+	 elseif context.destroying_card then
+		  local ruin = context.destroying_card.config.center == G.P_CENTERS.m_mult
+		  return not context.blueprint and ruin and context.destroying_card.ruined_card
+    end
+  end,
+}
 -- Roaring Moon 1005
 -- Iron Valiant 1006
 -- Koraidon 1007
@@ -197,5 +437,5 @@ local gholdengo={
 -- Hydrapple 1019
 -- Gouging Fire 1020
 return {name = "Pokemon Jokers 991-1020", 
-        list = {gimmighoul, gimmighoulr, gholdengo},
+	   list = {gimmighoul, gimmighoulr, gholdengo, wo_chien, chien_pao, ting_lu, chi_yu},
 }
