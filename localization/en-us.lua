@@ -2407,6 +2407,14 @@ return {
 					"{C:mult}+#2# mult{} for each {C:clubs}Club{} in your deck",
 					"{C:inactive}(Currently #3#)"
                 } 
+            j_poke_sneasel = {
+                name = 'Sneasel',
+                text = {
+                    "If played hand is a single {C:attention}#1#{}",
+                    "destroy it and earn {C:money}$#2#",
+                    "{C:inactive,s:0.8}(Rank changes every round){}",
+                    "{C:inactive,s:0.8}(Evolves with a {C:attention,s:0.8}Dusk Stone{C:inactive,s:0.8})",
+                }
             },
             j_poke_heracross = {
                 name = 'Heracross',
@@ -2972,6 +2980,16 @@ return {
                   "{C:attention}Gold{} cards {C:attention}held{} in hand",
                   "give {C:chips}+#1#{} Chips",
                   "{C:inactive,s:0.8}(Evolves after {C:attention,s:0.8}#3#{C:inactive,s:0.8} rounds)",
+                }
+            },
+            j_poke_weavile = {
+                name = 'Weavile',
+                text = {
+                    "If played hand is a single {C:attention}#3#{} destroy it,",
+                    "earn {C:money}$#4#{} and this gains {X:mult,C:white}X#1#{} Mult,",
+                    "resets when {C:attention}Boss Blind{} is defeated",
+                    "{C:inactive,s:0.8}(Rank changes every round){}",
+                    "{C:inactive}(Currently {X:red,C:white}X#2#{C:inactive} Mult){}",
                 }
             },
             j_poke_magnezone = {
