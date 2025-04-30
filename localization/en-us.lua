@@ -3283,7 +3283,7 @@ return {
 			j_poke_shelmet = {
                 name = "Shelmet",
                 text = {
-                    "{C:mult}+#1#{C:inactive} Mult{} when playing your first hand",
+                    "{C:mult}+#1# Mult{} when playing your first {C:attention}hand",
                     "{C:inactive,s:0.8}(Evolves with Link Cable if you have another Grass Joker)"
                 }
             },

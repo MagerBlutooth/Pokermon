@@ -137,6 +137,8 @@ local hydreigon={
 -- Frogadier 657
 -- Greninja 658
 -- Bunnelby 659
+-- Strange issue with certain effects that causes upside-down cards to be added to the deck, resulting in more cards in the deck than you have.
+-- Unsure what causes this issue, but it happened both times I used it with Articuno. After this glitch occurs, will keep adding more face-down cards, breaking the run.
 local bunnelby = {
   name = "bunnelby",
   pos = {x = 9, y = 0},
@@ -186,7 +188,7 @@ local bunnelby = {
 local diggersby={
   name = "diggersby",
   pos = {x = 10, y = 0},
-  config = {extra = {h_size = 2, Xmult_mod = 0.5, times_deck_empty = 0, deck_empty_check = true}},
+  config = {extra = {h_size = 3, Xmult_mod = 0.5, times_deck_empty = 0, deck_empty_check = true}},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
 	local Xmult = 1 + (center.ability.extra.Xmult_mod * center.ability.extra.times_deck_empty)

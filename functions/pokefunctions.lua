@@ -184,6 +184,19 @@ find_pokemon_type = function(target_type)
   return found
 end
 
+find_other_pokemon_type = function(card, poke_type)
+  local type_count = 0
+  type_count = #find_pokemon_type(poke_type)
+  if is_type(card, poke_type) then
+    type_count = type_count - 1
+  end
+  if type_count > 0 then
+    return type_count
+  else
+    return 0
+  end
+end
+
 is_type = function(card, target_type)
   if card.ability and ((card.ability.extra and type(card.ability.extra) == "table" and target_type == card.ability.extra.ptype) or card.ability[string.lower(target_type).."_sticker"]) then
     return true
@@ -434,6 +447,31 @@ item_evo = function(self, card, context, forced_key)
         end
       end
       
+    end
+end
+
+item_evo_with_condition = function(self, card, context, forced_key, will_evolve)
+	if not will_evolve then 
+		return 
+	end
+    if (card.ability.extra.evolve and ((card.ability.extra.evolve == true) or type(card.ability.extra.evolve) == "string")) then
+      if type(card.ability.extra.evolve) == "string" then
+        forced_key = card.ability.extra.evo_list[card.ability.extra.evolve]
+      end
+      if forced_key and can_evolve(self, card, context, forced_key) then
+        card.ability.extra.evolve = nil
+        return {
+          message = poke_evolve(card, forced_key)
+        }
+      end
+
+      if can_evolve(self, card, context, forced_key, true) then
+        if not card.ability.extra.juiced then
+          card.ability.extra.juiced = true
+          local eval = function(card) return card.ability.extra.evolve and not card.REMOVED and not G.RESET_JIGGLES end
+          juice_card_until(card, eval, true)
+        end
+      end
     end
 end
 

@@ -521,9 +521,10 @@ local speed = {
         }
     },
     jokers = {
-      {id = "j_poke_accelgor", eternal = true},
+      {id = "j_poke_shelmet", eternal = true},
     },
 	consumeables = {
+		{id = 'c_poke_linkcable'}
 	},
     restrictions = {
         banned_cards = {

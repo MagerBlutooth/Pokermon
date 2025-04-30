@@ -306,28 +306,30 @@ local chandelure={
 local shelmet = {
   name = "shelmet",
   pos = { x = 10, y = 8 },
-  config = { extra = {mult_mod = 20}},
+  config = { extra = {mult_mod = 15}},
   loc_vars = function(self, info_queue, card)
     type_tooltip(self, info_queue, card)
     return { vars = {card.ability.extra.mult_mod} }
   end,
-  rarity = 3,
-  cost = 9,
+  rarity = 2,
+  cost = 6,
+  item_req = "linkcable",
   stage = "Basic",
   ptype = "Grass",
   atlas = "Pokedex5",
   volatile = true,
-  blueprint_compat = false,
+  blueprint_compat = true,
   perishable_compat = true,
   eternal_compat = true,
   calculate = function(self, card, context)
 	if context.cardarea == G.jokers and context.scoring_hand and context.joker_main and G.GAME.current_round.hands_played == 0 then
 		return {
-			  message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.mult}}, 
+			  message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.mult_mod}}, 
 			  colour = G.C.MULT,
-			  mult_mod = card.ability.extra.mult
+			  mult_mod = card.ability.extra.mult_mod
 			}
 	end
+	return item_evo_with_condition(self, card, context, "j_poke_accelgor", find_other_pokemon_type(card, "Grass") > 0)
   end,
 }
 -- Accelgor 617
@@ -341,11 +343,11 @@ local accelgor = {
   end,
   rarity = "poke_safari",
   cost = 9,
-  stage = "Basic",
+  stage = "One",
   ptype = "Grass",
   atlas = "Pokedex5",
   volatile = true,
-  blueprint_compat = false,
+  blueprint_compat = true,
   perishable_compat = true,
   eternal_compat = true,
   calculate = function(self, card, context)
@@ -367,7 +369,7 @@ local accelgor = {
 	end
 	 if context.end_of_round and not context.individual and not context.repetition and not context.blueprint and G.GAME.current_round.hands_played == 1 then
 		if card.ability.extra.tag then
-			add_tag(Tag(G.GAME.round_resets.blind_tags['Small']))
+			add_tag(Tag(card.ability.extra.tag))
 			card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('poke_accelgor_ex'), colour = G.C.FILTER})
 		end
 	 end

@@ -181,7 +181,7 @@ local wo_chien={
   name = "wo_chien",
   pos = {x = pokermon_config.pokemon_altart and 0, y = pokermon_config.pokemon_altart and 9},
   soul_pos = {x = 1, y = 9},
-  config = {extra = {chips = 75, mult = 8, Xmult = 1.5}},
+  config = {extra = {chips = 50, mult = 8, Xmult = 1.5}},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
     return {vars = {center.ability.extra.chips, center.ability.extra.mult, center.ability.extra.Xmult}}
@@ -277,7 +277,7 @@ local ting_lu={
   name = "ting_lu",
   pos = {x = pokermon_config.pokemon_altart and 4, y = pokermon_config.pokemon_altart and 9},
   soul_pos = {x = 5, y = 9},
-  config = {extra = {chips = 100}},
+  config = {extra = {chips = 50}},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
 	info_queue[#info_queue+1] = G.P_CENTERS.m_stone
@@ -381,7 +381,7 @@ local chi_yu={
   name = "chi_yu",
   pos = {x = pokermon_config.pokemon_altart and 6, y = pokermon_config.pokemon_altart and 9},
   soul_pos = {x = 7, y = 9},
-  config = {extra = {mult_multi = 12}},
+  config = {extra = {mult_multi = 8}},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
 	info_queue[#info_queue+1] = G.P_CENTERS.m_mult
