@@ -188,7 +188,7 @@ local wailord = {
   name = "wailord",
   pos = { x = 9, y = 6 },
   config = { extra = { mult = 4, Xmult = 0.2}},
-  rarity = 2,
+  rarity = "poke_safari",
   cost = 6,
   stage = "Basic",
   atlas = "Pokedex3",

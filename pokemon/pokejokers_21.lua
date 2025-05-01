@@ -306,7 +306,7 @@ local chandelure={
 local shelmet = {
   name = "shelmet",
   pos = { x = 10, y = 8 },
-  config = { extra = {mult_mod = 15}},
+  config = { extra = {mult_mod = 12}},
   loc_vars = function(self, info_queue, card)
     type_tooltip(self, info_queue, card)
     return { vars = {card.ability.extra.mult_mod} }
@@ -314,6 +314,7 @@ local shelmet = {
   rarity = 2,
   cost = 6,
   item_req = "linkcable",
+  condition = false,
   stage = "Basic",
   ptype = "Grass",
   atlas = "Pokedex5",
@@ -329,17 +330,22 @@ local shelmet = {
 			  mult_mod = card.ability.extra.mult_mod
 			}
 	end
-	return item_evo_with_condition(self, card, context, "j_poke_accelgor", find_other_pokemon_type(card, "Grass") > 0)
+	return item_evo_with_condition(self, card, context, "j_poke_accelgor", self.meets_condition(card))
+  end,
+  meets_condition = function(card)
+	  local var = find_other_pokemon_type(card, "Grass") > 0
+	  card.config.center.condition = var
+	  return card.config.center.condition
   end,
 }
 -- Accelgor 617
 local accelgor = {
   name = "accelgor",
   pos = { x = 11, y = 8 },
-  config = { extra = {Xmult_mod = 2.5, tag = nil}},
+  config = { extra = {Xmult_mod = 2, tag = nil}},
   loc_vars = function(self, info_queue, card)
     type_tooltip(self, info_queue, card)
-    return { vars = {card.ability.extra.Xmult_mod}}
+    return { vars = {card.ability.extra.Xmult_mod, card.ability.extra.tag or "None" }}
   end,
   rarity = "poke_safari",
   cost = 9,
@@ -367,11 +373,14 @@ local accelgor = {
 			  Xmult_mod = card.ability.extra.Xmult_mod
 			}
 	end
-	 if context.end_of_round and not context.individual and not context.repetition and not context.blueprint and G.GAME.current_round.hands_played == 1 then
-		if card.ability.extra.tag then
-			add_tag(Tag(card.ability.extra.tag))
-			card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('poke_accelgor_ex'), colour = G.C.FILTER})
+	 if context.end_of_round then
+		if not context.individual and not context.repetition and not context.blueprint and G.GAME.current_round.hands_played == 1 then
+			if card.ability.extra.tag then
+				add_tag(Tag(card.ability.extra.tag))
+				card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('poke_accelgor_ex'), colour = G.C.FILTER})
+			end
 		end
+		card.ability.extra.tag = nil
 	 end
   end,
 }

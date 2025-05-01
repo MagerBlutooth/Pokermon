@@ -13,10 +13,11 @@ local falinks = {
   atlas = "Pokedex8",
   volatile = true,
   blueprint_compat = false,
-  perishable_compat = true,
-  eternal_compat = true,
+  perishable_compat = false,
+  eternal_compat = false,
   calculate = function(self, card, context)
     if context.setting_blind then
+		card.ability.eternal = true
 		local starting_hands = G.GAME.round_resets.hands
 		G.GAME.round_resets.hands = card.ability.extra.hand_mod
 		card.ability.extra.lost_hands = starting_hands - G.GAME.round_resets.hands
@@ -36,6 +37,7 @@ local falinks = {
         }
 	end
 	 if context.end_of_round and not context.individual and not context.repetition and not context.blueprint then
+	    card.ability.eternal = false
 		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_reset')})
 		G.GAME.round_resets.hands = G.GAME.round_resets.hands + card.ability.extra.lost_hands 
 		ease_hands_played(card.ability.extra.lost_hands)

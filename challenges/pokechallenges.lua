@@ -522,6 +522,7 @@ local speed = {
     },
     jokers = {
       {id = "j_poke_shelmet", eternal = true},
+	  {id = "j_poke_karrablast", eternal = true},
     },
 	consumeables = {
 		{id = 'c_poke_linkcable'}

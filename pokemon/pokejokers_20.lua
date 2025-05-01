@@ -438,7 +438,93 @@ local vanilluxe={
 -- Sawsbuck 586
 -- Emolga 587
 -- Karrablast 588
+local karrablast = {
+  name = "karrablast",
+  pos = { x = 10, y = 6 },
+  config = { extra = {mult_mod = 3, mult_current = 3}},
+  loc_vars = function(self, info_queue, card)
+    type_tooltip(self, info_queue, card)
+    return { vars = {card.ability.extra.mult_mod, card.ability.extra.mult_current} }
+  end,
+  rarity = 2,
+  cost = 6,
+  item_req = "linkcable",
+  condition = false,
+  stage = "Basic",
+  ptype = "Grass",
+  atlas = "Pokedex5",
+  volatile = true,
+  blueprint_compat = true,
+  perishable_compat = true,
+  eternal_compat = true,
+  calculate = function(self, card, context)
+	if context.cardarea == G.jokers and context.scoring_hand and context.joker_main then
+		card.ability.extra.mult_current = card.ability.extra.mult_current + card.ability.extra.mult_mod
+		return {
+			  message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.mult_current - card.ability.extra.mult_mod}}, 
+			  colour = G.C.MULT,
+			  mult_mod = card.ability.extra.mult_current - card.ability.extra.mult_mod
+			}
+	end
+	if context.end_of_round then
+		card.ability.extra.mult_current = card.ability.extra.mult_mod
+	end
+	return item_evo_with_condition(self, card, context, "j_poke_escavalier", self.meets_condition(card))
+  end,
+  meets_condition = function(card)
+	  local var = find_other_pokemon_type(card, "Grass") > 0
+	  card.config.center.condition = var
+	  return card.config.center.condition
+  end,
+}
 -- Escavalier 589
+local escavalier = {
+  name = "escavalier",
+  pos = { x = 11, y = 6 },
+  config = { extra = {mult_mod = 10, mult_current = 10, tag = nil, target_goal = 2}},
+  loc_vars = function(self, info_queue, card)
+    type_tooltip(self, info_queue, card)
+    return { vars = {card.ability.extra.mult_mod, card.ability.extra.mult_current, card.ability.extra.tag or "None", card.ability.extra.target_goal}}
+  end,
+  rarity = "poke_safari",
+  cost = 9,
+  stage = "One",
+  ptype = "Grass",
+  atlas = "Pokedex5",
+  volatile = true,
+  blueprint_compat = true,
+  perishable_compat = true,
+  eternal_compat = true,
+  calculate = function(self, card, context)
+    if context.setting_blind then
+		if G.GAME.blind_on_deck == 'Small' then
+			card.ability.extra.tag = G.GAME.round_resets.blind_tags['Small']
+			card_eval_status_text(card, 'extra', nil, nil, nil, {message = "Add Tag"})
+		elseif G.GAME.blind_on_deck == 'Big' then
+			card.ability.extra.tag = G.GAME.round_resets.blind_tags['Big']
+			card_eval_status_text(card, 'extra', nil, nil, nil, {message = "Add Tag"})
+		end
+	end
+	if context.cardarea == G.jokers and context.scoring_hand and context.joker_main then
+		card.ability.extra.mult_current = card.ability.extra.mult_current + card.ability.extra.mult_mod
+		return {
+			  message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.mult_current - card.ability.extra.mult_mod}}, 
+			  colour = G.C.MULT,
+			  mult_mod = card.ability.extra.mult_current - card.ability.extra.mult_mod
+			}
+	end
+	 if context.end_of_round then
+		card.ability.extra.mult_current = card.ability.extra.mult_mod
+		if not context.individual and not context.repetition and not context.blueprint and G.GAME.chips/G.GAME.blind.chips >= card.ability.extra.target_goal then
+			if card.ability.extra.tag then
+				add_tag(Tag(card.ability.extra.tag))
+				card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('poke_escavalier_ex'), colour = G.C.FILTER})
+			end
+		end
+		card.ability.extra.tag = nil
+	end
+  end,
+}
 -- Foongus 590
 -- Amoonguss 591
 -- Frillish 592
@@ -451,5 +537,5 @@ local vanilluxe={
 -- Klink 599
 -- Klang 600
 return {name = "Pokemon Jokers 570-600", 
-        list = {zoroark, gothita, gothorita, gothitelle, vanillite, vanillish, vanilluxe},
+        list = {zoroark, gothita, gothorita, gothitelle, vanillite, vanillish, vanilluxe, karrablast, escavalier},
 }

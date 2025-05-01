@@ -112,6 +112,7 @@ family = {
     {"vanillite", "vanillish", "vanilluxe"},
     {"elgyem", "beheeyem"},
     {"litwick", "lampent", "chandelure"},
+	{"karrablast", "escavalier"},
 	  {"shelmet", "accelgor"},
     {"pansage", "simisage"},
     {"pansear", "simisear"},
@@ -456,9 +457,10 @@ item_evo = function(self, card, context, forced_key)
 end
 
 item_evo_with_condition = function(self, card, context, forced_key, will_evolve)
-	if not will_evolve then 
+	if not will_evolve then
 		return 
 	end
+	
     if (card.ability.extra.evolve and ((card.ability.extra.evolve == true) or type(card.ability.extra.evolve) == "string")) then
       if type(card.ability.extra.evolve) == "string" then
         forced_key = card.ability.extra.evo_list[card.ability.extra.evolve]
@@ -788,7 +790,11 @@ evo_item_use = function(self, card, area, copier)
     for k, v in pairs(G.jokers.cards) do
       if applied ~= true then
         if v.ability and v.ability.extra and type(v.ability.extra) == "table" and type(v.ability.extra.item_req) ~= "table" and v.ability.extra.item_req == self.name and not v.ability.extra.evolve then
-          evolve = true
+			if v.config.center.condition ~= nil and v.config.center.condition == false then
+				evolve = false
+			else
+				evolve = true
+			end
         elseif v.ability and v.ability.extra and type(v.ability.extra) == "table" and type(v.ability.extra.item_req) == "table" and not v.ability.extra.evolve then
           for l, p in pairs(v.ability.extra.item_req) do
             if p == self.name then

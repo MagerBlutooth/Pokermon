@@ -2406,7 +2406,8 @@ return {
 					"all scoring cards into {C:clubs}Clubs{}.",
 					"{C:mult}+#2# mult{} for each {C:clubs}Club{} in your deck",
 					"{C:inactive}(Currently #3#)"
-                } 
+				}
+            }, 
             j_poke_sneasel = {
                 name = 'Sneasel',
                 text = {
@@ -3325,6 +3326,23 @@ return {
                     "{C:inactive}(Currently {C:mult}+#3#{C:inactive} Mult){}",
                 }
             },
+			j_poke_karrablast = {
+                name = "Karrablast",
+                text = {
+                    "{C:mult}+#1# Mult{} per {C:attention}hand{} played this round {C:attention}",
+					"{C:inactive,s:0.8}(Currently {C:mult}+#2#{C:inactive,s:0.8} Mult{}}",
+                    "{C:inactive,s:0.8}(Evolves with Link Cable if you have another Grass Joker)"
+                }
+            },
+			j_poke_escavalier = {
+                name = "Escavalier",
+                text = {
+                    "{C:mult}+#1# Mult{} per {C:attention}hand{} played this round",
+                    "If you clear a {C:attention}Small{} or {C:attention}Big Blind{} by {C:attention}#4#X{} or more chips,",
+					"gain its {C:attention}Skip Tag{}",
+					"{C:inactive,s:0.8}(Currently {C:mult}+#2#{C:inactive,s:0.8} Mult, Tag: #3#}"
+                }
+            },
 			j_poke_shelmet = {
                 name = "Shelmet",
                 text = {
@@ -3338,7 +3356,7 @@ return {
                     "{X:mult,C:white} X#1# {} Mult if playing your first {C:chips}hand",
                     "If you clear a {C:attention}Small{} or {C:attention}Big Blind{} on the first {C:chips}hand{},",
 					"gain its {C:attention}Skip Tag{}",
-					--"{C:inactive,s:0.8}(Currently #2#)"
+					"{C:inactive,s:0.8}(Current Tag: #2#)"
                 }
             },
             j_poke_golett = {
@@ -3800,8 +3818,8 @@ return {
               name = "Falinks",
               text = {
 				"{C:chips}+#1# Chips{}, {C:mult}+#2# Mult{}, and {X:mult,C:white}X#3#{} Mult",
-                "When {C:attention}Blind{} is selected, set your {C:chips}hands{} to {C:attention}#4#",
-				"and gain {C:attention}+#4#{} hand size and {C:red}+#4# discard{}"
+                "When {C:attention}Blind{} is selected, make this Joker eternal, set your {C:chips}hands{} to {C:attention}#4#",
+				"and gain {C:attention}+#4#{} hand size and {C:red}+#4# discard until end of round.{}"
               }
             },
             j_poke_gimmighoul = {
@@ -4966,6 +4984,7 @@ return {
             poke_fire_blast_ex = "Fire Blast!",
 			--From Accelgor
 			poke_accelgor_ex = "Swift!",
+			poke_escavalier_ex = "Giga Impact!",
 			--From Bunnelby
 			poke_bunnelby_ex = "Dig!",
 			--From Throh and Sawk
