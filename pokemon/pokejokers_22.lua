@@ -188,7 +188,7 @@ local bunnelby = {
 local diggersby={
   name = "diggersby",
   pos = {x = 10, y = 0},
-  config = {extra = {h_size = 3, Xmult_mod = 0.5, times_deck_empty = 0, deck_empty_check = true}},
+  config = {extra = {h_size = 2, Xmult_mod = 0.5, times_deck_empty = 0, deck_empty_check = true}},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
 	local Xmult = 1 + (center.ability.extra.Xmult_mod * center.ability.extra.times_deck_empty)

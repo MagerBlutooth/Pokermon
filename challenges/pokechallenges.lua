@@ -521,8 +521,10 @@ local speed = {
         }
     },
     jokers = {
-      {id = "j_poke_shelmet", eternal = true},
-	  {id = "j_poke_karrablast", eternal = true},
+	  {id = "j_poke_lapras", eternal = true},
+	  {id = "j_poke_wailord", eternal = true},
+	  {id = "j_poke_gyarados", eternal = true},
+      {id = "j_poke_escavalier", eternal = true},
     },
 	consumeables = {
 		{id = 'c_poke_linkcable'}
@@ -540,6 +542,57 @@ local speed = {
     },
 }
 
+local rose = {
+    object_type = "Challenge",
+    key = "rose",
+    rules = {
+        modifiers = {
+            {id = 'joker_slots', value = 5},
+			{id = 'discards', value = 2},
+        }
+    },
+    jokers = {
+	  {id = "j_poke_shelmet", eternal = false},
+      {id = "j_poke_budew", eternal = true},
+    },
+    restrictions = {
+        banned_cards = {
+        },
+        banned_tags = {
+        },
+        banned_other = {
+        },
+    },
+    deck = {
+      type = 'Challenge Deck',
+    },
+}
+
+local starter = {
+    object_type = "Challenge",
+    key = "starter",
+    rules = {
+        modifiers = {
+            {id = 'joker_slots', value = 5},
+			{id = 'discards', value = 2},
+        }
+    },
+    jokers = {
+	  {id = "j_poke_turtwig", eternal = false},
+    },
+    restrictions = {
+        banned_cards = {
+        },
+        banned_tags = {
+        },
+        banned_other = {
+        },
+    },
+    deck = {
+      type = 'Challenge Deck',
+    },
+}
+
 return {name = "Challenges", 
-        list = {nuzlocke, goodasgold, parenthood, littlecup, hammertime, bunnelby_test, wailmer_test, kecleon_test, wimpod_test, sawk_throh, teddy_bear, furfrou, ruin, no_retreat, speed}
+        list = {nuzlocke, goodasgold, parenthood, littlecup, hammertime, bunnelby_test, wailmer_test, kecleon_test, wimpod_test, sawk_throh, teddy_bear, furfrou, ruin, no_retreat, speed, rose}
 }

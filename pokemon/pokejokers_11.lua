@@ -139,6 +139,71 @@ local aggron = {
 -- Volbeat 313
 -- Illumise 314
 -- Roselia 315
+local roselia = {
+  name = "roselia",
+  pos = {x = 3, y = 6},
+  config = {extra = {mult = 6}},
+  loc_vars = function(self, info_queue, center)
+    type_tooltip(self, info_queue, center)
+    return {vars = {center.ability.extra.mult}}
+  end,
+  rarity = 2,
+  cost = 6,
+  stage = "One",
+  ptype = "Grass",
+  atlas = "Pokedex3",
+  item_req = "shinystone",
+  perishable_compat = true,
+  blueprint_compat = true,
+  eternal_compat = true,
+  calculate = function(self, card, context)
+    if context.cardarea == G.jokers and context.scoring_hand and context.joker_main then
+		local unique_suits = 0
+        local suits = {
+			['Hearts'] = 0,
+			['Diamonds'] = 0,
+			['Spades'] = 0,
+			['Clubs'] = 0
+		}
+		for i = 1, #context.scoring_hand do
+			if context.scoring_hand[i].ability.name ~= 'Wild Card' then
+				if context.scoring_hand[i]:is_suit('Hearts', true) and suits["Hearts"] == 0 then suits["Hearts"] = suits["Hearts"] + 1
+					elseif context.scoring_hand[i]:is_suit('Diamonds', true) and suits["Diamonds"] == 0  then suits["Diamonds"] = suits["Diamonds"] + 1
+					elseif context.scoring_hand[i]:is_suit('Spades', true) and suits["Spades"] == 0  then suits["Spades"] = suits["Spades"] + 1
+					elseif context.scoring_hand[i]:is_suit('Clubs', true) and suits["Clubs"] == 0  then suits["Clubs"] = suits["Clubs"] + 1 
+				end
+			end
+		end
+		for i = 1, #context.scoring_hand do
+				if context.scoring_hand[i].ability.name == 'Wild Card' then
+					if context.scoring_hand[i]:is_suit('Hearts') and suits["Hearts"] == 0 then suits["Hearts"] = suits["Hearts"] + 1
+						elseif context.scoring_hand[i]:is_suit('Diamonds') and suits["Diamonds"] == 0  then suits["Diamonds"] = suits["Diamonds"] + 1
+						elseif context.scoring_hand[i]:is_suit('Spades') and suits["Spades"] == 0  then suits["Spades"] = suits["Spades"] + 1
+						elseif context.scoring_hand[i]:is_suit('Clubs') and suits["Clubs"] == 0  then suits["Clubs"] = suits["Clubs"] + 1 
+					end
+				end
+			end
+			  if suits["Hearts"] > 0 then
+				unique_suits = unique_suits + 1
+			  end
+				if suits["Diamonds"] > 0 then
+				unique_suits = unique_suits + 1
+			  end
+			 if suits["Spades"] > 0 then
+				unique_suits = unique_suits + 1
+			  end
+			 if suits["Clubs"] > 0 then
+				unique_suits = unique_suits + 1
+			  end
+		return {
+          message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.mult*unique_suits}}, 
+          colour = G.C.MULT,
+          mult_mod = card.ability.extra.mult*unique_suits
+        }
+	end
+    return item_evo(self, card, context, "j_poke_roserade")
+  end,
+}
 -- Gulpin 316
 -- Swalot 317
 -- Carvanha 318
@@ -162,16 +227,16 @@ local wailmer = {
     return { vars = { center.ability.extra.mult*tier, hands_left, center.ability.extra.mult, get_largest_poker_hand_name()} }
   end,
   calculate = function(self, card, context)
-    if context.before then
+    if context.before and not context.blueprint then
 		if get_poker_hand_tier(context.scoring_name) == get_poker_hand_tier(get_largest_poker_hand_name()) then
-			if card.ability.extra.tier  ~= get_poker_hand_tier(context.scoring_name) then
+			if G.GAME.hands[context.scoring_name].played == 1 and get_largest_poker_hand_name() ~= 'High Card' then --If the largest hand has only been played once, the largest hand just increased (unless High Card) 
 				card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex')})
 			end	
 		end
 	end
     if context.cardarea == G.jokers and context.scoring_hand then
       local tier = get_poker_hand_tier(get_largest_poker_hand_name())
-		if context.joker_main and get_poker_hand_tier(context.scoring_name) == tier then
+		if context.joker_main and get_poker_hand_tier(context.scoring_name) == tier then 
 			card.ability.extra.hands_played = card.ability.extra.hands_played + 1
 			  return {
 				message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.extra.mult*tier } },
@@ -203,7 +268,7 @@ local wailord = {
   calculate = function(self, card, context)
     if context.before then
 		if get_poker_hand_tier(context.scoring_name) == get_poker_hand_tier(get_largest_poker_hand_name()) then
-			if G.GAME.hands[context.scoring_name].played == 1 then --If the largest hand has only been played once, the largest hand just increased 
+			if G.GAME.hands[context.scoring_name].played == 1 and get_largest_poker_hand_name() ~= 'High Card'  then --If the largest hand has only been played once, the largest hand just increased (unless High Card) 
 				card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex')})
 			end	
 		end
@@ -232,5 +297,5 @@ local wailord = {
 -- Flygon 330
 return {
   name = "Pokemon Jokers 301-330",
-  list = {aron, lairon, aggron, wailmer,wailord},
+  list = {aron, lairon, aggron, roselia, wailmer, wailord},
 }

@@ -391,7 +391,7 @@ local gigalith = {
 local throh = {
   name = "throh",
   pos = { x = 2, y = 3 },
-  config = { extra = {mult = 0, mult_gain = 1, mult_cost = 3, discard_mod = 1, triggered = false, volatile = "left", round_limit = 3}},
+  config = { extra = {mult = 0, mult_gain = 1, mult_cost = 3, discard_mod = 1, triggered = false, volatile = "right", round_limit = 3}},
   loc_vars = function(self, info_queue, card)
     type_tooltip(self, info_queue, card)
 	info_queue[#info_queue+1] = {set = 'Other', key = 'poke_volatile_'..card.ability.extra.volatile}
@@ -407,7 +407,7 @@ local throh = {
   perishable_compat = true,
   eternal_compat = true,
   calculate = function(self, card, context)
-    if context.pre_discard and not context.hook and not volatile_active(self, card, card.ability.extra.volatile) then
+    if context.pre_discard and not context.hook and not (volatile_active(self, card, card.ability.extra.volatile) and card.ability.extra.mult >= card.ability.extra.mult_cost) then
 		card.ability.extra.mult =  card.ability.extra.mult + card.ability.extra.mult_gain
 		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex')})
 	end
@@ -442,7 +442,7 @@ local throh = {
 local sawk = {
   name = "sawk",
   pos = { x = 3, y = 3 },
-  config = { extra = {chips = 0, chip_gain = 4, chip_cost = 20, hand_mod = 1, triggered = false, volatile = "right", round_limit = 3}},
+  config = { extra = {chips = 0, chip_gain = 4, chip_cost = 20, hand_mod = 1, triggered = false, volatile = "left", round_limit = 3}},
   loc_vars = function(self, info_queue, card)
     type_tooltip(self, info_queue, card)
 	info_queue[#info_queue+1] = {set = 'Other', key = 'poke_volatile_'..card.ability.extra.volatile}
@@ -458,7 +458,7 @@ local sawk = {
   perishable_compat = true,
   eternal_compat = true,
   calculate = function(self, card, context)
-    if context.before and not volatile_active(self, card, card.ability.extra.volatile) then
+    if context.before and not (volatile_active(self, card, card.ability.extra.volatile) and card.ability.extra.chips >= card.ability.extra.chip_cost) then
 		card.ability.extra.chips =  card.ability.extra.chips + card.ability.extra.chip_gain
 		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex')})
 	end

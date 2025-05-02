@@ -1,7 +1,7 @@
 local falinks = {
   name = "falinks",
   pos = { x = 7, y = 4 },
-  config = { extra = {chip_mod = 40, mult_mod = 8, Xmult_mod = 0.25, hand_mod = 1, lost_hands = 0}},
+  config = { extra = {chip_mod = 50, mult_mod = 10, Xmult_mod = 0.25, hand_mod = 1, lost_hands = 0}},
   loc_vars = function(self, info_queue, card)
     type_tooltip(self, info_queue, card)
     return { vars = {card.ability.extra.chip_mod, card.ability.extra.mult_mod, 1 + card.ability.extra.Xmult_mod, card.ability.extra.hand_mod} }
@@ -18,14 +18,16 @@ local falinks = {
   calculate = function(self, card, context)
     if context.setting_blind then
 		card.ability.eternal = true
-		local starting_hands = G.GAME.round_resets.hands
-		G.GAME.round_resets.hands = card.ability.extra.hand_mod
-		card.ability.extra.lost_hands = starting_hands - G.GAME.round_resets.hands
-		ease_hands_played(-card.ability.extra.lost_hands)
+		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('poke_falinks_ex')})
 		G.GAME.round_resets.discards = G.GAME.round_resets.discards + card.ability.extra.hand_mod
 		ease_discard(card.ability.extra.hand_mod)
 		G.hand:change_size(card.ability.extra.hand_mod)
-		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('poke_falinks_ex')})
+		if not (G.GAME.blind.boss and G.GAME.blind.name == 'The Needle' and not G.GAME.blind.disabled) then
+			local starting_hands = G.GAME.round_resets.hands
+			G.GAME.round_resets.hands = card.ability.extra.hand_mod
+			card.ability.extra.lost_hands = starting_hands - G.GAME.round_resets.hands
+			ease_hands_played(-card.ability.extra.lost_hands)
+		end
 	end
 	if context.cardarea == G.jokers and context.scoring_hand and context.joker_main then
 		return {
@@ -39,12 +41,14 @@ local falinks = {
 	 if context.end_of_round and not context.individual and not context.repetition and not context.blueprint then
 	    card.ability.eternal = false
 		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_reset')})
-		G.GAME.round_resets.hands = G.GAME.round_resets.hands + card.ability.extra.lost_hands 
-		ease_hands_played(card.ability.extra.lost_hands)
+		if not (G.GAME.blind.boss and G.GAME.blind.name == 'The Needle' and not G.GAME.blind.disabled) then
+			G.GAME.round_resets.hands = G.GAME.round_resets.hands + card.ability.extra.lost_hands 
+			ease_hands_played(card.ability.extra.lost_hands)
+			ease_discard(-card.ability.extra.hand_mod)
+			card.ability.extra.lost_hands = 0
+		end
 		G.GAME.round_resets.discards = G.GAME.round_resets.discards - card.ability.extra.hand_mod
-		ease_discard(-card.ability.extra.hand_mod)
 		G.hand:change_size(-card.ability.extra.hand_mod)
-		card.ability.extra.lost_hands = 0
 	 end
   end,
 }

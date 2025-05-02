@@ -2765,6 +2765,32 @@ return {
 					"{C:inactive,s:0.8}(Mult increased by {C:mult}+#3#{} {C:inactive,s:0.8}and Xmult increased by {C:mult}+#4#{} {C:inactive,s:0.8}per {C:attention}tier{}{C:inactive,s:0.8})"
                 }
             },
+			j_poke_budew = {
+                name = 'Budew',
+                text = {
+                    "{C:attention}Baby{}, {X:red,C:white} X#1# {} Mult",
+                    "Create a {C:attention}Lovers{} card with",
+                    "{C:dark_edition}Negative{} at end of round",
+                    "{C:inactive,s:0.8}(Evolves after {C:attention,s:0.8}#2#{C:inactive,s:0.8} rounds)",
+                }
+            },
+			
+			j_poke_roselia = {
+                name = 'Roselia',
+                text = {
+                    "{C:mult}+#1#{} Mult for each unique scoring suit",
+                    "{C:inactive,s:0.8}(Evolves with a {C:attention,s:0.8}Shiny Stone{C:inactive,s:0.8} card)"
+                }
+            },
+			
+			j_poke_roserade = {
+                name = 'Roserade',
+                text = {
+                    "{X:red,C:white}X#1# {} Mult",
+                    "for each unique scoring suit",
+                }
+            },
+			
             j_poke_feebas = {
                 name = 'Feebas',
                 text = {
@@ -2795,7 +2821,7 @@ return {
                     "When you gain a joker,",
                     "this changes to the same type. When this joker",
                     "changes type, it gains {C:mult}+#1#{} Mult",
-                    "{C:inactive,s:0.8}(Currently {C:attention,s:0.8}#+2#{C:inactive,s:0.8})"
+                    "{C:inactive,s:0.8}(Currently {C:attention,s:0.8}+#2#{C:inactive,s:0.8})"
                 }
             },
             j_poke_snorunt = {
@@ -2896,6 +2922,15 @@ return {
                     "{br:3}ERROR - CONTACT STEAK",
                     "If {C:attention}first discard{} has exactly {C:attention}1{} card,",
                     "{C:attention}destroy{} it",
+                }
+            },
+			j_poke_turtwig = {
+                name = 'Turtwig',
+                text = {
+                    "{C:attention}+#1#{} hand size",
+                    "If your deck has {C:attention}#2#{} or fewer cards remaining at the end of the round,", 
+					"increase your interest by {C:money}$1{} for every {C:money}$#3#{}",
+                    "{C:inactive,s:0.8}(Evolves once you have ${C:attention,s:0.8}#4#{C:inactive,s:0.8} or more)"
                 }
             },
             j_poke_buizel = {
@@ -3189,7 +3224,7 @@ return {
                 text = {
                     "Gains {C:mult}+#2# Mult{} each time you discard",
 					"{C:inactive} (Currently {C:mult}+#1#{} Mult)",
-					"{C:attention}(Volatile Left)",
+					"{C:attention}(Volatile Right)",
 					"{C:mult}+#4# discard{} and loses {C:mult}-#3# Mult{}",
 					"{C:inactive}(Debuffed after volatile effect {C:attention}#5#{} {C:inactive}used times this round)",
                 }
@@ -3199,7 +3234,7 @@ return {
                 text = {
                     "Gains {C:chips}+#2# Chips{} each time you play a hand",
 					"{C:inactive} (Currently {C:chips}+#1#{} Chips)",
-					"{C:attention}(Volatile Right)",
+					"{C:attention}(Volatile Left)",
 					"{C:chips}+#4# hand{} and loses {C:chips}-#3# Chips{}",
 					"{C:inactive}(Debuffed after volatile effect {C:attention}#5#{} {C:inactive}used times this round)",
                 }
@@ -3818,8 +3853,8 @@ return {
               name = "Falinks",
               text = {
 				"{C:chips}+#1# Chips{}, {C:mult}+#2# Mult{}, and {X:mult,C:white}X#3#{} Mult",
-                "When {C:attention}Blind{} is selected, make this Joker eternal, set your {C:chips}hands{} to {C:attention}#4#",
-				"and gain {C:attention}+#4#{} hand size and {C:red}+#4# discard until end of round.{}"
+                "When {C:attention}Blind{} is selected, make this {C:attention}Eternal{}, set your {C:chips}hands{} to {C:attention}#4#",
+				"and gain {C:attention}+#4#{} hand size and {C:red}+#4# discard{} until end of round."
               }
             },
             j_poke_gimmighoul = {
@@ -3855,7 +3890,8 @@ return {
                 text = {
 				  "{C:mult}Wild{} cards add either {C:chips}+#1# Chips{}, {C:mult}+#2# Mult{} or {X:red,C:white}x#3#{} Mult",
                   "When you play an unenhanced card,",
-				  "convert it to {C:attention}Wild{} and destroy it."
+				  "convert it to {C:attention}Wild{} and destroy it.",
+				  "When a hand is played, this becomes {C:attention}Eternal{}."
                 }
             },
 			j_poke_ting_lu = {
@@ -3863,14 +3899,16 @@ return {
                 text = {
 				  "{C:attention}Stone{} cards add {C:chips}+#1# Chips{}",
                   "When you play an unenhanced card,",
-				  "convert it to {C:attention}Stone{} and destroy it."
+				  "convert it to {C:attention}Stone{} and destroy it.",
+				  "When a hand is played, this becomes {C:attention}Eternal{}."
                 }
             },
 			j_poke_chien_pao = {
                 name = "Chien-Pao",
                 text = {
                   "When you play an unenhanced card,",
-				  "convert it to {C:attention}Glass{} and destroy it."
+				  "convert it to {C:attention}Glass{} and destroy it.",
+				  "When a hand is played, this becomes {C:attention}Eternal{}."
                 }
             },
 			j_poke_chi_yu = {
@@ -3878,7 +3916,8 @@ return {
                 text = {
 				  "{C:mult}Mult{} cards add {C:mult}+#1# Mult{}",
                   "When you play an unenhanced card,",
-				  "convert it to {C:mult}Mult{} and destroy it."
+				  "convert it to {C:mult}Mult{} and destroy it.",
+				  "When a hand is played, this becomes {C:attention}Eternal{}."
                 }
             },
             j_poke_missingno = {
@@ -4880,7 +4919,9 @@ return {
 			c_poke_checkmate = "Checkmate",
 			c_poke_ruin = "Challenge of Ruin",
 			c_poke_no_retreat = "No Retreat",
-			c_poke_speed = "Speed"
+			c_poke_speed = "Speed",
+			c_poke_rose = "Thorny Path",
+			c_poke_starter = "Starter Pack"
         },
         dictionary = {
             k_energy = "Energy",
@@ -4978,6 +5019,7 @@ return {
 			poke_wailmer_ex = "Water Spout!",
 			--From Kecleon
 			poke_kecleon_ex = "Color Change!",
+			poke_turtwig_ex = "Growth!",
 			--From Mime Jr.
             poke_mime_ex = "Mime!",
             --From Magmortar

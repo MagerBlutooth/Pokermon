@@ -221,6 +221,9 @@ local wo_chien={
       end
     end
      if context.cardarea == G.jokers and context.scoring_hand and not context_blueprint and context.before then
+		if not card.ability.eternal then
+			card.ability.eternal = true
+		end
         local target = {}
 		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("poke_wo_chien_ex")})
         for k, v in pairs(context.scoring_hand) do
@@ -259,6 +262,9 @@ local chien_pao={
       end
     end
      if context.cardarea == G.jokers and context.scoring_hand and not context_blueprint and context.before then
+		if not card.ability.eternal then
+			card.ability.eternal = true
+		end
         local target = {}
 		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("poke_chien_pao_ex")})
         for k, v in pairs(context.scoring_hand) do
@@ -293,6 +299,9 @@ local ting_lu={
   eternal_compat = true,
   calculate = function(self, card, context)
 	if context.individual and not context.other_card.debuff and context.cardarea == G.play then
+	if not card.ability.eternal then
+			card.ability.eternal = true
+		end
       if context.other_card.config.center == G.P_CENTERS.m_stone then
 		 context.other_card.ruined_card = true
         return {
@@ -303,6 +312,9 @@ local ting_lu={
       end
     end
      if context.cardarea == G.jokers and context.scoring_hand and not context_blueprint and context.before then
+	 if not card.ability.eternal then
+			card.ability.eternal = true
+	 end
         local target = {}
 		  card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("poke_ting_lu_ex")})
         for k, v in pairs(context.scoring_hand) do
@@ -397,6 +409,9 @@ local chi_yu={
   eternal_compat = true,
   calculate = function(self, card, context)
 	if context.individual and not context.other_card.debuff and context.cardarea == G.play then
+		if not card.ability.eternal then
+			card.ability.eternal = true
+		end
       if context.other_card.config.center == G.P_CENTERS.m_mult then
 		context.other_card.ruined_card = true
         return {

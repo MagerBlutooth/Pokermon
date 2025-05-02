@@ -481,10 +481,10 @@ local karrablast = {
 local escavalier = {
   name = "escavalier",
   pos = { x = 11, y = 6 },
-  config = { extra = {mult_mod = 10, mult_current = 10, tag = nil, target_goal = 2}},
+  config = { extra = {mult_mod = 10, mult_current = 10, tag = nil, tag_name = nil, target_goal = 2}},
   loc_vars = function(self, info_queue, card)
     type_tooltip(self, info_queue, card)
-    return { vars = {card.ability.extra.mult_mod, card.ability.extra.mult_current, card.ability.extra.tag or "None", card.ability.extra.target_goal}}
+    return { vars = {card.ability.extra.mult_mod, card.ability.extra.mult_current, card.ability.extra.tag_name or "None", card.ability.extra.target_goal}}
   end,
   rarity = "poke_safari",
   cost = 9,
@@ -492,18 +492,29 @@ local escavalier = {
   ptype = "Grass",
   atlas = "Pokedex5",
   volatile = true,
-  blueprint_compat = true,
+  blueprint_compat = false,
   perishable_compat = true,
   eternal_compat = true,
   calculate = function(self, card, context)
     if context.setting_blind then
+		--Orbital tags currently take the largest poker hand instead of the one from the tag. Need to figure out how to grab the existing tag instead of only the key.
 		if G.GAME.blind_on_deck == 'Small' then
-			card.ability.extra.tag = G.GAME.round_resets.blind_tags['Small']
-			card_eval_status_text(card, 'extra', nil, nil, nil, {message = "Add Tag"})
+			card.ability.extra.tag = Tag(G.GAME.round_resets.blind_tags.Small)
+			card.ability.extra.tag_name = Tag(G.GAME.round_resets.blind_tags.Small).name
+			if G.GAME.round_resets.blind_tags.Small == 'tag_orbital' then
+				card.ability.extra.tag_name = Tag(G.GAME.round_resets.blind_tags.Small).name .. ": " .. get_largest_poker_hand_name()
+				card.ability.extra.tag.ability.orbital_hand = get_largest_poker_hand_name()
+			end
+		card_eval_status_text(card, 'extra', nil, nil, nil, {message = "Add Tag"})
 		elseif G.GAME.blind_on_deck == 'Big' then
-			card.ability.extra.tag = G.GAME.round_resets.blind_tags['Big']
-			card_eval_status_text(card, 'extra', nil, nil, nil, {message = "Add Tag"})
-		end
+			card.ability.extra.tag = Tag(G.GAME.round_resets.blind_tags.Big)
+			card.ability.extra.tag_name = Tag(G.GAME.round_resets.blind_tags.Big).name
+			if G.GAME.round_resets.blind_tags.Big == 'tag_orbital' then
+				card.ability.extra.tag_name = Tag(G.GAME.round_resets.blind_tags.Big).name .. ": " .. get_largest_poker_hand_name()
+				card.ability.extra.tag.ability.orbital_hand = get_largest_poker_hand_name()
+			end
+		card_eval_status_text(card, 'extra', nil, nil, nil, {message = "Add Tag"})
+	    end
 	end
 	if context.cardarea == G.jokers and context.scoring_hand and context.joker_main then
 		card.ability.extra.mult_current = card.ability.extra.mult_current + card.ability.extra.mult_mod
@@ -517,11 +528,12 @@ local escavalier = {
 		card.ability.extra.mult_current = card.ability.extra.mult_mod
 		if not context.individual and not context.repetition and not context.blueprint and G.GAME.chips/G.GAME.blind.chips >= card.ability.extra.target_goal then
 			if card.ability.extra.tag then
-				add_tag(Tag(card.ability.extra.tag))
+				add_tag(card.ability.extra.tag)
 				card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('poke_escavalier_ex'), colour = G.C.FILTER})
 			end
 		end
 		card.ability.extra.tag = nil
+		card.ability.extra.tag_name = nil
 	end
   end,
 }
