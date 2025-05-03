@@ -2386,7 +2386,7 @@ return {
                 text = {
                     "When you play a hand, destroy your leftmost",
 					"consumable and this gains {C:mult}+#2# Mult.",
-					"{C:inactive}(Evolves at {C:mult}+#1#/{C:inactive}#3# Mult)"
+					"{C:inactive}(Evolves at {C:mult}+#1#{C:inactive} / #3# Mult)"
                 } 
             },
 			j_poke_ursaring = {
@@ -2818,8 +2818,8 @@ return {
 			j_poke_kecleon = {
                 name = 'Kecleon',
                 text = {
-                    "When you gain a joker,",
-                    "this changes to the same type. When this joker",
+                    "When you gain a Joker,",
+                    "this changes to the same type. When this",
                     "changes type, it gains {C:mult}+#1#{} Mult",
                     "{C:inactive,s:0.8}(Currently {C:attention,s:0.8}+#2#{C:inactive,s:0.8})"
                 }
@@ -3218,6 +3218,24 @@ return {
                     "Each {C:attention}Hazard Card held{} in hand",
                     "gives {C:mult}+#3#{} Mult and retriggers",
                 }
+            },
+			j_poke_drilbur = {
+                name = "Drilbur",
+                text = {
+                    "{C:purple}+#1# Hazards {C:inactive}(1 per #2# cards)",
+                    "Gains {C:mult}+#3# Mult{} for each ",
+					"{C:purple}Hazard Card{} in your scoring hand",
+                    "{C:inactive,s:0.8}(Evolves at {C:attention}+#4#{} / {C:inactive,s:0.8} #5# Mult)"
+                }
+            },
+			j_poke_excadrill= {
+                name = "Excadrill",
+                text = {
+                    "{C:purple}+#1# Hazards {C:inactive}(1 per #2# cards)",
+                    "Gains {C:mult}+#3#{} and {X:mult,C:white} X#4# {} Mult for each ",
+					"{C:attention}Hazard Card{} in your scoring hand",
+					"{C:inactive,s:0.8}(Currently {C:mult}+#5#{}) and {X:mult,C:white}X#6#{})",
+            }
             },
 			j_poke_throh = {
                 name = "Throh",
@@ -4921,7 +4939,8 @@ return {
 			c_poke_no_retreat = "No Retreat",
 			c_poke_speed = "Speed",
 			c_poke_rose = "Thorny Path",
-			c_poke_starter = "Starter Pack"
+			c_poke_starter = "Starter Pack",
+			c_poke_drill = "Rapid Spin"
         },
         dictionary = {
             k_energy = "Energy",
@@ -5032,6 +5051,9 @@ return {
 			--From Throh and Sawk
 			poke_throh_ex = "Superpower!",
 			poke_sawk_ex = "Close Combat!",
+			--From Drilbur Line
+			poke_drilbur_ex = "Rapid Spin!",
+			poke_excadrill_ex = "Drill Run!",
             --From Vikavolt
 			--From Wimpod Line
 			poke_wimpod_ex = "Wimp Out!",

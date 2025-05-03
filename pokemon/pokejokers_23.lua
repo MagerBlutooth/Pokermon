@@ -103,38 +103,29 @@ local pyroar={
 local furfrou={
   name = "furfrou",
   pos = {x = 12, y = 1},
-  config = {extra = {mult = 0, mult_mod = 0, form = 0}},
+  config = {extra = {mult = 0, mult_mod = 1, form = 0}},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
 	info_queue[#info_queue+1] = {set = 'Other', key = 'trim'}
 	local alt_key = nil
 	if center.ability.extra.form == 1 then
       alt_key = "j_poke_furfrou_heart"
-	  center.ability.extra.mult_mod = 1
     elseif center.ability.extra.form == 2 then
       alt_key = "j_poke_furfrou_star"
-	  center.ability.extra.mult_mod = 1
 	elseif center.ability.extra.form == 3 then
       alt_key = "j_poke_furfrou_diamond"
-	  center.ability.extra.mult_mod = 1
 	elseif center.ability.extra.form == 4 then
 	  alt_key = "j_poke_furfrou_debutante"
-	  center.ability.extra.mult_mod = 1
 	elseif center.ability.extra.form == 5 then
 	  alt_key = "j_poke_furfrou_dandy"
-	  center.ability.extra.mult_mod = 3
 	elseif center.ability.extra.form == 6 then
 	  alt_key = "j_poke_furfrou_matron"
-	  center.ability.extra.mult_mod = 3
 	elseif center.ability.extra.form == 7 then
 	  alt_key = "j_poke_furfrou_pharaoh"
-	  center.ability.extra.mult_mod = 1
 	elseif center.ability.extra.form == 8 then
 	  alt_key = "j_poke_furfrou_kabuki"
-	  center.ability.extra.mult_mod = 4
 	elseif center.ability.extra.form == 9 then
 	  alt_key = "j_poke_furfrou_lareine"
-	  center.ability.extra.mult_mod = 3
     end
     return {vars = {center.ability.extra.mult, center.ability.extra.mult_mod}, key = alt_key}
   end,
@@ -152,6 +143,15 @@ local furfrou={
 		card.ability.extra.form = math.ceil(furfrou_form * 9)
 		self:set_sprites(card)
 		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('poke_furfrou_ex'), colour = G.C.FILTER})
+			if card.ability.extra.form == 5 then
+			  card.ability.extra.mult_mod = card.ability.extra.mult_mod  * 4
+			elseif card.ability.extra.form == 6 then
+			  card.ability.extra.mult_mod = card.ability.extra.mult_mod  * 4
+			elseif card.ability.extra.form == 8 then
+			  card.ability.extra.mult_mod = card.ability.extra.mult_mod  * 5
+			elseif card.ability.extra.form == 9 then
+			  card.ability.extra.mult_mod = card.ability.extra.mult_mod  * 4
+			end
 		card:juice_up()
 	end
 		
@@ -206,6 +206,12 @@ local furfrou={
 	end
 	if context.end_of_round and G.GAME.blind.boss and card.ability.extra.form ~= 0 and not context.game_over then
 		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('poke_furfrou_revert_ex'), colour = G.C.FILTER})
+		if card.ability.extra.form == 5 or card.ability.extra.form == 6 or card.ability.extra.form == 9 then
+			card.ability.extra.mult_mod = card.ability.extra.mult_mod  / 4 
+		end
+		if card.ability.extra.form == 8 then
+			card.ability.extra.mult_mod = card.ability.extra.mult_mod  / 5 
+		end
 		card:juice_up()
 		card.ability.extra.form = 0
 		card.children.center:set_sprite_pos({x = 12, y = 1})

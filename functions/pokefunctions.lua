@@ -121,6 +121,7 @@ family = {
     {"golett", "golurk"},
 	  {"pawniard", "bisharp", "kingambit"},
     {"roggenrola", "boldore", "gigalith"},
+	{"drilbur", "excadrill"},
     {"zorua", "zoroark"},
     {"deino", "zweilous", "hydreigon"},
 	  {"bunnelby", "diggersby"},

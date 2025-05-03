@@ -2,11 +2,11 @@
 local ursaluna={
   name = "ursaluna",
   pos = {x = 2, y = 8},
-  config = {extra = {card_limit = 2, club_mod = 1, clubs_in_deck = 0}},
+  config = {extra = {card_limit = 2, club_mod = 3, clubs_in_deck = 0}},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
 	center.ability.extra.clubs_in_deck = 0
-	if center.area == G.jokers and G.playing_cards and #G.playing_cards > 0 then
+	if center.area == G.jokers and G.playing_cards and #G.playing_cards > 0 and G.GAME.current_round.hands_played == 0 then
 		for k, v in pairs(G.playing_cards) do
 			if v.base.suit == 'Clubs' then
 				center.ability.extra.clubs_in_deck = center.ability.extra.clubs_in_deck + 1

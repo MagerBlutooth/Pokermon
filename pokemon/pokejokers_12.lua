@@ -87,10 +87,10 @@ local milotic={
 local kecleon={
   name = "kecleon",
   pos = {x = 3, y = 10},
-  config = {extra = {mult_gain = 2, mult = 0, joker_tally = (G.jokers and #G.jokers or 0), latest_type = "Colorless"}},
+  config = {extra = {mult_mod = 2, mult = 0, joker_tally = (G.jokers and #G.jokers or 0), latest_type = "Colorless"}},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
-    return {vars = {center.ability.extra.mult_gain, center.ability.extra.mult}}
+    return {vars = {center.ability.extra.mult_mod, center.ability.extra.mult}}
   end,
   rarity = 3,
   cost = 8,

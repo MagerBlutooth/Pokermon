@@ -305,8 +305,11 @@ local kecleon_test = {
     },
     jokers = {
       {id = "j_poke_kecleon", eternal = true},
-	  {id = "j_poke_wailord", eternal = false},
     },
+	consumeables = {
+		{id = "c_poke_colorless_energy"},
+		{id = "c_poke_colorless_energy"}
+	},
     restrictions = {
         banned_cards = {
         },
@@ -358,6 +361,10 @@ local sawk_throh = {
 	  {id = "j_poke_psyduck", eternal = true},
 	  {id = "j_poke_throh", eternal = true},
     },
+	consumeables = {
+		{id = 'c_poke_fighting_energy'},
+		{id = 'c_poke_fighting_energy'},
+	},
     restrictions = {
         banned_cards = {
         },
@@ -410,9 +417,12 @@ local furfrou = {
         }
     },
     jokers = {
+	  {id = "j_poke_sentret", eternal = true},
       {id = "j_poke_furfrou", eternal = true},
     },
 	consumeables = {
+		{id = "c_poke_colorless_energy"},
+		{id = "c_poke_colorless_energy"}
 	},
     restrictions = {
         banned_cards = {
@@ -592,7 +602,31 @@ local starter = {
       type = 'Challenge Deck',
     },
 }
+local drill = {
+    object_type = "Challenge",
+    key = "drill",
+    rules = {
+        modifiers = {
+            {id = 'joker_slots', value = 5},
+			{id = 'discards', value = 2},
+        }
+    },
+    jokers = {
+	  {id = "j_poke_drilbur", eternal = false},
+    },
+    restrictions = {
+        banned_cards = {
+        },
+        banned_tags = {
+        },
+        banned_other = {
+        },
+    },
+    deck = {
+      type = 'Challenge Deck',
+    },
+}
 
 return {name = "Challenges", 
-        list = {nuzlocke, goodasgold, parenthood, littlecup, hammertime, bunnelby_test, wailmer_test, kecleon_test, wimpod_test, sawk_throh, teddy_bear, furfrou, ruin, no_retreat, speed, rose}
+        list = {nuzlocke, goodasgold, parenthood, littlecup, hammertime, bunnelby_test, wailmer_test, kecleon_test, wimpod_test, sawk_throh, teddy_bear, furfrou, ruin, no_retreat, speed, rose, drill}
 }

@@ -1198,5 +1198,5 @@ return {name = "Pokemon Jokers 211-240",
               end
             end
         end,
-        list = {qwilfish, scizor, heracross, sneasel, corsola, remoraid, octillery, delibird, mantine, skarmory, kingdra, phanpy, donphan, porygon2, stantler, smeargle, tyrogue, hitmontop, smoochum, elekid, magby},
+        list = {qwilfish, scizor, heracross, sneasel, teddiursa, ursaring, corsola, remoraid, octillery, delibird, mantine, skarmory, kingdra, phanpy, donphan, porygon2, stantler, smeargle, tyrogue, hitmontop, smoochum, elekid, magby},
 }

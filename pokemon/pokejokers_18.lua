@@ -379,7 +379,129 @@ local gigalith = {
 -- Woobat 527
 -- Swoobat 528
 -- Drilbur 529
+local drilbur = {
+  name = "drilbur",
+  pos = { x = 7, y = 2 },
+   config = {extra = {hazard_ratio = 10, mult = 0, mult_mod = 1, upgraded = false}, evo_rqmt = 15},
+  loc_vars = function(self, info_queue, card)
+    type_tooltip(self, info_queue, card)
+    -- just to shorten function
+    local abbr = card.ability.extra
+    info_queue[#info_queue+1] = {set = 'Other', key = 'poke_hazards'}
+    info_queue[#info_queue+1] = G.P_CENTERS.m_poke_hazard
+
+    local to_add = math.floor(52 / abbr.hazard_ratio)
+    if G.playing_cards then
+      local count = #G.playing_cards
+      for _, v in pairs(G.playing_cards) do
+        if SMODS.has_enhancement(v, "m_poke_hazard") then
+          count = count - 1
+        end
+      end
+      to_add = math.floor(count / abbr.hazard_ratio)
+    end
+    return {vars = {to_add, abbr.hazard_ratio, abbr.mult_mod, abbr.mult, self.config.evo_rqmt}}
+  end,
+  rarity = 1,
+  cost = 5,
+  stage = "Basic",
+  ptype = "Earth",
+  atlas = "Pokedex5",
+  blueprint_compat = true,
+  calculate = function(self, card, context)
+    if context.setting_blind then
+      poke_add_hazards(card.ability.extra.hazard_ratio)
+    end
+	if context.cardarea == G.jokers and context.scoring_hand and context.before and not context.blueprint then
+		for k, v in ipairs(context.scoring_hand) do
+			  if SMODS.has_enhancement(v, "m_poke_hazard") then
+				card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
+				v.rapid_spin = true
+				card.ability.extra.upgraded = true
+			  end
+		end
+		if card.ability.extra.upgraded then
+			card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("poke_drilbur_ex")})
+			card.ability.extra.upgraded = false
+		end
+	end
+	if context.joker_main then
+        return {
+          message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.mult}}, 
+          colour = G.C.MULT,
+          mult_mod = card.ability.extra.mult
+        }
+	 elseif context.destroying_card then
+		  local spin = context.destroying_card.config.center == G.P_CENTERS.m_poke_hazard
+		  return not context.blueprint and spin and context.destroying_card.rapid_spin
+     end
+    return scaling_evo(self, card, context, "j_poke_excadrill", card.ability.extra.mult, self.config.evo_rqmt)
+ end,
+}
 -- Excadrill 530
+local excadrill = {
+  name = "excadrill",
+  pos = { x = 8, y = 2 },
+  config = {extra = {hazard_ratio = 10, mult = 0, Xmult = 1, mult_mod = 1, Xmult_mod = 0.1, upgraded = false}},
+  loc_vars = function(self, info_queue, card)
+    type_tooltip(self, info_queue, card)
+    -- just to shorten function
+    local abbr = card.ability.extra
+    info_queue[#info_queue+1] = {set = 'Other', key = 'poke_hazards'}
+    info_queue[#info_queue+1] = G.P_CENTERS.m_poke_hazard
+
+    local to_add = math.floor(52 / abbr.hazard_ratio)
+    if G.playing_cards then
+      local count = #G.playing_cards
+      for _, v in pairs(G.playing_cards) do
+        if SMODS.has_enhancement(v, "m_poke_hazard") then
+          count = count - 1
+        end
+      end
+      to_add = math.floor(count / abbr.hazard_ratio)
+    end
+    return {vars = {to_add, abbr.hazard_ratio, abbr.mult_mod, abbr.Xmult_mod, abbr.mult, abbr.Xmult}}
+  end,
+  rarity = 3,
+  cost = 8,
+  stage = "Basic",
+  ptype = "Fighting",
+  atlas = "Pokedex5",
+  volatile = true,
+  blueprint_compat = false,
+  perishable_compat = true,
+  eternal_compat = true,
+  calculate = function(self, card, context)
+    if context.setting_blind then
+      poke_add_hazards(card.ability.extra.hazard_ratio)
+    end
+	 if context.cardarea == G.jokers and context.scoring_hand and not context_blueprint and context.before then
+		 for k, v in ipairs(context.scoring_hand) do
+			  if SMODS.has_enhancement(v, "m_poke_hazard") then
+				card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
+				card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.Xmult_mod
+				v.rapid_spin = true
+				card.ability.extra.upgraded = true
+			  end
+		 end
+		if card.ability.extra.upgraded then
+			card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("poke_drilbur_ex")})
+			card.ability.extra.upgraded = false
+		end
+	end
+	if context.joker_main then
+        return {
+			  message = localize("poke_excadrill_ex"), 
+			  colour = G.C.XMULT,
+			  mult_mod = card.ability.extra.mult,
+			  Xmult_mod = card.ability.extra.Xmult
+			}
+	 elseif context.destroying_card then
+		local spin = context.destroying_card.config.center == G.P_CENTERS.m_poke_hazard
+		return not context.blueprint and spin and context.destroying_card.rapid_spin
+    end
+end,
+}
 -- Audino 531
 -- Timburr 532
 -- Gurdurr 533
@@ -391,11 +513,11 @@ local gigalith = {
 local throh = {
   name = "throh",
   pos = { x = 2, y = 3 },
-  config = { extra = {mult = 0, mult_gain = 1, mult_cost = 3, discard_mod = 1, triggered = false, volatile = "right", round_limit = 3}},
+  config = { extra = {mult = 0, mult_mod = 1, mult_cost = 3, discard_mod = 1, triggered = false, volatile = "right", round_limit = 3}},
   loc_vars = function(self, info_queue, card)
     type_tooltip(self, info_queue, card)
 	info_queue[#info_queue+1] = {set = 'Other', key = 'poke_volatile_'..card.ability.extra.volatile}
-    return { vars = {card.ability.extra.mult,card.ability.extra.mult_gain, card.ability.extra.mult_cost, card.ability.extra.discard_mod, card.ability.extra.round_limit} }
+    return { vars = {card.ability.extra.mult,card.ability.extra.mult_mod, card.ability.extra.mult_cost, card.ability.extra.discard_mod, card.ability.extra.round_limit} }
   end,
   rarity = 3,
   cost = 8,
@@ -408,7 +530,7 @@ local throh = {
   eternal_compat = true,
   calculate = function(self, card, context)
     if context.pre_discard and not context.hook and not (volatile_active(self, card, card.ability.extra.volatile) and card.ability.extra.mult >= card.ability.extra.mult_cost) then
-		card.ability.extra.mult =  card.ability.extra.mult + card.ability.extra.mult_gain
+		card.ability.extra.mult =  card.ability.extra.mult + card.ability.extra.mult_mod
 		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex')})
 	end
 	local mult_to_add = card.ability.extra.mult
@@ -442,11 +564,11 @@ local throh = {
 local sawk = {
   name = "sawk",
   pos = { x = 3, y = 3 },
-  config = { extra = {chips = 0, chip_gain = 4, chip_cost = 20, hand_mod = 1, triggered = false, volatile = "left", round_limit = 3}},
+  config = { extra = {chips = 0, chip_mod = 4, chip_cost = 20, hand_mod = 1, triggered = false, volatile = "left", round_limit = 3}},
   loc_vars = function(self, info_queue, card)
     type_tooltip(self, info_queue, card)
 	info_queue[#info_queue+1] = {set = 'Other', key = 'poke_volatile_'..card.ability.extra.volatile}
-    return { vars = {card.ability.extra.chips, card.ability.extra.chip_gain, card.ability.extra.chip_cost, card.ability.extra.hand_mod, card.ability.extra.round_limit} }
+    return { vars = {card.ability.extra.chips, card.ability.extra.chip_mod, card.ability.extra.chip_cost, card.ability.extra.hand_mod, card.ability.extra.round_limit} }
   end,
   rarity = 3,
   cost = 8,
@@ -459,7 +581,7 @@ local sawk = {
   eternal_compat = true,
   calculate = function(self, card, context)
     if context.before and not (volatile_active(self, card, card.ability.extra.volatile) and card.ability.extra.chips >= card.ability.extra.chip_cost) then
-		card.ability.extra.chips =  card.ability.extra.chips + card.ability.extra.chip_gain
+		card.ability.extra.chips =  card.ability.extra.chips + card.ability.extra.chip_mod
 		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex')})
 	end
 	local chips_to_add = card.ability.extra.chips
@@ -492,5 +614,5 @@ local sawk = {
 -- Sewaddle 540
 return {
   name = "Pokemon Jokers 511-540",
-  list = {roggenrola, boldore, gigalith, pansage, simisage, pansear, simisear, panpour, simipour, throh, sawk},
+  list = {roggenrola, boldore, gigalith, drilbur, excadrill, pansage, simisage, pansear, simisear, panpour, simipour, throh, sawk},
 }
