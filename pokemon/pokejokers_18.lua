@@ -402,7 +402,7 @@ local drilbur = {
     end
     return {vars = {to_add, abbr.hazard_ratio, abbr.mult_mod, abbr.mult, self.config.evo_rqmt}}
   end,
-  rarity = 1,
+  rarity = 2,
   cost = 5,
   stage = "Basic",
   ptype = "Earth",
@@ -442,7 +442,7 @@ local drilbur = {
 local excadrill = {
   name = "excadrill",
   pos = { x = 8, y = 2 },
-  config = {extra = {hazard_ratio = 10, mult = 0, Xmult = 1, mult_mod = 1, Xmult_mod = 0.1, upgraded = false}},
+  config = {extra = {hazard_ratio = 10, mult = 0, mult_mod = 2, upgraded = false}},
   loc_vars = function(self, info_queue, card)
     type_tooltip(self, info_queue, card)
     -- just to shorten function
@@ -460,9 +460,9 @@ local excadrill = {
       end
       to_add = math.floor(count / abbr.hazard_ratio)
     end
-    return {vars = {to_add, abbr.hazard_ratio, abbr.mult_mod, abbr.Xmult_mod, abbr.mult, abbr.Xmult}}
+    return {vars = {to_add, abbr.hazard_ratio, abbr.mult_mod, abbr.mult}}
   end,
-  rarity = 3,
+  rarity = "poke_safari",
   cost = 8,
   stage = "Basic",
   ptype = "Fighting",
@@ -477,9 +477,8 @@ local excadrill = {
     end
 	 if context.cardarea == G.jokers and context.scoring_hand and not context_blueprint and context.before then
 		 for k, v in ipairs(context.scoring_hand) do
-			  if SMODS.has_enhancement(v, "m_poke_hazard") then
+			  if SMODS.has_enhancement(v, "m_poke_hazard") and not v.debuff then
 				card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
-				card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.Xmult_mod
 				v.rapid_spin = true
 				card.ability.extra.upgraded = true
 			  end
@@ -492,9 +491,8 @@ local excadrill = {
 	if context.joker_main then
         return {
 			  message = localize("poke_excadrill_ex"), 
-			  colour = G.C.XMULT,
+			  colour = G.C.MULT,
 			  mult_mod = card.ability.extra.mult,
-			  Xmult_mod = card.ability.extra.Xmult
 			}
 	 elseif context.destroying_card then
 		local spin = context.destroying_card.config.center == G.P_CENTERS.m_poke_hazard

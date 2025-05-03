@@ -3223,18 +3223,18 @@ return {
                 name = "Drilbur",
                 text = {
                     "{C:purple}+#1# Hazards {C:inactive}(1 per #2# cards)",
-                    "Gains {C:mult}+#3# Mult{} for each ",
+                    "Gains {C:mult}+#3# Mult{} for each",
 					"{C:purple}Hazard Card{} in your scoring hand",
-                    "{C:inactive,s:0.8}(Evolves at {C:attention}+#4#{} / {C:inactive,s:0.8} #5# Mult)"
+                    "{C:inactive,s:0.8}(Evolves at {C:mult}+#4#{} / {C:inactive,s:0.8} #5# Mult)"
                 }
             },
 			j_poke_excadrill= {
                 name = "Excadrill",
                 text = {
                     "{C:purple}+#1# Hazards {C:inactive}(1 per #2# cards)",
-                    "Gains {C:mult}+#3#{} and {X:mult,C:white} X#4# {} Mult for each ",
+                    "Gains {C:mult}+#3#{} Mult for each",
 					"{C:attention}Hazard Card{} in your scoring hand",
-					"{C:inactive,s:0.8}(Currently {C:mult}+#5#{}) and {X:mult,C:white}X#6#{})",
+					"{C:inactive,s:0.8}(Currently {C:mult}+#4#{}{C:inactive,s:0.8})",
             }
             },
 			j_poke_throh = {
