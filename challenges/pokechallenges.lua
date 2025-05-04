@@ -530,10 +530,7 @@ local speed = {
         }
     },
     jokers = {
-	  {id = "j_poke_lapras", eternal = true},
-	  {id = "j_poke_wailord", eternal = true},
-	  {id = "j_poke_gyarados", eternal = true},
-      {id = "j_poke_escavalier", eternal = true},
+      {id = "j_poke_karrablast", eternal = true},
     },
 	consumeables = {
 		{id = 'c_poke_linkcable'}
@@ -626,6 +623,31 @@ local drill = {
     },
 }
 
+local deer = {
+    object_type = "Challenge",
+    key = "deer",
+    rules = {
+        modifiers = {
+            {id = 'joker_slots', value = 5},
+        }
+    },
+    jokers = {
+	  {id = "j_poke_deerling", eternal = false},
+	  {id = "j_poke_shelmet", eternal = false},
+    },
+    restrictions = {
+        banned_cards = {
+        },
+        banned_tags = {
+        },
+        banned_other = {
+        },
+    },
+    deck = {
+      type = 'Challenge Deck',
+    },
+}
+
 return {name = "Challenges", 
-        list = {nuzlocke, goodasgold, parenthood, littlecup, hammertime, bunnelby_test, wailmer_test, kecleon_test, wimpod_test, sawk_throh, teddy_bear, furfrou, ruin, no_retreat, speed, rose, drill}
+        list = {nuzlocke, goodasgold, parenthood, littlecup, hammertime, bunnelby_test, wailmer_test, kecleon_test, wimpod_test, sawk_throh, teddy_bear, furfrou, ruin, no_retreat, speed, rose, drill, deer}
 }

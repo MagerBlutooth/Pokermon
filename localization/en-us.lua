@@ -3380,6 +3380,78 @@ return {
                     "{C:inactive}(Currently {C:mult}+#3#{C:inactive} Mult){}",
                 }
             },
+			j_poke_deerling = {
+				name = "Deerling (Spring)",
+                text = {
+                    "Gains {C:mult}+#1#{} Mult for each",
+                    "{C:hearts}#3#{} suit in scoring hand",
+					"{C:inactive}(Resets if a hand does not contain a {C:hearts}#3#{}{C:inactive} suit",
+					"{C:inactive}(Suit changes after beating boss blind)",
+                    "{C:inactive}(Evolves at {C:mult}+#2#{C:inactive} / +#4# Mult)",
+                } 
+			},
+			j_poke_deerling_summer = {
+			   name = "Deerling (Summer)",
+               text = {
+                    "Gains {C:mult}+#1#{} Mult for each",
+                    "{C:clubs}#3#{} suit in scoring hand",
+					"{C:inactive}(Resets if a hand does not contain a {C:clubs}#3#{}{C:inactive} suit)",
+					"{C:inactive}(Suit changes after beating boss blind)",
+                    "{C:inactive}(Evolves at {C:mult}+#2#{C:inactive} / +#4# Mult)",
+                } 
+			},
+			j_poke_deerling_fall = {
+				name = "Deerling (Fall)",
+                text = {
+                    "Gains {C:mult}+#1#{} Mult for each",
+                    "{C:diamonds}#3#{} suit in scoring hand",
+					"{C:inactive}(Resets if a hand does not contain a {C:diamonds}#3#{}{C:inactive} suit",
+					"{C:inactive}(Suit changes after beating boss blind)",
+                    "{C:inactive}(Evolves at {C:mult}+#2#{C:inactive} / +#4# Mult)",
+                } 
+			},
+			j_poke_deerling_winter = {
+				name = "Deerling (Winter)",
+                text = {
+                    "Gains {C:mult}+#1#{} Mult for each",
+                    "{C:spades}#3#{} suit in scoring hand",
+					"{C:inactive}(Resets if a hand does not contain a {C:spades}#3#{}{C:inactive} suit",
+					"{C:inactive}(Suit changes after beating boss blind)",
+                    "{C:inactive}(Evolves at {C:mult}+#2#{C:inactive} / +#4# Mult)",
+                } 
+			},
+			j_poke_sawsbuck = {
+			   name = "Sawsbuck (Spring)",
+               text = {
+                    "Gains {C:mult}+#1#{} Mult for each ",
+                    "{C:hearts}#3#{} suit in scoring hand",
+					"{C:inactive}(Suit changes after beating boss blind)",
+                } 
+			},
+			j_poke_sawsbuck_summer = {
+			   name = "Sawsbuck (Summer)",
+               text = {
+                    "Gains {C:mult}+#1#{} Mult for each ",
+                    "{C:clubs}#3#{} suit in scoring hand",
+					"{C:inactive}(Suit changes after beating boss blind)",
+                } 
+			},
+			j_poke_sawsbuck_fall = {
+				name = "Sawsbuck (Fall)",
+                text = {
+                    "Gains {C:mult}+#2#{} Mult for each ",
+                    "{C:diamonds}#3#{} suit in scoring hand",
+					"{C:inactive}(Suit changes after beating boss blind)",
+                } 
+			},
+			j_poke_sawsbuck_winter = {
+				name = "Sawsbuck (Winter)",
+                text = {
+                    "Gains {C:mult}+#1#{} Mult for each ",
+                    "{C:spades}#3#{} suit in scoring hand",
+					"{C:inactive}(Suit changes after beating boss blind)",
+                } 
+			},
 			j_poke_karrablast = {
                 name = "Karrablast",
                 text = {
@@ -4941,7 +5013,8 @@ return {
 			c_poke_speed = "Speed",
 			c_poke_rose = "Thorny Path",
 			c_poke_starter = "Starter Pack",
-			c_poke_drill = "Rapid Spin"
+			c_poke_drill = "Rapid Spin",
+			c_poke_deer = "Seasons Greetings",
         },
         dictionary = {
             k_energy = "Energy",
@@ -5049,6 +5122,8 @@ return {
 			poke_escavalier_ex = "Giga Impact!",
 			--From Bunnelby
 			poke_bunnelby_ex = "Dig!",
+			--From Deerling
+			poke_deerling_ex = "Change Form!",
 			--From Throh and Sawk
 			poke_throh_ex = "Superpower!",
 			poke_sawk_ex = "Close Combat!",

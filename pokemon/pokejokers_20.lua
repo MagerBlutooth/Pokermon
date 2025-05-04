@@ -435,16 +435,211 @@ local vanilluxe={
   end
 }
 -- Deerling 585
+local deerling = {
+  name = "deerling",
+  pos = { x = 7, y = 6 },
+  config = { extra = {mult = 0, mult_mod = 1, season_suit = 'Hearts', season = math.random(0,3)}, evo_rqmt = 3},
+  loc_vars = function(self, info_queue, center)
+    type_tooltip(self, info_queue, center)
+	local alt_key = nil
+	if center.ability.extra.season == 0 then
+      alt_key = "j_poke_deerling"
+	  self:set_suit(center)
+    elseif center.ability.extra.season == 1 then
+      alt_key = "j_poke_deerling_summer"
+	  self:set_suit(center)
+	elseif center.ability.extra.season == 2 then
+      alt_key = "j_poke_deerling_fall"
+	  self:set_suit(center)
+	elseif center.ability.extra.season == 3 then
+	  alt_key = "j_poke_deerling_winter"
+	  self:set_suit(center)
+	end
+    return { vars = {center.ability.extra.mult_mod, center.ability.extra.mult, center.ability.extra.season_suit, self.config.evo_rqmt}, key = alt_key }
+  end,
+  rarity = 1,
+  cost = 4,
+  stage = "Basic",
+  ptype = "Grass",
+  atlas = "Pokedex5",
+  volatile = true,
+  blueprint_compat = true,
+  perishable_compat = true,
+  eternal_compat = true,
+  calculate = function(self, card, context)
+    if context.before and not context.blueprint then
+      if context.cardarea == G.jokers and context.scoring_hand then
+          local upgraded = false
+          for k, v in ipairs(context.scoring_hand) do
+            if v:is_suit(card.ability.extra.season_suit) then
+              card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
+              if not upgraded then upgraded = true end
+            end
+          end
+          if upgraded then
+            return {
+              message = localize('k_upgrade_ex'),
+              colour = G.C.MULT
+            }
+            else
+				card.ability.extra.mult = 0
+				return {
+				  message = localize('k_reset'),
+				  colour = G.C.MULT
+				}
+		  end
+      end
+    end
+		
+    if context.joker_main and card.ability.extra.mult > 0 then
+          return {
+            message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.mult}}, 
+            colour = G.C.MULT,
+            mult_mod = card.ability.extra.mult
+          }
+    end
+
+    if context.end_of_round and not context.repetition and not context.individual and not context.blueprint and G.GAME.blind.boss and not context.game_over then
+		card.ability.extra.season = get_next_season(card.ability.extra.season)
+		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('poke_deerling_ex')})
+		card:juice_up()
+        self:set_suit(card)
+        self:set_sprites(card)
+    end
+	
+	return scaling_evo(self, card, context, "j_poke_sawsbuck", card.ability.extra.mult, self.config.evo_rqmt)
+
+	end,
+  set_ability = function(self, card, initial, delay_sprites)
+	  self:set_sprites(card)
+  end,
+  set_sprites = function(self, card, front)
+    --Change Form
+		if card.ability and card.ability.extra and card.ability.extra.season == 0 then --Spring Form
+		  card.children.center:set_sprite_pos({x = 7, y = 6})
+		elseif card.ability and card.ability.extra and card.ability.extra.season == 1 then --Summer Form
+		  card.children.center:set_sprite_pos({x = 11, y = 12})
+		elseif card.ability and card.ability.extra and card.ability.extra.season == 2 then --Fall Form
+		  card.children.center:set_sprite_pos({x = 12, y = 12})
+		elseif card.ability and card.ability.extra and card.ability.extra.season == 3 then --Winter Form
+		  card.children.center:set_sprite_pos({x = 10, y = 12})
+		end
+  end,
+   set_suit = function(self, card, front)
+    --Change Form
+		if card.ability and card.ability.extra and card.ability.extra.season == 0 then --Spring Form
+		  card.ability.extra.season_suit = 'Hearts'
+		elseif card.ability and card.ability.extra and card.ability.extra.season == 1 then --Summer Form
+		  card.ability.extra.season_suit = 'Clubs'
+		elseif card.ability and card.ability.extra and card.ability.extra.season == 2 then --Fall Form
+		  card.ability.extra.season_suit = 'Diamonds'
+		elseif card.ability and card.ability.extra and card.ability.extra.season == 3 then --Winter Form
+		  card.ability.extra.season_suit = 'Spades'
+		end
+  end,
+}
 -- Sawsbuck 586
+local sawsbuck = {
+  name = "sawsbuck",
+  pos = { x = 8, y = 6 },
+  config = { extra = {mult = 0, mult_mod = 1, season_suit = 'Hearts', season = 0}},
+  loc_vars = function(self, info_queue, center)
+    type_tooltip(self, info_queue, center)
+	local alt_key = nil
+	if center.ability.extra.season == 0 then
+      alt_key = "j_poke_sawsbuck"
+    elseif center.ability.extra.season == 1 then
+      alt_key = "j_poke_sawsbuck_summer"
+	elseif center.ability.extra.season == 2 then
+      alt_key = "j_poke_sawsbuck_fall"
+	elseif center.ability.extra.season == 3 then
+	  alt_key = "j_poke_sawsbuck_winter"
+	end
+    return { vars = {center.ability.extra.mult_mod, center.ability.extra.mult, center.ability.extra.season_suit}, key = alt_key }
+  end,
+  rarity = "poke_safari",
+  cost = 8,
+  condition = false,
+  stage = "Basic",
+  ptype = "Grass",
+  atlas = "Pokedex5",
+  volatile = true,
+  blueprint_compat = true,
+  perishable_compat = true,
+  eternal_compat = true,
+  calculate = function(self, card, context)
+  
+  self:set_sprites(card)
+    if context.before and not context.blueprint then
+      if context.cardarea == G.jokers and context.scoring_hand then
+          local upgraded = false
+          for k, v in ipairs(context.scoring_hand) do
+            if v:is_suit(card.ability.extra.suit) then
+              card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
+              if not upgraded then upgraded = true end
+            end
+          end
+          if upgraded then
+            return {
+              message = localize('k_upgrade_ex'),
+              colour = G.C.MULT
+            }
+		      end
+      end
+    end
+		
+    if context.joker_main and card.ability.extra.mult > 0 then
+          return {
+            message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.mult}}, 
+            colour = G.C.MULT,
+            mult_mod = card.ability.extra.mult
+          }
+    end
+    if context.end_of_round and not context.repetition and not context.individual and not context.blueprint and G.GAME.blind.boss and not context.game_over then
+        card.ability.extra.season = get_next_season(card.ability.extra.season)
+		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('poke_deerling_ex')})
+		card:juice_up()
+        self:set_suit(card)
+        self:set_sprites(card)
+    end
+	end,
+  set_ability = function(self, card, initial, delay_sprites)
+	  self:set_sprites(card)
+  end,
+  set_sprites = function(self, card, front)
+    --Change Form
+		if card.ability and card.ability.extra and card.ability.extra.season == 0 then --Spring Form
+		  card.children.center:set_sprite_pos({x = 8, y = 6})
+		elseif card.ability and card.ability.extra and card.ability.extra.season == 1 then --Summer Form
+		  card.children.center:set_sprite_pos({x = 11, y = 13})
+		elseif card.ability and card.ability.extra and card.ability.extra.season == 2 then --Fall Form
+		  card.children.center:set_sprite_pos({x = 12, y = 13})
+		elseif card.ability and card.ability.extra and card.ability.extra.season == 3 then --Winter Form
+		  card.children.center:set_sprite_pos({x = 10, y = 13})
+		end
+  end,
+   set_suit = function(card)
+    --Change Form
+		if card.ability and card.ability.extra and card.ability.extra.season == 0 then --Spring Form
+		  card.ability.extra.season_suit = 'Hearts'
+		elseif card.ability and card.ability.extra and card.ability.extra.season == 1 then --Summer Form
+		  card.ability.extra.season_suit = 'Clubs'
+		elseif card.ability and card.ability.extra and card.ability.extra.season == 2 then --Fall Form
+		  card.ability.extra.season_suit = 'Diamonds'
+		elseif card.ability and card.ability.extra and card.ability.extra.season == 3 then --Winter Form
+		  card.ability.extra.season_suit = 'Spades'
+		end
+  end,
+}
 -- Emolga 587
 -- Karrablast 588
 local karrablast = {
   name = "karrablast",
   pos = { x = 10, y = 6 },
-  config = { extra = {mult_mod = 3, mult_current = 3}},
+  config = { extra = {mult_mod = 3, mult = 3}},
   loc_vars = function(self, info_queue, card)
     type_tooltip(self, info_queue, card)
-    return { vars = {card.ability.extra.mult_mod, card.ability.extra.mult_current} }
+    return { vars = {card.ability.extra.mult_mod, card.ability.extra.mult} }
   end,
   rarity = 2,
   cost = 6,
@@ -459,15 +654,15 @@ local karrablast = {
   eternal_compat = true,
   calculate = function(self, card, context)
 	if context.cardarea == G.jokers and context.scoring_hand and context.joker_main then
-		card.ability.extra.mult_current = card.ability.extra.mult_current + card.ability.extra.mult_mod
+		card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
 		return {
-			  message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.mult_current - card.ability.extra.mult_mod}}, 
+			  message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.mult - card.ability.extra.mult_mod}}, 
 			  colour = G.C.MULT,
-			  mult_mod = card.ability.extra.mult_current - card.ability.extra.mult_mod
+			  mult_mod = card.ability.extra.mult - card.ability.extra.mult_mod
 			}
 	end
 	if context.end_of_round then
-		card.ability.extra.mult_current = card.ability.extra.mult_mod
+		card.ability.extra.mult = card.ability.extra.mult_mod
 	end
 	return item_evo_with_condition(self, card, context, "j_poke_escavalier", self.meets_condition(card))
   end,
@@ -481,10 +676,10 @@ local karrablast = {
 local escavalier = {
   name = "escavalier",
   pos = { x = 11, y = 6 },
-  config = { extra = {mult_mod = 10, mult_current = 10, tag = nil, tag_name = nil, target_goal = 2}},
+  config = { extra = {mult_mod = 10, mult = 10, tag = nil, tag_name = nil, target_goal = 2}},
   loc_vars = function(self, info_queue, card)
     type_tooltip(self, info_queue, card)
-    return { vars = {card.ability.extra.mult_mod, card.ability.extra.mult_current, card.ability.extra.tag_name or "None", card.ability.extra.target_goal}}
+    return { vars = {card.ability.extra.mult_mod, card.ability.extra.mult, card.ability.extra.tag_name or "None", card.ability.extra.target_goal}}
   end,
   rarity = "poke_safari",
   cost = 9,
@@ -517,15 +712,15 @@ local escavalier = {
 	    end
 	end
 	if context.cardarea == G.jokers and context.scoring_hand and context.joker_main then
-		card.ability.extra.mult_current = card.ability.extra.mult_current + card.ability.extra.mult_mod
+		card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
 		return {
-			  message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.mult_current - card.ability.extra.mult_mod}}, 
+			  message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.mult - card.ability.extra.mult_mod}}, 
 			  colour = G.C.MULT,
-			  mult_mod = card.ability.extra.mult_current - card.ability.extra.mult_mod
+			  mult_mod = card.ability.extra.mult - card.ability.extra.mult_mod
 			}
 	end
 	 if context.end_of_round then
-		card.ability.extra.mult_current = card.ability.extra.mult_mod
+		card.ability.extra.mult = card.ability.extra.mult_mod
 		if not context.individual and not context.repetition and not context.blueprint and G.GAME.chips/G.GAME.blind.chips >= card.ability.extra.target_goal then
 			if card.ability.extra.tag then
 				add_tag(card.ability.extra.tag)
@@ -549,5 +744,5 @@ local escavalier = {
 -- Klink 599
 -- Klang 600
 return {name = "Pokemon Jokers 570-600", 
-        list = {zoroark, gothita, gothorita, gothitelle, vanillite, vanillish, vanilluxe, karrablast, escavalier},
+        list = {zoroark, gothita, gothorita, gothitelle, vanillite, vanillish, vanilluxe, deerling, sawsbuck, karrablast, escavalier},
 }

@@ -113,8 +113,9 @@ family = {
     {"vanillite", "vanillish", "vanilluxe"},
     {"elgyem", "beheeyem"},
     {"litwick", "lampent", "chandelure"},
+	{"deerling", "sawsbuck"},
 	{"karrablast", "escavalier"},
-	  {"shelmet", "accelgor"},
+	{"shelmet", "accelgor"},
     {"pansage", "simisage"},
     {"pansear", "simisear"},
     {"panpour", "simipour"},
@@ -138,7 +139,9 @@ family = {
     {"gimmighoul", "gholdengo", "gimmighoulr"},
   --{{key = "oricorio", form = "Hearts"}, {key = "oricorio", form = "Clubs"}, {key = "oricorio", form = "Diamonds"}, {key = "oricorio", form = "Spades"}},
     {{key = "rival", form = 0},{key = "rival", form = 1},{key = "rival", form = 2}},
-	  {{key = "furfrou", form = 0},{key = "furfrou", form = 1},{key = "furfrou", form = 2},{key = "furfrou", form = 3},{key = "furfrou", form = 4},{key = "furfrou", form = 5},{key = "furfrou", form = 6},{key = "furfrou", form = 7},{key = "furfrou", form = 8},{key = "furfrou", form = 9}}
+	{{key = "furfrou", form = 0},{key = "furfrou", form = 1},{key = "furfrou", form = 2},{key = "furfrou", form = 3},{key = "furfrou", form = 4},{key = "furfrou", form = 5},{key = "furfrou", form = 6},{key = "furfrou", form = 7},{key = "furfrou", form = 8},{key = "furfrou", form = 9}},
+	{{key = "deerling", form = 0},{key = "deerling", form = 1},{key = "deerling", form = 2},{key = "deerling", form = 3}},
+	{{key = "sawsbuck", form = 0},{key = "sawsbuck", form = 1},{key = "sawsbuck", form = 2},{key = "sawsbuck", form = 3}},
 }
 
 extended_family = {
@@ -317,7 +320,7 @@ poke_backend_evolve = function(card, to_key)
     card.ability.perish_tally = G.GAME.perishable_rounds
   end
 
-  local names_to_keep = {"targets", "rank", "id", "cards_scored", "upgrade", "hazards_drawn", "energy_count", "c_energy_count", "largest_hand_name"}
+  local names_to_keep = {"targets", "rank", "id", "cards_scored", "upgrade", "hazards_drawn", "energy_count", "c_energy_count", "largest_hand_name", "season_suit", "season"}
   if type_sticker_applied(card) then
     table.insert(names_to_keep, "ptype")
   end
@@ -988,6 +991,13 @@ get_largest_poker_hand_name = function()
 	return largest_hand_name
 end
 
+get_next_season = function(season)
+	season = season + 1
+	if season > 3 then
+		season = 0
+	end
+	return season
+end
 
 get_poker_hand_tier = function(hand_name)
 	local tier = 1

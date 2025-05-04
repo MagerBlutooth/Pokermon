@@ -511,11 +511,11 @@ end,
 local throh = {
   name = "throh",
   pos = { x = 2, y = 3 },
-  config = { extra = {mult = 0, mult_mod = 1, mult_cost = 3, discard_mod = 1, triggered = false, volatile = "right", round_limit = 3}},
+  config = { extra = {mult = 0, mult_mod = 1, mult_cost_factor = 3, discard_mod = 1, triggered = false, volatile = "right", round_limit = 3}},
   loc_vars = function(self, info_queue, card)
     type_tooltip(self, info_queue, card)
 	info_queue[#info_queue+1] = {set = 'Other', key = 'poke_volatile_'..card.ability.extra.volatile}
-    return { vars = {card.ability.extra.mult,card.ability.extra.mult_mod, card.ability.extra.mult_cost, card.ability.extra.discard_mod, card.ability.extra.round_limit} }
+    return { vars = {card.ability.extra.mult,card.ability.extra.mult_mod, card.ability.extra.mult_mod*card.ability.extra.mult_cost_factor, card.ability.extra.discard_mod, card.ability.extra.round_limit} }
   end,
   rarity = 3,
   cost = 8,
@@ -527,16 +527,19 @@ local throh = {
   perishable_compat = true,
   eternal_compat = true,
   calculate = function(self, card, context)
-    if context.pre_discard and not context.hook and not (volatile_active(self, card, card.ability.extra.volatile) and card.ability.extra.mult >= card.ability.extra.mult_cost) then
+  
+	local mult_cost = math.ceil(card.ability.extra.mult_mod*card.ability.extra.mult_cost_factor)
+	
+    if context.pre_discard and not context.hook and not (volatile_active(self, card, card.ability.extra.volatile) and card.ability.extra.mult >= mult_cost) then
 		card.ability.extra.mult =  card.ability.extra.mult + card.ability.extra.mult_mod
 		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex')})
 	end
 	local mult_to_add = card.ability.extra.mult
 	if context.cardarea == G.jokers and context.scoring_hand then
       if context.joker_main then
-		if volatile_active(self, card, card.ability.extra.volatile) and card.ability.extra.mult >= card.ability.extra.mult_cost then
+		if volatile_active(self, card, card.ability.extra.volatile) and card.ability.extra.mult >= mult_cost then
 			card.ability.extra.triggered = true
-			card.ability.extra.mult = card.ability.extra.mult - card.ability.extra.mult_cost
+			card.ability.extra.mult = card.ability.extra.mult - mult_cost
 			card.ability.extra.round_limit = card.ability.extra.round_limit - 1
 			G.GAME.round_resets.discards = G.GAME.round_resets.discards + card.ability.extra.discard_mod
 			ease_discard(card.ability.extra.discard_mod)
@@ -562,11 +565,11 @@ local throh = {
 local sawk = {
   name = "sawk",
   pos = { x = 3, y = 3 },
-  config = { extra = {chips = 0, chip_mod = 4, chip_cost = 20, hand_mod = 1, triggered = false, volatile = "left", round_limit = 3}},
+  config = { extra = {chips = 0, chip_mod = 4, chip_cost_factor = 5, hand_mod = 1, triggered = false, volatile = "left", round_limit = 3}},
   loc_vars = function(self, info_queue, card)
     type_tooltip(self, info_queue, card)
 	info_queue[#info_queue+1] = {set = 'Other', key = 'poke_volatile_'..card.ability.extra.volatile}
-    return { vars = {card.ability.extra.chips, card.ability.extra.chip_mod, card.ability.extra.chip_cost, card.ability.extra.hand_mod, card.ability.extra.round_limit} }
+    return { vars = {card.ability.extra.chips, card.ability.extra.chip_mod, card.ability.extra.chip_mod*card.ability.extra.chip_cost_factor, card.ability.extra.hand_mod, card.ability.extra.round_limit} }
   end,
   rarity = 3,
   cost = 8,
@@ -578,16 +581,20 @@ local sawk = {
   perishable_compat = true,
   eternal_compat = true,
   calculate = function(self, card, context)
-    if context.before and not (volatile_active(self, card, card.ability.extra.volatile) and card.ability.extra.chips >= card.ability.extra.chip_cost) then
+
+  local chip_cost = card.ability.extra.chip_mod*card.ability.extra.chip_cost_factor
+  
+    if context.before and not (volatile_active(self, card, card.ability.extra.volatile) and card.ability.extra.chips >= chip_cost) then
 		card.ability.extra.chips =  card.ability.extra.chips + card.ability.extra.chip_mod
 		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex')})
 	end
 	local chips_to_add = card.ability.extra.chips
+	
 	if context.cardarea == G.jokers and context.scoring_hand then
       if context.joker_main then
-		if volatile_active(self, card, card.ability.extra.volatile) and card.ability.extra.chips >= card.ability.extra.chip_cost then
+		if volatile_active(self, card, card.ability.extra.volatile) and card.ability.extra.chips >= chip_cost then
 			card.ability.extra.triggered = true
-			card.ability.extra.chips = card.ability.extra.chips - card.ability.extra.chip_cost
+			card.ability.extra.chips = card.ability.extra.chips - chip_cost
 			card.ability.extra.round_limit = card.ability.extra.round_limit - 1
 			G.GAME.round_resets.hands = G.GAME.round_resets.hands + card.ability.extra.hand_mod
 			ease_hands_played(card.ability.extra.hand_mod)
