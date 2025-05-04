@@ -417,7 +417,6 @@ local furfrou = {
         }
     },
     jokers = {
-	  {id = "j_poke_sentret", eternal = true},
       {id = "j_poke_furfrou", eternal = true},
     },
 	consumeables = {

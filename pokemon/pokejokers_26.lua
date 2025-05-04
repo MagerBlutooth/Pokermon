@@ -55,10 +55,10 @@ local wimpod={
 local golisopod={
   name = "golisopod",
   pos = {x = 10, y = 3},
-  config = {extra = {mult = 30, debuffed = false}},
+  config = {extra = {Xmult = 3, debuffed = false}},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
-	return {vars = {center.ability.extra.mult}}
+	return {vars = {center.ability.extra.Xmult}}
   end,
   rarity = "poke_safari",
   cost = 8,
@@ -77,9 +77,9 @@ local golisopod={
 	if context.cardarea == G.jokers and context.scoring_hand then
 		if context.joker_main then
 		return {
-				message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.mult}}, 
-				colour = G.C.MULT,
-				mult_mod = card.ability.extra.mult
+				message = localize{type = 'variable', key = 'a_xmult', vars = {card.ability.extra.Xmult}}, 
+				colour = G.C.XMULT,
+				Xmult_mod = card.ability.extra.Xmult
 		}
 		end
 	end

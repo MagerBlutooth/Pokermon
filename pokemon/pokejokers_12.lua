@@ -82,8 +82,8 @@ local milotic={
 }
 -- Castform 351
 -- Kecleon 352
--- Minor bug causes Kecleon to proc automatically the first time after purchased, if there is a Joker of a different color.
--- Possibly specific to challenges since you can automatically start with Jokers. It might not identify there are two at the time you take it.
+-- Minor bug causes Kecleon to proc automatically the first time when you start with it.
+-- Minor timing delay when certain effects give you a Joker, like using a Poke Ball in the store. Causes potential issue with timing if you move the Joker and sell it, causing the effect to trigger.
 local kecleon={
   name = "kecleon",
   pos = {x = 3, y = 10},
@@ -122,9 +122,10 @@ local kecleon={
 		card.ability.extra.joker_tally = #G.jokers.cards
 	end
 	  
+	  
   -- --Increase Kecleon's mult if it changes type for any reason
   if not is_type(card, card.ability.extra.latest_type) then
-	card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
+	card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
 	card.ability.extra.latest_type = get_type(card)
 	card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('poke_kecleon_ex'), colour = G.C.FILTER})
 	card:juice_up()

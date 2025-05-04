@@ -2752,17 +2752,18 @@ return {
 			j_poke_wailmer = {
                 name = 'Wailmer',
                 text = {
-                    "{C:mult}+#1#{} Mult if playing a {C:attention}#4#{}",
-					"{C:inactive,s:0.8}(Always the largest played poker hand. Mult increased by {C:mult}+#3#{} {C:inactive,s:0.8}per {C:attention}tier{})",
-					"{C:inactive,s:0.8}(Evolves after triggering {C:attention,s:0.8}#2#{C:inactive,s:0.8} times)"
+                    "{C:mult}+#1# Mult{} if playing a {C:attention}#3#{}",
+					"If a larger poker hand played, Mult increases by {C:mult}+#2# Mult{} per tier",
+					"When triggered, gain {C:attention}+1 EXP{} per {C:attention}tier{}",
+					"{C:inactive,s:0.8}(Evolves at {C:attention}#4#{C:inactive,s:0.8} / #5# EXP)"
                 }
             },
 			j_poke_wailord = {
                 name = 'Wailord',
                 text = {
                     "{C:mult}+#1#{} Mult and {X:mult,C:white}X#2#{} Mult if playing a {C:attention}#5#{}",
-					"{C:inactive,s:0.8}(Always the largest played poker hand)",
-					"{C:inactive,s:0.8}(Mult increased by {C:mult}+#3#{} {C:inactive,s:0.8}and Xmult increased by {C:mult}+#4#{} {C:inactive,s:0.8}per {C:attention}tier{}{C:inactive,s:0.8})"
+					"{C:inactive,s:0.8}(Poker hand increases if a larger {C:attention}tier{} played",
+					"{C:inactive,s:0.8}({C:mult}+#3# Mult{} and {C:mult}Xmult{} increased by {C:mult}+#4#{} {C:inactive,s:0.8}per {C:attention}tier{}{C:inactive,s:0.8})"
                 }
             },
 			j_poke_budew = {
@@ -3638,15 +3639,15 @@ return {
                 text = {
                   "{C:chips}+#1#{} Chips",
                   "Self-destructs when using your final hand or discard",
-				  "{C:inactive,s:0.8}(Must use at least two hands/discards to trigger)",
+				  "{C:inactive,s:0.8}(Only triggered after using two hands or discards)",
 				  "{C:inactive,s:0.8}(Evolves after {C:attention,s:0.8}#2#{C:inactive,s:0.8} rounds)",
                 }
             },
 			j_poke_golisopod = {
                 name = "Golisopod",
                 text = {
-                  "{C:mult}+#1#{} Mult",
-                  "Debuffed when using your final hand or discard",
+                  "{X:red,C:white} X#1#{} Mult",
+                  "Debuffed after using your final hand or discard",
                 }
             },
             j_poke_mimikyu = {

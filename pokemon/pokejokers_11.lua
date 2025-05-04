@@ -212,7 +212,7 @@ local roselia = {
 local wailmer = {
   name = "wailmer",
   pos = { x = 8, y = 6 },
-  config = { extra = { mult = 3, hands_played = 0}, evo_rqmt = 15},
+  config = { extra = { mult = 3, exp = 0, largest_hand_name = 'High Card'}, evo_rqmt = 40},
   rarity = 2,
   cost = 6,
   stage = "Basic",
@@ -222,22 +222,20 @@ local wailmer = {
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
 	info_queue[#info_queue+1] = {set = 'Other', key = 'tier'}
-	local hands_left = math.max(0, self.config.evo_rqmt - center.ability.extra.hands_played)
-	local tier = get_poker_hand_tier(get_largest_poker_hand_name())
-    return { vars = { center.ability.extra.mult*tier, hands_left, center.ability.extra.mult, get_largest_poker_hand_name()} }
+	local tier = get_poker_hand_tier(center.ability.extra.largest_hand_name)
+    return { vars = { center.ability.extra.mult*tier, center.ability.extra.mult, center.ability.extra.largest_hand_name, center.ability.extra.exp, self.config.evo_rqmt} }
   end,
   calculate = function(self, card, context)
     if context.before and not context.blueprint then
-		if get_poker_hand_tier(context.scoring_name) == get_poker_hand_tier(get_largest_poker_hand_name()) then
-			if G.GAME.hands[context.scoring_name].played == 1 and get_largest_poker_hand_name() ~= 'High Card' then --If the largest hand has only been played once, the largest hand just increased (unless High Card) 
+		if get_poker_hand_tier(context.scoring_name) > get_poker_hand_tier(card.ability.extra.largest_hand_name) then
 				card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex')})
-			end	
+				card.ability.extra.largest_hand_name = context.scoring_name
 		end
 	end
     if context.cardarea == G.jokers and context.scoring_hand then
-      local tier = get_poker_hand_tier(get_largest_poker_hand_name())
+      local tier = get_poker_hand_tier(card.ability.extra.largest_hand_name)
 		if context.joker_main and get_poker_hand_tier(context.scoring_name) == tier then 
-			card.ability.extra.hands_played = card.ability.extra.hands_played + 1
+			card.ability.extra.exp = card.ability.extra.exp + tier
 			  return {
 				message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.extra.mult*tier } },
 				colour = G.C.MULT,
@@ -245,14 +243,14 @@ local wailmer = {
 			  }
 		end
     end
-    return scaling_evo(self, card, context, "j_poke_wailord", card.ability.extra.hands_played, self.config.evo_rqmt)
+    return scaling_evo(self, card, context, "j_poke_wailord", card.ability.extra.exp, self.config.evo_rqmt)
   end
 }
 -- Wailord 321
 local wailord = {
   name = "wailord",
   pos = { x = 9, y = 6 },
-  config = { extra = { mult = 4, Xmult = 0.2}},
+  config = { extra = { mult = 4, Xmult = 0.2, largest_hand_name = 'High Card'}},
   rarity = "poke_safari",
   cost = 6,
   stage = "Basic",
@@ -262,19 +260,18 @@ local wailord = {
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
 	info_queue[#info_queue+1] = {set = 'Other', key = 'tier'}
-	local tier = get_poker_hand_tier(get_largest_poker_hand_name())
-    return { vars = { tier*center.ability.extra.mult, 1+center.ability.extra.Xmult*tier, center.ability.extra.mult, center.ability.extra.Xmult, get_largest_poker_hand_name()} }
+	local tier = get_poker_hand_tier(center.ability.extra.largest_hand_name)
+    return { vars = { tier*center.ability.extra.mult, 1+center.ability.extra.Xmult*tier, center.ability.extra.mult, center.ability.extra.Xmult, center.ability.extra.largest_hand_name} }
   end,
   calculate = function(self, card, context)
     if context.before then
-		if get_poker_hand_tier(context.scoring_name) == get_poker_hand_tier(get_largest_poker_hand_name()) then
-			if G.GAME.hands[context.scoring_name].played == 1 and get_largest_poker_hand_name() ~= 'High Card'  then --If the largest hand has only been played once, the largest hand just increased (unless High Card) 
-				card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex')})
-			end	
+		if get_poker_hand_tier(context.scoring_name) > get_poker_hand_tier(card.ability.extra.largest_hand_name) then
+			card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex')})
+			card.ability.extra.largest_hand_name = context.scoring_name
 		end
 	end
 	if context.cardarea == G.jokers and context.scoring_hand then
-	local tier = get_poker_hand_tier(get_largest_poker_hand_name())
+	local tier = get_poker_hand_tier(card.ability.extra.largest_hand_name)
 		if context.joker_main and get_poker_hand_tier(context.scoring_name) == tier then
 			  return {
 				message = localize("poke_wailmer_ex"), 

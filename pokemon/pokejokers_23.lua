@@ -134,7 +134,7 @@ local furfrou={
   stage = "Basic",
   ptype = "Colorless",
   atlas = "Pokedex6",
-  perishable_compat = true,
+  perishable_compat = false,
   blueprint_compat = true,
   eternal_compat = true,
   calculate = function(self, card, context)
@@ -143,7 +143,9 @@ local furfrou={
 		card.ability.extra.form = math.ceil(furfrou_form * 9)
 		self:set_sprites(card)
 		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('poke_furfrou_ex'), colour = G.C.FILTER})
-			if card.ability.extra.form == 5 then
+			if card.ability.extra.form <= 4 then
+				card.ability.extra.mult_mod = card.ability.extra.mult_mod  * 2
+			elseif card.ability.extra.form == 5 then
 			  card.ability.extra.mult_mod = card.ability.extra.mult_mod  * 4
 			elseif card.ability.extra.form == 6 then
 			  card.ability.extra.mult_mod = card.ability.extra.mult_mod  * 4
@@ -197,7 +199,7 @@ local furfrou={
 		card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
 		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("k_upgrade_ex")})
 	end
-    if context.cardarea == G.jokers and context.scoring_hand and context.joker_main then
+    if context.cardarea == G.jokers and context.scoring_hand and context.joker_main and not context.blueprint then
 		  return {
 			message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.mult}}, 
 			colour = G.C.MULT,
@@ -206,6 +208,9 @@ local furfrou={
 	end
 	if context.end_of_round and G.GAME.blind.boss and card.ability.extra.form ~= 0 and not context.game_over then
 		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('poke_furfrou_revert_ex'), colour = G.C.FILTER})
+		if card.ability.extra.form <= 4 then
+			card.ability.extra.mult_mod = card.ability.extra.mult_mod  / 2 
+		end
 		if card.ability.extra.form == 5 or card.ability.extra.form == 6 or card.ability.extra.form == 9 then
 			card.ability.extra.mult_mod = card.ability.extra.mult_mod  / 4 
 		end

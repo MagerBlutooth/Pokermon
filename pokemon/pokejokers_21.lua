@@ -573,7 +573,7 @@ local pawniard={
 local bisharp={
   name = "bisharp",
   pos = {x = 5, y = 9},
-  config = {extra = {target_hand_name = 'Straight Flush', mult = 16, mult_mod = 2, times_triggered = 0}, evo_rqmt = 3},
+  config = {extra = {target_hand_name = 'Straight Flush', mult = 16, mult_mod = 3, times_triggered = 0}, evo_rqmt = 3},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
 	info_queue[#info_queue+1] = {set = 'Other', key = 'tier'}
