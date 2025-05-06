@@ -629,11 +629,11 @@ local deer = {
     rules = {
         modifiers = {
             {id = 'joker_slots', value = 5},
+			{id = 'discards', value = 2},
         }
     },
     jokers = {
 	  {id = "j_poke_deerling", eternal = false},
-	  {id = "j_poke_shelmet", eternal = false},
     },
     restrictions = {
         banned_cards = {

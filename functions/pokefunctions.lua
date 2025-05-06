@@ -991,6 +991,11 @@ get_largest_poker_hand_name = function()
 	return largest_hand_name
 end
 
+get_starting_season = function()
+	math.randomseed(os.time())
+	return math.random(0,3)
+end
+
 get_next_season = function(season)
 	season = season + 1
 	if season > 3 then

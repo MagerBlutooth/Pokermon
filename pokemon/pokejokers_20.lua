@@ -438,24 +438,24 @@ local vanilluxe={
 local deerling = {
   name = "deerling",
   pos = { x = 7, y = 6 },
-  config = { extra = {mult = 0, mult_mod = 1, season_suit = 'Hearts', season = math.random(0,3)}, evo_rqmt = 3},
+  config = { extra = {chips = 0, chip_mod = 2, season_suit = 'Hearts', season = get_starting_season(), form = get_starting_season()}, evo_rqmt = 40},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
 	local alt_key = nil
-	if center.ability.extra.season == 0 then
+	if center.ability.extra.form == 0 then
       alt_key = "j_poke_deerling"
 	  self:set_suit(center)
-    elseif center.ability.extra.season == 1 then
+    elseif center.ability.extra.form == 1 then
       alt_key = "j_poke_deerling_summer"
 	  self:set_suit(center)
-	elseif center.ability.extra.season == 2 then
+	elseif center.ability.extra.form == 2 then
       alt_key = "j_poke_deerling_fall"
 	  self:set_suit(center)
-	elseif center.ability.extra.season == 3 then
+	elseif center.ability.extra.form == 3 then
 	  alt_key = "j_poke_deerling_winter"
 	  self:set_suit(center)
 	end
-    return { vars = {center.ability.extra.mult_mod, center.ability.extra.mult, center.ability.extra.season_suit, self.config.evo_rqmt}, key = alt_key }
+    return { vars = {center.ability.extra.chip_mod, center.ability.extra.chips, center.ability.extra.season_suit, self.config.evo_rqmt}, key = alt_key }
   end,
   rarity = 1,
   cost = 4,
@@ -467,47 +467,49 @@ local deerling = {
   perishable_compat = true,
   eternal_compat = true,
   calculate = function(self, card, context)
+	card.ability.extra.form = card.ability.extra.season
+	self:set_sprites(card)
     if context.before and not context.blueprint then
       if context.cardarea == G.jokers and context.scoring_hand then
-          local upgraded = false
+          local target_suit = false
+		  local other_suit = false
+		  local suit_count = 0
           for k, v in ipairs(context.scoring_hand) do
             if v:is_suit(card.ability.extra.season_suit) then
-              card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
-              if not upgraded then upgraded = true end
-            end
+              suit_count = suit_count + 1
+              if not target_suit then target_suit = true end
+			else
+				if not other_suit then other_suit = true end
+			end
           end
-          if upgraded then
+          if target_suit and other_suit then
+			card.ability.extra.chips = card.ability.extra.chips + (card.ability.extra.chip_mod*suit_count)
             return {
               message = localize('k_upgrade_ex'),
-              colour = G.C.MULT
+              colour = G.C.CHIPS
             }
-            else
-				card.ability.extra.mult = 0
-				return {
-				  message = localize('k_reset'),
-				  colour = G.C.MULT
-				}
 		  end
       end
     end
 		
-    if context.joker_main and card.ability.extra.mult > 0 then
+    if context.joker_main and card.ability.extra.chips > 0 then
           return {
-            message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.mult}}, 
-            colour = G.C.MULT,
-            mult_mod = card.ability.extra.mult
+            message = localize{type = 'variable', key = 'a_chips', vars = {card.ability.extra.chips}}, 
+            colour = G.C.CHIPS,
+            chip_mod = card.ability.extra.chips
           }
     end
 
     if context.end_of_round and not context.repetition and not context.individual and not context.blueprint and G.GAME.blind.boss and not context.game_over then
 		card.ability.extra.season = get_next_season(card.ability.extra.season)
+		card.ability.extra.form = card.ability.extra.season
 		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('poke_deerling_ex')})
 		card:juice_up()
         self:set_suit(card)
-        self:set_sprites(card)
+		self:set_sprites(card)
     end
 	
-	return scaling_evo(self, card, context, "j_poke_sawsbuck", card.ability.extra.mult, self.config.evo_rqmt)
+	return scaling_evo(self, card, context, "j_poke_sawsbuck", card.ability.extra.chips, self.config.evo_rqmt)
 
 	end,
   set_ability = function(self, card, initial, delay_sprites)
@@ -515,47 +517,54 @@ local deerling = {
   end,
   set_sprites = function(self, card, front)
     --Change Form
-		if card.ability and card.ability.extra and card.ability.extra.season == 0 then --Spring Form
+		if card.ability and card.ability.extra and card.ability.extra.form == 0 then --Spring Form
 		  card.children.center:set_sprite_pos({x = 7, y = 6})
-		elseif card.ability and card.ability.extra and card.ability.extra.season == 1 then --Summer Form
+		elseif card.ability and card.ability.extra and card.ability.extra.form == 1 then --Summer Form
 		  card.children.center:set_sprite_pos({x = 11, y = 12})
-		elseif card.ability and card.ability.extra and card.ability.extra.season == 2 then --Fall Form
+		elseif card.ability and card.ability.extra and card.ability.extra.form == 2 then --Fall Form
 		  card.children.center:set_sprite_pos({x = 12, y = 12})
-		elseif card.ability and card.ability.extra and card.ability.extra.season == 3 then --Winter Form
+		elseif card.ability and card.ability.extra and card.ability.extra.form == 3 then --Winter Form
 		  card.children.center:set_sprite_pos({x = 10, y = 12})
 		end
   end,
    set_suit = function(self, card, front)
     --Change Form
-		if card.ability and card.ability.extra and card.ability.extra.season == 0 then --Spring Form
+		if card.ability and card.ability.extra and card.ability.extra.form == 0 then --Spring Form
 		  card.ability.extra.season_suit = 'Hearts'
-		elseif card.ability and card.ability.extra and card.ability.extra.season == 1 then --Summer Form
+		elseif card.ability and card.ability.extra and card.ability.extra.form == 1 then --Summer Form
 		  card.ability.extra.season_suit = 'Clubs'
-		elseif card.ability and card.ability.extra and card.ability.extra.season == 2 then --Fall Form
+		elseif card.ability and card.ability.extra and card.ability.extra.form == 2 then --Fall Form
 		  card.ability.extra.season_suit = 'Diamonds'
-		elseif card.ability and card.ability.extra and card.ability.extra.season == 3 then --Winter Form
+		elseif card.ability and card.ability.extra and card.ability.extra.form == 3 then --Winter Form
 		  card.ability.extra.season_suit = 'Spades'
 		end
+  end,
+  get_random_season = function()
+	return math.floor(4 * pseudorandom('deerling'))
   end,
 }
 -- Sawsbuck 586
 local sawsbuck = {
   name = "sawsbuck",
   pos = { x = 8, y = 6 },
-  config = { extra = {mult = 0, mult_mod = 1, season_suit = 'Hearts', season = 0}},
+  config = { extra = {chips = 0, chip_mod = 4, season_suit = 'Hearts', season = get_starting_season(), form = get_starting_season()}},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
 	local alt_key = nil
-	if center.ability.extra.season == 0 then
+	if center.ability.extra.form == 0 then
       alt_key = "j_poke_sawsbuck"
-    elseif center.ability.extra.season == 1 then
+	  self:set_suit(center)
+    elseif center.ability.extra.form == 1 then
       alt_key = "j_poke_sawsbuck_summer"
-	elseif center.ability.extra.season == 2 then
+	  self:set_suit(center)
+	elseif center.ability.extra.form == 2 then
       alt_key = "j_poke_sawsbuck_fall"
-	elseif center.ability.extra.season == 3 then
+	  self:set_suit(center)
+	elseif center.ability.extra.form == 3 then
 	  alt_key = "j_poke_sawsbuck_winter"
+	  self:set_suit(center)
 	end
-    return { vars = {center.ability.extra.mult_mod, center.ability.extra.mult, center.ability.extra.season_suit}, key = alt_key }
+    return { vars = {center.ability.extra.chip_mod, center.ability.extra.chips, center.ability.extra.season_suit}, key = alt_key }
   end,
   rarity = "poke_safari",
   cost = 8,
@@ -568,36 +577,43 @@ local sawsbuck = {
   perishable_compat = true,
   eternal_compat = true,
   calculate = function(self, card, context)
-  
-  self:set_sprites(card)
+	card.ability.extra.form = card.ability.extra.season
+	self:set_sprites(card)
     if context.before and not context.blueprint then
       if context.cardarea == G.jokers and context.scoring_hand then
-          local upgraded = false
+          local target_suit = false
+		  local other_suit = false
+		  local suit_count = 0
           for k, v in ipairs(context.scoring_hand) do
-            if v:is_suit(card.ability.extra.suit) then
-              card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
-              if not upgraded then upgraded = true end
-            end
+            if v:is_suit(card.ability.extra.season_suit) then
+              suit_count = suit_count + 1
+              if not target_suit then target_suit = true end
+			else
+				if not other_suit then other_suit = true end
+			end
           end
-          if upgraded then
+          if target_suit and other_suit then
+			card.ability.extra.chips = card.ability.extra.chips + (card.ability.extra.chip_mod*suit_count)
             return {
               message = localize('k_upgrade_ex'),
-              colour = G.C.MULT
+              colour = G.C.CHIPS
             }
-		      end
+		  end
       end
     end
 		
-    if context.joker_main and card.ability.extra.mult > 0 then
+    if context.joker_main and card.ability.extra.chips > 0 then
           return {
-            message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.mult}}, 
-            colour = G.C.MULT,
-            mult_mod = card.ability.extra.mult
+            message = localize{type = 'variable', key = 'a_chips', vars = {card.ability.extra.chips}}, 
+            colour = G.C.CHIPS,
+            chip_mod = card.ability.extra.chips
           }
     end
     if context.end_of_round and not context.repetition and not context.individual and not context.blueprint and G.GAME.blind.boss and not context.game_over then
-        card.ability.extra.season = get_next_season(card.ability.extra.season)
+		card.ability.extra.season = get_next_season(card.ability.extra.season)
+		card.ability.extra.form = card.ability.extra.season
 		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('poke_deerling_ex')})
+		card.ability.extra.reset_val = 0
 		card:juice_up()
         self:set_suit(card)
         self:set_sprites(card)
@@ -608,25 +624,25 @@ local sawsbuck = {
   end,
   set_sprites = function(self, card, front)
     --Change Form
-		if card.ability and card.ability.extra and card.ability.extra.season == 0 then --Spring Form
+		if card.ability and card.ability.extra and card.ability.extra.form == 0 then --Spring Form
 		  card.children.center:set_sprite_pos({x = 8, y = 6})
-		elseif card.ability and card.ability.extra and card.ability.extra.season == 1 then --Summer Form
+		elseif card.ability and card.ability.extra and card.ability.extra.form == 1 then --Summer Form
 		  card.children.center:set_sprite_pos({x = 11, y = 13})
-		elseif card.ability and card.ability.extra and card.ability.extra.season == 2 then --Fall Form
+		elseif card.ability and card.ability.extra and card.ability.extra.form == 2 then --Fall Form
 		  card.children.center:set_sprite_pos({x = 12, y = 13})
-		elseif card.ability and card.ability.extra and card.ability.extra.season == 3 then --Winter Form
+		elseif card.ability and card.ability.extra and card.ability.extra.form == 3 then --Winter Form
 		  card.children.center:set_sprite_pos({x = 10, y = 13})
 		end
   end,
-   set_suit = function(card)
+   set_suit = function(self, card, front)
     --Change Form
-		if card.ability and card.ability.extra and card.ability.extra.season == 0 then --Spring Form
+		if card.ability and card.ability.extra and card.ability.extra.form == 0 then --Spring Form
 		  card.ability.extra.season_suit = 'Hearts'
-		elseif card.ability and card.ability.extra and card.ability.extra.season == 1 then --Summer Form
+		elseif card.ability and card.ability.extra and card.ability.extra.form == 1 then --Summer Form
 		  card.ability.extra.season_suit = 'Clubs'
-		elseif card.ability and card.ability.extra and card.ability.extra.season == 2 then --Fall Form
+		elseif card.ability and card.ability.extra and card.ability.extra.form == 2 then --Fall Form
 		  card.ability.extra.season_suit = 'Diamonds'
-		elseif card.ability and card.ability.extra and card.ability.extra.season == 3 then --Winter Form
+		elseif card.ability and card.ability.extra and card.ability.extra.form == 3 then --Winter Form
 		  card.ability.extra.season_suit = 'Spades'
 		end
   end,

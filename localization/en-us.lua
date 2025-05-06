@@ -2752,18 +2752,22 @@ return {
 			j_poke_wailmer = {
                 name = 'Wailmer',
                 text = {
-                    "{C:mult}+#1# Mult{} if playing a {C:attention}#3#{}",
-					"If a larger poker hand played, Mult increases by {C:mult}+#2# Mult{} per tier",
+					"{C:mult}+#1# Mult{} if playing a {C:attention}#3#{}",
+                    "{C:inactive}(+#2# Mult per {C:attention}tier{} {C:inactive}of played hand)",
+					"{br:3.5}ERROR - CONTACT STEAK",
+					"{C:attention}Poker hand{} increases if playing a", 
+					"larger poker hand than the target.",
 					"When triggered, gain {C:attention}+1 EXP{} per {C:attention}tier{}",
-					"{C:inactive,s:0.8}(Evolves at {C:attention}#4#{C:inactive,s:0.8} / #5# EXP)"
+					"{C:inactive}(Evolves at {C:attention}#4#{C:inactive} / #5# EXP)"
                 }
             },
 			j_poke_wailord = {
                 name = 'Wailord',
                 text = {
                     "{C:mult}+#1#{} Mult and {X:mult,C:white}X#2#{} Mult if playing a {C:attention}#5#{}",
-					"{C:inactive,s:0.8}(Poker hand increases if a larger {C:attention}tier{} played",
-					"{C:inactive,s:0.8}({C:mult}+#3# Mult{} and {C:mult}Xmult{} increased by {C:mult}+#4#{} {C:inactive,s:0.8}per {C:attention}tier{}{C:inactive,s:0.8})"
+					"{C:attention}Poker hand{} increases if playing a", 
+					"larger poker hand than the target.",
+					"{C:inactive}({C:mult}+#3# Mult{} and {C:mult}Xmult{} increased by {C:mult}+#4#{} {C:inactive}per {C:attention}tier{}{C:inactive})"
                 }
             },
 			j_poke_budew = {
@@ -2787,7 +2791,7 @@ return {
 			j_poke_roserade = {
                 name = 'Roserade',
                 text = {
-                    "{X:red,C:white}X#1# {} Mult",
+                    "Adds {X:red,C:white}X#1# {} Mult",
                     "for each unique scoring suit",
                 }
             },
@@ -3383,72 +3387,80 @@ return {
 			j_poke_deerling = {
 				name = "Deerling (Spring)",
                 text = {
-                    "Gains {C:mult}+#1#{} Mult for each",
+                    "Gains {C:chips}+#1#{} Chips for each",
                     "{C:hearts}#3#{} suit in scoring hand",
-					"{C:inactive}(Resets if a hand does not contain a {C:hearts}#3#{}{C:inactive} suit",
-					"{C:inactive}(Suit changes after beating boss blind)",
-                    "{C:inactive}(Evolves at {C:mult}+#2#{C:inactive} / +#4# Mult)",
+					"if the hand has another scoring suit",
+					"{C:inactive}(Suit changes after beating Boss Blind)",
+                    "{C:inactive}(Evolves at {C:chips}+#2#{C:inactive} / +#4# Chips)",
                 } 
 			},
 			j_poke_deerling_summer = {
 			   name = "Deerling (Summer)",
                text = {
-                    "Gains {C:mult}+#1#{} Mult for each",
+                    "Gains {C:chips}+#1#{} Chips for each",
                     "{C:clubs}#3#{} suit in scoring hand",
-					"{C:inactive}(Resets if a hand does not contain a {C:clubs}#3#{}{C:inactive} suit)",
-					"{C:inactive}(Suit changes after beating boss blind)",
-                    "{C:inactive}(Evolves at {C:mult}+#2#{C:inactive} / +#4# Mult)",
+					"if the hand has another scoring suit",
+					"{C:inactive}(Suit changes after beating Boss Blind)",
+                    "{C:inactive}(Evolves at {C:chips}+#2#{C:inactive} / +#4# Chips)",
                 } 
 			},
 			j_poke_deerling_fall = {
 				name = "Deerling (Fall)",
                 text = {
-                    "Gains {C:mult}+#1#{} Mult for each",
+                    "Gains {C:chips}+#1#{} Chips for each",
                     "{C:diamonds}#3#{} suit in scoring hand",
-					"{C:inactive}(Resets if a hand does not contain a {C:diamonds}#3#{}{C:inactive} suit",
-					"{C:inactive}(Suit changes after beating boss blind)",
-                    "{C:inactive}(Evolves at {C:mult}+#2#{C:inactive} / +#4# Mult)",
+					"if the hand has another scoring suit",
+					"{C:inactive}(Suit changes after beating Boss Blind)",
+                    "{C:inactive}(Evolves at {C:chips}+#2#{C:inactive} / +#4# Chips)",
                 } 
 			},
 			j_poke_deerling_winter = {
 				name = "Deerling (Winter)",
                 text = {
-                    "Gains {C:mult}+#1#{} Mult for each",
+                    "Gains {C:chips}+#1#{} Chips for each",
                     "{C:spades}#3#{} suit in scoring hand",
-					"{C:inactive}(Resets if a hand does not contain a {C:spades}#3#{}{C:inactive} suit",
-					"{C:inactive}(Suit changes after beating boss blind)",
-                    "{C:inactive}(Evolves at {C:mult}+#2#{C:inactive} / +#4# Mult)",
+					"if the hand has another scoring suit",
+					"{C:inactive}(Suit changes after beating Boss Blind)",
+                    "{C:inactive}(Evolves at {C:chips}+#2#{C:inactive} / +#4# Chips)",
                 } 
 			},
 			j_poke_sawsbuck = {
 			   name = "Sawsbuck (Spring)",
                text = {
-                    "Gains {C:mult}+#1#{} Mult for each ",
+                    "Gains {C:chips}+#1#{} Chips for each ",
                     "{C:hearts}#3#{} suit in scoring hand",
+					"if the hand has another scoring suit",
+					"(Currently {C:chips}+#2#{} Chips)",
 					"{C:inactive}(Suit changes after beating boss blind)",
                 } 
 			},
 			j_poke_sawsbuck_summer = {
 			   name = "Sawsbuck (Summer)",
                text = {
-                    "Gains {C:mult}+#1#{} Mult for each ",
+                    "Gains {C:chips}+#1#{} Chips for each ",
                     "{C:clubs}#3#{} suit in scoring hand",
+					"if the hand has another scoring suit",
+					"(Currently {C:chips}+#2#{} Chips)",
 					"{C:inactive}(Suit changes after beating boss blind)",
                 } 
 			},
 			j_poke_sawsbuck_fall = {
 				name = "Sawsbuck (Fall)",
                 text = {
-                    "Gains {C:mult}+#2#{} Mult for each ",
+                    "Gains {C:chips}+#1#{} Chips for each ",
                     "{C:diamonds}#3#{} suit in scoring hand",
+					"if the hand has another scoring suit",
+					"(Currently {C:chips}+#2#{} Chips)",
 					"{C:inactive}(Suit changes after beating boss blind)",
                 } 
 			},
 			j_poke_sawsbuck_winter = {
 				name = "Sawsbuck (Winter)",
                 text = {
-                    "Gains {C:mult}+#1#{} Mult for each ",
+                    "Gains {C:chips}+#1#{} Chips for each ",
                     "{C:spades}#3#{} suit in scoring hand",
+					"if the hand has another scoring suit",
+					"(Currently {C:chips}+#2#{} Chips)",
 					"{C:inactive}(Suit changes after beating boss blind)",
                 } 
 			},
@@ -3979,18 +3991,20 @@ return {
 			j_poke_wo_chien = {
                 name = "Wo-Chien",
                 text = {
-				  "{C:mult}Wild{} cards add either {C:chips}+#1# Chips{}, {C:mult}+#2# Mult{} or {X:red,C:white}x#3#{} Mult",
+				  "{C:mult}Wild{} cards add either {C:chips}+#1# Chips{}, {C:mult}+#2# Mult{} or {X:red,C:white}x#3#{} Mult.",
                   "When you play an unenhanced card,",
-				  "convert it to {C:attention}Wild{} and destroy it.",
+				  "convert it to {C:attention}Wild{}",
+				  "If it is already Wild, destroy it.",
 				  "When a hand is played, this becomes {C:attention}Eternal{}."
                 }
             },
 			j_poke_ting_lu = {
                 name = "Ting-Lu",
                 text = {
-				  "{C:attention}Stone{} cards add {C:chips}+#1# Chips{}",
+				  "{C:attention}Stone{} cards add {C:chips}+#1# Chips{}.",
                   "When you play an unenhanced card,",
-				  "convert it to {C:attention}Stone{} and destroy it.",
+				  "convert it to {C:attention}Stone{}",
+				  "If it is already Stone, destroy it.",
 				  "When a hand is played, this becomes {C:attention}Eternal{}."
                 }
             },
@@ -3998,16 +4012,18 @@ return {
                 name = "Chien-Pao",
                 text = {
                   "When you play an unenhanced card,",
-				  "convert it to {C:attention}Glass{} and destroy it.",
+				  "convert it to {C:attention}Glass{}",
+				  "If it is already Glass, destroy it.",
 				  "When a hand is played, this becomes {C:attention}Eternal{}."
                 }
             },
 			j_poke_chi_yu = {
                 name = "Chi-Yu",
                 text = {
-				  "{C:mult}Mult{} cards add {C:mult}+#1# Mult{}",
+				  "{C:mult}Mult{} cards add {C:mult}+#1# Mult{}.",
                   "When you play an unenhanced card,",
-				  "convert it to {C:mult}Mult{} and destroy it.",
+				  "convert it to {C:mult}Mult{}.",
+				  "If it is already Mult, destroy it.",
 				  "When a hand is played, this becomes {C:attention}Eternal{}."
                 }
             },

@@ -198,7 +198,6 @@ local wo_chien={
 	if context.individual and not context.other_card.debuff and context.cardarea == G.play then
       if context.other_card.config.center == G.P_CENTERS.m_wild then
 	    local option = math.random(1, 3)
-		context.other_card.ruined_card = true
 		if option == 1 then
 			return {
 				mult = card.ability.extra.mult,
@@ -229,6 +228,8 @@ local wo_chien={
         for k, v in pairs(context.scoring_hand) do
           if v.config.center == G.P_CENTERS.c_base then
             v:set_ability(G.P_CENTERS.m_wild, nil, true)
+		  elseif v.config.center == G.P_CENTERS.m_wild then
+			v.ruined_card = true
 		  end
         end
 	 elseif context.destroying_card then
@@ -242,7 +243,7 @@ local chien_pao={
   name = "chien_pao",
   pos = {x = pokermon_config.pokemon_altart and 2, y = pokermon_config.pokemon_altart and 9},
   soul_pos = {x = 3, y = 9},
-  config = {extra = {chips = 100}},
+  config = {extra = {}},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
     return {vars = {center.ability.extra.chips}}
@@ -256,11 +257,6 @@ local chien_pao={
   blueprint_compat = true,
   eternal_compat = true,
   calculate = function(self, card, context)
-	if context.individual and not context.other_card.debuff and context.cardarea == G.play then
-      if context.other_card.config.center == G.P_CENTERS.m_glass then
-		context.other_card.ruined_card = true
-      end
-    end
      if context.cardarea == G.jokers and context.scoring_hand and not context_blueprint and context.before then
 		if not card.ability.eternal then
 			card.ability.eternal = true
@@ -270,6 +266,8 @@ local chien_pao={
         for k, v in pairs(context.scoring_hand) do
           if v.config.center == G.P_CENTERS.c_base then
             v:set_ability(G.P_CENTERS.m_glass, nil, true)
+		  elseif v.config.center == G.P_CENTERS.m_glass then
+			v.ruined_card = true
 		  end
         end
 	 elseif context.destroying_card then
@@ -303,7 +301,6 @@ local ting_lu={
 			card.ability.eternal = true
 		end
       if context.other_card.config.center == G.P_CENTERS.m_stone then
-		 context.other_card.ruined_card = true
         return {
             chips = card.ability.extra.chips,
             colour = G.C.CHIPS,
@@ -320,6 +317,8 @@ local ting_lu={
         for k, v in pairs(context.scoring_hand) do
           if v.config.center == G.P_CENTERS.c_base then
             v:set_ability(G.P_CENTERS.m_stone, nil, true)
+		  elseif v.config.center == G.P_CENTERS.m_stone then
+			v.ruined_card = true
 		  end
         end
 	 elseif context.destroying_card then
@@ -413,7 +412,6 @@ local chi_yu={
 			card.ability.eternal = true
 		end
       if context.other_card.config.center == G.P_CENTERS.m_mult then
-		context.other_card.ruined_card = true
         return {
             mult = card.ability.extra.mult_multi,
             colour = G.C.MULT,
@@ -427,6 +425,8 @@ local chi_yu={
         for k, v in pairs(context.scoring_hand) do
           if v.config.center == G.P_CENTERS.c_base then
             v:set_ability(G.P_CENTERS.m_mult, nil, true)
+		  elseif v.config.center == G.P_CENTERS.m_mult then
+			v.ruined_card = true
 		  end
         end
 	 elseif context.destroying_card then
