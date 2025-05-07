@@ -41,7 +41,7 @@ local qwilfish = {
         }
       end
     end
-    if context.individual and not context.end_of_round and context.cardarea == G.hand and SMODS.has_enhancement(context.other_card, "m_poke_hazard") then
+    if context.individual and not context.end_of_round and context.cardarea == G.hand and SMODS.has_enhancement(context.other_card, "m_poke_hazard") and not context.blueprint then
       card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_mod
       return {
         message = localize('k_upgrade_ex'),
@@ -190,14 +190,14 @@ local sneasel = {
   ptype = "Dark",
   atlas = "Pokedex2",
   item_req = "duskstone",
-  blueprint_compat = true,
+  blueprint_compat = false,
   calculate = function(self, card, context)
-    if context.final_scoring_step and #context.full_hand == 1 and context.full_hand[1]:get_id() == G.GAME.current_round.sneaselcard.id then
+    if context.final_scoring_step and #context.full_hand == 1 and context.full_hand[1]:get_id() == G.GAME.current_round.sneaselcard.id and not context.blueprint then
       context.full_hand[1].to_be_removed_by = card
       ease_poke_dollars(card, "sneasel", card.ability.extra.money)
       card:juice_up()
     end
-    if context.destroy_card and context.destroy_card.to_be_removed_by == card then
+    if context.destroy_card and context.destroy_card.to_be_removed_by == card and not context.blueprint then
       context.destroy_card.to_be_removed_by = nil
       return {
         remove = true

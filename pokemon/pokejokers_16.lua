@@ -89,13 +89,14 @@ local weavile = {
   atlas = "Pokedex4",
   blueprint_compat = true,
   calculate = function(self, card, context)
-    if context.final_scoring_step and #context.full_hand == 1 and context.full_hand[1]:get_id() == G.GAME.current_round.sneaselcard.id then
+    if context.final_scoring_step and #context.full_hand == 1 and context.full_hand[1]:get_id() == G.GAME.current_round.sneaselcard.id and not context.blueprint then
       context.full_hand[1].to_be_removed_by = card
       card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.Xmult_mod
+      card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("k_upgrade_ex")})
       ease_poke_dollars(card, "weavile", card.ability.extra.money)
       card:juice_up()
     end
-    if context.destroy_card and context.destroy_card.to_be_removed_by == card then
+    if context.destroy_card and context.destroy_card.to_be_removed_by == card and not context.blueprint then
       context.destroy_card.to_be_removed_by = nil
       return {
         remove = true
@@ -110,7 +111,7 @@ local weavile = {
         }
       end
     end
-    if context.end_of_round and not context.blueprint then
+    if context.end_of_round and not context.individual and not context.repetition and not context.blueprint then
       if G.GAME.blind.boss and card.ability.extra.Xmult > 1 then
         card.ability.extra.Xmult = card.ability.extra.Xmult2
         return {
@@ -484,6 +485,49 @@ local glaceon={
   end,
 }
 -- Gliscor 472
+local gliscor = {
+  name = "gliscor",
+  pos = {x = 1, y = 6},
+  config = {extra = {Xmult_multi = 0.25}},
+  loc_vars = function(self, info_queue, card)
+    type_tooltip(self, info_queue, card)
+    local played_Xmult = 1
+    if G.hand then
+        local suit_count = 0
+        for i=1, #G.hand.cards do
+        if (G.hand.cards[i]:is_suit(G.GAME.current_round.gligar_suit) or G.hand.cards[i].debuff) and not G.hand.cards[i].highlighted then
+          suit_count = suit_count + 1
+        end
+      end
+      played_Xmult = 1 + (card.ability.extra.Xmult_multi * suit_count)
+    end
+    return {vars = {card.ability.extra.Xmult_multi, localize(G.GAME.current_round.gligar_suit or "Clubs", 'suits_singular'), played_Xmult,
+                    colours = {G.C.SUITS[G.GAME.current_round.gligar_suit or "Clubs"]}}}
+  end,
+  rarity = 'poke_safari',
+  cost = 10,
+  stage = "One",
+  ptype = "Earth",
+  atlas = "Pokedex4",
+  blueprint_compat = true,
+  calculate = function(self, card, context)
+    if context.individual and not context.end_of_round and context.cardarea == G.play and not context.other_card.debuff then
+      local suit_count = 0
+      for i=1, #G.hand.cards do
+        if G.hand.cards[i]:is_suit(G.GAME.current_round.gligar_suit) or G.hand.cards[i].debuff then
+          suit_count = suit_count + 1
+        end
+      end
+      if suit_count > 0 then
+        local Xmult = 1 + (card.ability.extra.Xmult_multi * suit_count)
+        return {
+          x_mult = Xmult,
+          card = card
+        }
+      end
+    end
+  end
+}
 -- Mamoswine 473
 -- Porygon-Z 474
 local porygonz={
@@ -602,5 +646,5 @@ local froslass={
 -- Rotom 479
 -- Uxie 480
 return {name = "Pokemon Jokers 451-480", 
-        list = {mantyke, weavile, magnezone, lickilicky, rhyperior, tangrowth, electivire, magmortar, togekiss, leafeon, glaceon, porygonz, probopass, froslass},
+        list = {mantyke, weavile, magnezone, lickilicky, rhyperior, tangrowth, electivire, magmortar, togekiss, leafeon, glaceon, gliscor, porygonz, probopass, froslass},
 }
