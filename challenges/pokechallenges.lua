@@ -605,6 +605,7 @@ local drill = {
         modifiers = {
             {id = 'joker_slots', value = 5},
 			{id = 'discards', value = 2},
+			{id = 'dollars', value = 2000},
         }
     },
     jokers = {
@@ -648,6 +649,31 @@ local deer = {
     },
 }
 
+local shinx = {
+    object_type = "Challenge",
+    key = "shinx",
+    rules = {
+        modifiers = {
+            {id = 'joker_slots', value = 5},
+			{id = 'discards', value = 2},
+        }
+    },
+    jokers = {
+	  {id = "j_poke_shinx", eternal = true},
+    },
+    restrictions = {
+        banned_cards = {
+        },
+        banned_tags = {
+        },
+        banned_other = {
+        },
+    },
+    deck = {
+      type = 'Challenge Deck',
+    },
+}
+
 return {name = "Challenges", 
-        list = {nuzlocke, goodasgold, parenthood, littlecup, hammertime, bunnelby_test, wailmer_test, kecleon_test, wimpod_test, sawk_throh, teddy_bear, furfrou, ruin, no_retreat, speed, rose, drill, deer}
+        list = {nuzlocke, goodasgold, parenthood, littlecup, hammertime, bunnelby_test, wailmer_test, kecleon_test, wimpod_test, sawk_throh, teddy_bear, furfrou, ruin, no_retreat, speed, rose, drill, deer, shinx}
 }

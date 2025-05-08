@@ -108,6 +108,7 @@ family = {
     {"shroomish", "breloom"},
     {"aron","lairon","aggron"},
 	{"wailmer","wailord"},
+	{"shinx", "luxio", "luxray"},
 	{"budew", "roselia", "roserade"},
     {"buizel", "floatzel"},
     {"gothita", "gothorita", "gothitelle"},
@@ -321,7 +322,7 @@ poke_backend_evolve = function(card, to_key)
     card.ability.perish_tally = G.GAME.perishable_rounds
   end
 
-  local names_to_keep = {"targets", "rank", "id", "cards_scored", "upgrade", "hazards_drawn", "energy_count", "c_energy_count", "largest_hand_name", "season_suit", "season"}
+  local names_to_keep = {"targets", "rank", "id", "cards_scored", "upgrade", "hazards_drawn", "energy_count", "c_energy_count", "largest_hand_name", "season_suit", "season", "high_score"}
   if type_sticker_applied(card) then
     table.insert(names_to_keep, "ptype")
   end

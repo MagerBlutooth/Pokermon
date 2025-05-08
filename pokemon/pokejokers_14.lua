@@ -11,8 +11,174 @@
 -- Kricketot 401
 -- Kricketune 402
 -- Shinx 403
+local shinx={
+  name = "shinx", 
+  pos = {x = 2, y = 1}, 
+  config = {extra = {money = 2, money_earned = 0, high_score = 0, hand_count = 0, current_hand_score = 0, score_accumulation = 0}, evo_rqmt = 20},
+  loc_vars = function(self, info_queue, center)
+    type_tooltip(self, info_queue, center)
+		return {vars = {center.ability.extra.money, center.ability.extra.high_score, self.config.evo_rqmt - center.ability.extra.money_earned}}
+  end,
+  rarity = 1, 
+  cost = 4, 
+  stage = "Basic", 
+  atlas = "Pokedex4",
+  ptype = "Lightning",
+  eternal_compat = true,
+  perishable_compat = true,
+  blueprint_compat = true,
+  calculate = function(self, card, context)
+  
+	if context.setting_blind then
+		card.ability.extra.hand_count = G.GAME.current_round.hands_played
+	end
+  
+	  if card.ability.extra.hand_count ~= G.GAME.current_round.hands_played then
+      card.ability.extra.hand_count = G.GAME.current_round.hands_played
+      card.ability.extra.current_hand_score = G.GAME.chips - card.ability.extra.score_accumulation
+      card.ability.extra.score_accumulation = card.ability.extra.score_accumulation + card.ability.extra.current_hand_score 
+	  --card_eval_status_text(card, 'extra', nil, nil, nil, {message = "New: " .. card.ability.extra.current_hand_score})
+		if card.ability.extra.current_hand_score > card.ability.extra.high_score then
+			card.ability.extra.high_score = card.ability.extra.current_hand_score
+			local earned = ease_poke_dollars(card, 'shinx', card.ability.extra.money, true)
+			card.ability.extra.money_earned = card.ability.extra.money_earned + earned
+			return {
+				--message = localize{type='variable',key='a_mult',vars={"New Score: " .. card.ability.extra.current_hand_score},
+				dollars = earned,
+				card = card,
+			}
+		end
+		
+		end
+		if context.end_of_round then
+			card.ability.extra.current_hand_score = 0
+			card.ability.extra.score_accumulation = 0
+		end
+
+		return scaling_evo(self, card, context, "j_poke_luxio", card.ability.extra.money_earned, self.config.evo_rqmt)
+  end,
+}
 -- Luxio 404
+local luxio={
+  name = "luxio", 
+  pos = {x = 3, y = 1}, 
+  config = {extra = {money = 4, mult = 1, dollar_per_mult = 5, money_earned = 0, high_score = 3000, hand_count = 0, current_hand_score = 0, score_accumulation = 0, evolved = false}, evo_rqmt = 40},
+  loc_vars = function(self, info_queue, center)
+    type_tooltip(self, info_queue, center)
+    local abbr = center.ability.extra
+	return {vars = {abbr.money, abbr.high_score, self.config.evo_rqmt - abbr.money_earned, abbr.mult, abbr.dollar_per_mult, math.floor(G.GAME.dollars/abbr.dollar_per_mult)*abbr.mult}}
+  end,
+  rarity = "poke_safari", 
+  cost = 8, 
+  stage = "Basic", 
+  atlas = "Pokedex4",
+  ptype = "Lightning",
+  eternal_compat = true,
+  perishable_compat = true,
+  blueprint_compat = true,
+  calculate = function(self, card, context)
+  
+	if context.setting_blind then
+		card.ability.extra.hand_count = G.GAME.current_round.hands_played
+		card.ability.extra.evolved = true
+	end
+	
+	if context.joker_main then
+		return {
+			message = localize{type='variable',key='a_mult',vars={math.floor(G.GAME.dollars/card.ability.extra.dollar_per_mult)*card.ability.extra.mult}},
+			mult_mod = math.floor(G.GAME.dollars/card.ability.extra.dollar_per_mult)*card.ability.extra.mult, 
+			colour = G.C.MULT
+        }
+      end
+  
+	  if card.ability.extra.hand_count ~= G.GAME.current_round.hands_played then
+		  card.ability.extra.hand_count = G.GAME.current_round.hands_played
+		  if card.ability.extra.evolved then
+			  card.ability.extra.current_hand_score = G.GAME.chips - card.ability.extra.score_accumulation
+			  card.ability.extra.score_accumulation = card.ability.extra.score_accumulation + card.ability.extra.current_hand_score 
+			  --card_eval_status_text(card, 'extra', nil, nil, nil, {message = "New: " .. card.ability.extra.current_hand_score})
+				if card.ability.extra.current_hand_score > card.ability.extra.high_score then
+					card.ability.extra.high_score = card.ability.extra.current_hand_score
+					local earned = ease_poke_dollars(card, 'shinx', card.ability.extra.money, true)
+					card.ability.extra.money_earned = card.ability.extra.money_earned + earned
+					return {
+						--message = localize{type='variable',key='a_mult',vars={"New Score: " card.ability.extra.current_hand_score},
+						dollars = earned,
+						card = card,
+					}
+				end
+			else 
+				card.ability.extra.evolved = true
+			end
+		end
+		if context.end_of_round then
+			card.ability.extra.current_hand_score = 0
+			card.ability.extra.score_accumulation = 0
+		end
+		
+		return scaling_evo(self, card, context, "j_poke_luxray", card.ability.extra.money_earned, self.config.evo_rqmt)
+		
+  end,
+}
 -- Luxray 405
+local luxray={
+  name = "luxray", 
+  pos = {x = 4, y = 1}, 
+  config = {extra = {money = 6, Xmult = 0.1, dollar_per_Xmult = 10, money_earned = 0, high_score = 15000, hand_count = 0, current_hand_score = 0, score_accumulation = 0, evolved = false}},
+  loc_vars = function(self, info_queue, center)
+    type_tooltip(self, info_queue, center)
+	local abbr = center.ability.extra
+		return {vars = {abbr.money, abbr.high_score, abbr.Xmult, abbr.dollar_per_Xmult, 1+ math.floor(G.GAME.dollars/abbr.dollar_per_Xmult)*abbr.Xmult}}
+  end,
+  rarity = "poke_safari", 
+  cost = 12, 
+  stage = "Basic", 
+  atlas = "Pokedex4",
+  ptype = "Lightning",
+  eternal_compat = true,
+  perishable_compat = true,
+  blueprint_compat = true,
+  calculate = function(self, card, context)
+  
+	if context.setting_blind then
+		card.ability.extra.hand_count = G.GAME.current_round.hands_played
+		card.ability.extra.evolved = true
+	end
+	
+	if context.joker_main then
+		return {
+			message = localize{type='variable',key='a_xmult',vars={1 + math.floor(G.GAME.dollars/card.ability.extra.dollar_per_Xmult)*card.ability.extra.Xmult}},
+			mult_mod = math.floor(G.GAME.dollars/card.ability.extra.dollar_per_Xmult)*card.ability.extra.Xmult, 
+			colour = G.C.XMULT,
+        }
+      end
+  
+	  if card.ability.extra.hand_count ~= G.GAME.current_round.hands_played then
+		  card.ability.extra.hand_count = G.GAME.current_round.hands_played
+		  if card.ability.extra.evolved then
+			  card.ability.extra.current_hand_score = G.GAME.chips - card.ability.extra.score_accumulation
+			  card.ability.extra.score_accumulation = card.ability.extra.score_accumulation + card.ability.extra.current_hand_score 
+			  --card_eval_status_text(card, 'extra', nil, nil, nil, {message = "New: " .. card.ability.extra.current_hand_score})
+				if card.ability.extra.current_hand_score > card.ability.extra.high_score then
+					card.ability.extra.high_score = card.ability.extra.current_hand_score
+					local earned = ease_poke_dollars(card, 'shinx', card.ability.extra.money, true)
+					card.ability.extra.money_earned = card.ability.extra.money_earned + earned
+					return {
+						dollars = earned,
+						card = card,
+					}
+				end
+			else 
+				card.ability.extra.evolved = true
+			end
+		end
+		if context.end_of_round then
+			card.ability.extra.current_hand_score = 0
+			card.ability.extra.score_accumulation = 0
+			evolved = true
+		end
+  end,
+}
 -- Budew 406
 local budew = {
   name = "budew",
@@ -189,5 +355,5 @@ local floatzel={
 }
 -- Cherubi 420
 return {name = "Pokemon Jokers 391-420", 
-        list = {budew, roserade, buizel, floatzel},
+        list = {shinx, luxio, luxray, budew, roserade, buizel, floatzel},
 }

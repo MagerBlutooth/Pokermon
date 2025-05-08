@@ -2780,6 +2780,41 @@ return {
 					"{C:inactive}({C:mult}+#3# Mult{} and {C:mult}Xmult{} increased by {C:mult}+#4#{} {C:inactive}per {C:attention}tier{}{C:inactive})"
                 }
             },
+			j_poke_shinx = {
+				name = 'Shinx',
+                text = {
+                    "When your scoring hand has a higher",
+					"score than this Joker's, earn {C:money}$#1#",
+					"and raise this Joker's high score to match",
+					"{C:inactive}(High Score: {C:attention}#2#{C:inactive})",
+					"{C:inactive}(Evolves after earning {C:money}$#3#{C:inactive})",
+                }
+			},
+			j_poke_luxio = {
+				name = 'Luxio',
+                text = {
+					"{C:mult}+#4# Mult{} per {C:money}$#5#{} you have",
+					"{br:2}ERROR - CONTACT STEAK",
+                    "When your scoring hand has a higher",
+					"score than this Joker's, earn {C:money}$#1#",
+					"and raise this Joker's high score  to match",
+					"{C:inactive}(Currently {C:mult}+#6# Mult{})",
+					"{C:inactive}(High Score: {C:attention}#2#{C:inactive})",
+					"{C:inactive}(Evolves after earning {C:money}$#3#{C:inactive})",
+                }
+			},
+			j_poke_luxray = {
+				name = 'Luxray',
+                text = {
+					"{X:mult,C:white}X#3#{} per {C:money}$#4#{} you have",
+					"{br:2}ERROR - CONTACT STEAK",
+                    "When your scoring hand has a higher",
+					"score than this Joker's, earn {C:money}$#1#",
+					"and raise this Joker's high score to match",
+					"{C:inactive}(Currently {X:mult,C:white}X#5#{}{C:inactive} Mult)",
+					"{C:inactive}(High Score: {C:attention}#2#{C:inactive})",
+                }
+			},
 			j_poke_budew = {
                 name = 'Budew',
                 text = {
@@ -5050,6 +5085,7 @@ return {
 			c_poke_starter = "Starter Pack",
 			c_poke_drill = "Rapid Spin",
 			c_poke_deer = "Seasons Greetings",
+			c_poke_shinx = "Shinx",
         },
         dictionary = {
             k_energy = "Energy",
@@ -5148,6 +5184,7 @@ return {
 			--From Kecleon
 			poke_kecleon_ex = "Color Change!",
 			poke_turtwig_ex = "Growth!",
+			poke_shinx_ex = "Rivalry!",
 			--From Mime Jr.
             poke_mime_ex = "Mime!",
             --From Magmortar

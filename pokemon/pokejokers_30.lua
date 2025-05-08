@@ -1,7 +1,7 @@
 local falinks = {
   name = "falinks",
   pos = { x = 7, y = 4 },
-  config = { extra = {chip_mod = 50, mult_mod = 10, Xmult_mod = 0.5, hand_mod = 1, lost_hands = 0}},
+  config = { extra = {chip_mod = 50, mult_mod = 10, Xmult_mod = 1.5, hand_mod = 1, lost_hands = 0}},
   loc_vars = function(self, info_queue, card)
     type_tooltip(self, info_queue, card)
     return { vars = {card.ability.extra.chip_mod, card.ability.extra.mult_mod, 1 + card.ability.extra.Xmult_mod, card.ability.extra.hand_mod} }
