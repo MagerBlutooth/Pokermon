@@ -3522,8 +3522,8 @@ return {
                 name = "Karrablast",
                 text = {
                     "{C:mult}+#1# Mult{} per {C:attention}hand{} played this round {C:attention}",
-					"{C:inactive,s:0.8}(Currently {C:mult}+#2#{C:inactive,s:0.8} Mult{}}",
-                    "{C:inactive,s:0.8}(Evolves with Link Cable if you have another Grass Joker)"
+					"{C:inactive}(Currently {C:mult}+#2#{C:inactive,s:0.8} Mult{}{C:inactive})",
+                    "{C:inactive}(Evolves with Link Cable if you have another Grass Joker)"
                 }
             },
 			j_poke_escavalier = {

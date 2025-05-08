@@ -11,10 +11,12 @@
 -- Kricketot 401
 -- Kricketune 402
 -- Shinx 403
+-- Unaccounted bug occurs with Shinx and its evolutions where Shinx will not set the hand_score value properly. Possibly an issue with the timing due to using variable-based timing instead of 
+-- a standard context. Seems to happen when more Jokers are present. Added a 1 sec. time delay to each evo stage as a potential fix.
 local shinx={
   name = "shinx", 
   pos = {x = 2, y = 1}, 
-  config = {extra = {money = 2, money_earned = 0, high_score = 0, hand_count = 0, current_hand_score = 0, score_accumulation = 0}, evo_rqmt = 20},
+  config = {extra = {money = 2, money_earned = 0, high_score = 0, hand_count = 0, current_hand_score = 0, score_accumulation = 0, spawn = true}, evo_rqmt = 20},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
 		return {vars = {center.ability.extra.money, center.ability.extra.high_score, self.config.evo_rqmt - center.ability.extra.money_earned}}
@@ -29,26 +31,30 @@ local shinx={
   blueprint_compat = true,
   calculate = function(self, card, context)
   
-	if context.setting_blind then
+	if context.setting_blind or card.ability.extra.spawn then
 		card.ability.extra.hand_count = G.GAME.current_round.hands_played
+		card.ability.extra.spawn = false
 	end
   
 	  if card.ability.extra.hand_count ~= G.GAME.current_round.hands_played then
-      card.ability.extra.hand_count = G.GAME.current_round.hands_played
-      card.ability.extra.current_hand_score = G.GAME.chips - card.ability.extra.score_accumulation
-      card.ability.extra.score_accumulation = card.ability.extra.score_accumulation + card.ability.extra.current_hand_score 
-	  --card_eval_status_text(card, 'extra', nil, nil, nil, {message = "New: " .. card.ability.extra.current_hand_score})
-		if card.ability.extra.current_hand_score > card.ability.extra.high_score then
-			card.ability.extra.high_score = card.ability.extra.current_hand_score
-			local earned = ease_poke_dollars(card, 'shinx', card.ability.extra.money, true)
-			card.ability.extra.money_earned = card.ability.extra.money_earned + earned
-			return {
-				--message = localize{type='variable',key='a_mult',vars={"New Score: " .. card.ability.extra.current_hand_score},
-				dollars = earned,
-				card = card,
-			}
-		end
-		
+		  if card.ability.extra.hand_count < G.GAME.current_round.hands_played then
+			  delay(1.0)
+			  card.ability.extra.hand_count = G.GAME.current_round.hands_played
+			  card.ability.extra.current_hand_score = G.GAME.chips - card.ability.extra.score_accumulation
+			  card.ability.extra.score_accumulation = card.ability.extra.score_accumulation + card.ability.extra.current_hand_score 
+			  card_eval_status_text(card, 'extra', nil, nil, nil, {message = "New: " .. card.ability.extra.current_hand_score})
+				if card.ability.extra.current_hand_score > card.ability.extra.high_score then
+					card.ability.extra.high_score = card.ability.extra.current_hand_score
+					local earned = ease_poke_dollars(card, 'shinx', card.ability.extra.money, true)
+					card.ability.extra.money_earned = card.ability.extra.money_earned + earned
+					return {
+						--message = localize{type='variable',key='a_mult',vars={"New Score: " .. card.ability.extra.current_hand_score},
+						dollars = earned,
+						card = card,
+					}
+				end
+		  end
+			card.ability.extra.hand_count = G.GAME.current_round.hands_played
 		end
 		if context.end_of_round then
 			card.ability.extra.current_hand_score = 0
@@ -62,7 +68,7 @@ local shinx={
 local luxio={
   name = "luxio", 
   pos = {x = 3, y = 1}, 
-  config = {extra = {money = 4, mult = 1, dollar_per_mult = 5, money_earned = 0, high_score = 3000, hand_count = 0, current_hand_score = 0, score_accumulation = 0, evolved = false}, evo_rqmt = 40},
+  config = {extra = {money = 4, mult = 1, dollar_per_mult = 5, money_earned = 0, high_score = 2000, hand_count = 0, current_hand_score = 0, score_accumulation = 0, spawn = true}, evo_rqmt = 40},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
     local abbr = center.ability.extra
@@ -78,9 +84,9 @@ local luxio={
   blueprint_compat = true,
   calculate = function(self, card, context)
   
-	if context.setting_blind then
+	if context.setting_blind or card.ability.extra.spawn then
 		card.ability.extra.hand_count = G.GAME.current_round.hands_played
-		card.ability.extra.evolved = true
+		card.ability.extra.spawn = false
 	end
 	
 	if context.joker_main then
@@ -91,26 +97,28 @@ local luxio={
         }
       end
   
-	  if card.ability.extra.hand_count ~= G.GAME.current_round.hands_played then
-		  card.ability.extra.hand_count = G.GAME.current_round.hands_played
-		  if card.ability.extra.evolved then
-			  card.ability.extra.current_hand_score = G.GAME.chips - card.ability.extra.score_accumulation
-			  card.ability.extra.score_accumulation = card.ability.extra.score_accumulation + card.ability.extra.current_hand_score 
-			  --card_eval_status_text(card, 'extra', nil, nil, nil, {message = "New: " .. card.ability.extra.current_hand_score})
-				if card.ability.extra.current_hand_score > card.ability.extra.high_score then
-					card.ability.extra.high_score = card.ability.extra.current_hand_score
-					local earned = ease_poke_dollars(card, 'shinx', card.ability.extra.money, true)
-					card.ability.extra.money_earned = card.ability.extra.money_earned + earned
-					return {
-						--message = localize{type='variable',key='a_mult',vars={"New Score: " card.ability.extra.current_hand_score},
-						dollars = earned,
-						card = card,
-					}
-				end
-			else 
-				card.ability.extra.evolved = true
-			end
+	   if card.ability.extra.hand_count ~= G.GAME.current_round.hands_played then
+		  if card.ability.extra.hand_count < G.GAME.current_round.hands_played then
+				  delay(1.0)
+				  card.ability.extra.hand_count = G.GAME.current_round.hands_played
+				  card.ability.extra.current_hand_score = G.GAME.chips - card.ability.extra.score_accumulation
+				  card.ability.extra.score_accumulation = card.ability.extra.score_accumulation + card.ability.extra.current_hand_score 
+				  card_eval_status_text(card, 'extra', nil, nil, nil, {message = "New: " .. card.ability.extra.current_hand_score})
+					if card.ability.extra.current_hand_score > card.ability.extra.high_score then
+						card.ability.extra.high_score = card.ability.extra.current_hand_score
+						local earned = ease_poke_dollars(card, 'luxio', card.ability.extra.money, true)
+						card.ability.extra.money_earned = card.ability.extra.money_earned + earned
+						return {
+							--message = localize{type='variable',key='a_mult',vars={"New Score: " card.ability.extra.current_hand_score},
+							dollars = earned,
+							card = card,
+						}
+					end
+  			card.ability.extra.hand_count = G.GAME.current_round.hands_played
 		end
+				
+			
+			end
 		if context.end_of_round then
 			card.ability.extra.current_hand_score = 0
 			card.ability.extra.score_accumulation = 0
@@ -124,7 +132,7 @@ local luxio={
 local luxray={
   name = "luxray", 
   pos = {x = 4, y = 1}, 
-  config = {extra = {money = 6, Xmult = 0.1, dollar_per_Xmult = 10, money_earned = 0, high_score = 15000, hand_count = 0, current_hand_score = 0, score_accumulation = 0, evolved = false}},
+  config = {extra = {money = 6, Xmult = 0.1, dollar_per_Xmult = 10, money_earned = 0, high_score = 10000, hand_count = 0, current_hand_score = 0, score_accumulation = 0, spawn = true}},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
 	local abbr = center.ability.extra
@@ -140,9 +148,9 @@ local luxray={
   blueprint_compat = true,
   calculate = function(self, card, context)
   
-	if context.setting_blind then
+	if context.setting_blind or card.ability.extra.spawn then
 		card.ability.extra.hand_count = G.GAME.current_round.hands_played
-		card.ability.extra.evolved = true
+		card.ability.extra.spawn = false
 	end
 	
 	if context.joker_main then
@@ -154,28 +162,29 @@ local luxray={
       end
   
 	  if card.ability.extra.hand_count ~= G.GAME.current_round.hands_played then
-		  card.ability.extra.hand_count = G.GAME.current_round.hands_played
-		  if card.ability.extra.evolved then
-			  card.ability.extra.current_hand_score = G.GAME.chips - card.ability.extra.score_accumulation
-			  card.ability.extra.score_accumulation = card.ability.extra.score_accumulation + card.ability.extra.current_hand_score 
-			  --card_eval_status_text(card, 'extra', nil, nil, nil, {message = "New: " .. card.ability.extra.current_hand_score})
-				if card.ability.extra.current_hand_score > card.ability.extra.high_score then
-					card.ability.extra.high_score = card.ability.extra.current_hand_score
-					local earned = ease_poke_dollars(card, 'shinx', card.ability.extra.money, true)
-					card.ability.extra.money_earned = card.ability.extra.money_earned + earned
-					return {
-						dollars = earned,
-						card = card,
-					}
-				end
-			else 
-				card.ability.extra.evolved = true
+		  if card.ability.extra.hand_count < G.GAME.current_round.hands_played then
+			delay(1.0)
+			card.ability.extra.hand_count = G.GAME.current_round.hands_played
+        	card.ability.extra.current_hand_score = G.GAME.chips - card.ability.extra.score_accumulation
+				  card.ability.extra.score_accumulation = card.ability.extra.score_accumulation + card.ability.extra.current_hand_score 
+				  card_eval_status_text(card, 'extra', nil, nil, nil, {message = "New: " .. card.ability.extra.current_hand_score})
+					if card.ability.extra.current_hand_score > card.ability.extra.high_score then
+						card.ability.extra.high_score = card.ability.extra.current_hand_score
+						local earned = ease_poke_dollars(card, 'luxray', card.ability.extra.money, true)
+						card.ability.extra.money_earned = card.ability.extra.money_earned + earned
+						return {
+							--message = localize{type='variable',key='a_mult',vars={"New Score: " card.ability.extra.current_hand_score},
+							dollars = earned,
+							card = card,
+						}
+					end
 			end
+			card.ability.extra.hand_count = G.GAME.current_round.hands_played
 		end
+		
 		if context.end_of_round then
 			card.ability.extra.current_hand_score = 0
 			card.ability.extra.score_accumulation = 0
-			evolved = true
 		end
   end,
 }
