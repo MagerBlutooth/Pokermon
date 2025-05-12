@@ -239,5 +239,5 @@ local diggersby={
   end
 }
 return {name = "Pokemon Jokers 631-660", 
-        list = {deino, zweilous, hydreigon, bunnelby, diggersby},
+        list = {deino, zweilous, hydreigon},
 }

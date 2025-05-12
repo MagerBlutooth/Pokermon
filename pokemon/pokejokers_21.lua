@@ -573,11 +573,11 @@ local pawniard={
 local bisharp={
   name = "bisharp",
   pos = {x = 5, y = 9},
-  config = {extra = {target_hand_name = 'Straight Flush', mult = 16, mult_mod = 3, times_triggered = 0}, evo_rqmt = 3},
+  config = {extra = {target_hand_1 = 'Straight', target_hand_2 = "Flush", target_hand_3 = "Straight Flush", mult = 0, mult_mod = 3, target1_triggered = false, target2_triggered = false, target3_triggered = false, evo_triggered = false}},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
 	info_queue[#info_queue+1] = {set = 'Other', key = 'tier'}
-    return {vars = {center.ability.extra.target_hand_name, center.ability.extra.mult, center.ability.extra.mult_mod, self.config.evo_rqmt - center.ability.extra.times_triggered}}
+    return {vars = {center.ability.extra.target_hand_1, center.ability.extra.target_hand_2, center.ability.extra.target_hand_3, center.ability.extra.mult_mod, center.ability.extra.mult}}
   end,
   rarity = "poke_safari",
   cost = 4,
@@ -588,14 +588,24 @@ local bisharp={
   blueprint_compat = true,
   eternal_compat = true,
   calculate = function(self, card, context)
+  
     if context.before then
-		if context.scoring_name == card.ability.extra.target_hand_name then
-			card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("poke_bisharp_ex")})
-			card.ability.extra.times_triggered = card.ability.extra.times_triggered + 1
+		if bisharp_poker_hand_check(context.scoring_name, card.ability.extra.target_hand_1, card.ability.extra.target1_triggered) then
+			card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("k_upgrade_ex")})
 			card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
+			card.ability.extra.target1_triggered = true
+		elseif bisharp_poker_hand_check(context.scoring_name, card.ability.extra.target_hand_2, card.ability.extra.target2_triggered) then
+			card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("k_upgrade_ex")})
+			card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
+			card.ability.extra.target2_triggered = true
+		elseif bisharp_poker_hand_check(context.scoring_name, card.ability.extra.target_hand_3, card.ability.extra.target3_triggered) then
+			card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("k_upgrade_ex")})
+			card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
+			card.ability.extra.target3_triggered = true
 		end
-		card.ability.extra.target_hand_name = get_new_random_poker_hand(card.ability.extra.target_hand_name)
-		card_eval_status_text(card, 'extra', nil, nil, nil, {message = "Next: " .. card.ability.extra.target_hand_name})
+		if card.ability.extra.target1_triggered and card.ability.extra.target2_triggered and card.ability.extra.target3_triggered then
+			card.ability.extra.evo_triggered = true
+		end
 	end
 	
 	if context.cardarea == G.jokers and context.scoring_hand and context.joker_main then
@@ -606,11 +616,35 @@ local bisharp={
 			  mult_mod = card.ability.extra.mult
 			}
 	end
-	if context.end_of_round and card.ability.extra.times_triggered < self.config.evo_rqmt then
-		card.ability.extra.times_triggered = 0
+	if context.end_of_round and not context.repetition and not context.individual then
+	    card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("k_reset")})
+		card.ability.extra.target1_triggered = false
+		card.ability.extra.target2_triggered = false
+		card.ability.extra.target3_triggered = false
+		
+	  --First get all visible hands
+	  local hands = {"High Card", "Pair", "Two Pair", "Three of a Kind", "Straight", "Flush", "Full House", "Four of a Kind", "Straight Flush", "Five of a Kind", "Flush House", "Flush Five"}
+      local visible_hands = {}
+      for i = 1, #hands do
+        if G.GAME.hands[hands[i]].visible then
+          table.insert(visible_hands, hands[i])
+        end
+      end
+	  
+	 --Then select three random hands
+		local random_1 = math.ceil(#visible_hands * pseudorandom('bisharp1'))
+		card.ability.extra.target_hand_1 = visible_hands[random_1]
+		table.remove(visible_hands, random_1)
+		
+		local random_2 = math.ceil(#visible_hands * pseudorandom('bisharp2'))
+		card.ability.extra.target_hand_2 = visible_hands[random_2]
+		table.remove(visible_hands, random_2)
+		
+		local random_3 = math.ceil(#visible_hands * pseudorandom('bisharp3'))
+		card.ability.extra.target_hand_3 = visible_hands[random_3]
 	end
 	
-	return scaling_evo(self, card, context, "j_poke_kingambit", card.ability.extra.times_triggered, self.config.evo_rqmt)
+	return condition_evo(self, card, context, "j_poke_kingambit", card.ability.extra.evo_triggered)
 
   end,
 }

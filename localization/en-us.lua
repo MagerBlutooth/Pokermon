@@ -2404,7 +2404,7 @@ return {
                 text = {
                     "When you play a hand, destroy your leftmost",
 					"consumable and this gains {C:mult}+#2# Mult.",
-					"{C:inactive}(Currently {C:mult}+#1# Mult)",
+					"{C:inactive}(Currently {C:mult}+#1# Mult{C:inactive})",
 					"{C:inactive}(Evolves after this Joker destroys a Moon card)"
                 } 
             },
@@ -3293,7 +3293,8 @@ return {
                     "{C:purple}+#1# Hazards {C:inactive}(1 per #2# cards)",
                     "Gains {C:mult}+#3#{} Mult for each",
 					"{C:attention}Hazard Card{} in your scoring hand",
-					"{C:inactive,s:0.8}(Currently {C:mult}+#4#{}{C:inactive,s:0.8})",
+					"{X:mult,C:white} X#5# {} Mult if no Hazard Cards held in hand",
+					"{C:inactive,s:0.8}(Currently {C:mult}+#4# Mult{}{C:inactive,s:0.8})",
             }
             },
 			j_poke_throh = {
@@ -3579,10 +3580,11 @@ return {
 			j_poke_bisharp = {
                 name = "Bisharp",
                 text = {
-                  "Gains {C:mult}+#3# Mult{} if you play a {C:attention}#1#{})",
-				  "(Currently {C:mult}+#2# Mult{})",
-				  "{C:inactive,s:0.8}(Poker hand changes after each hand is played)",
-                  "{C:inactive,s:0.8}(Evolves when this effect triggers {C:attention}#4#{} {C:inactive,s:0.8}times in one round)"
+                  "Gains {C:mult}+#4# Mult{} the first time you play a:",
+				   "[{C:attention}#1#{}], [{C:attention}#2#{}], [{C:attention}#3#{}] this round",
+				   "(Currently {C:mult}+#5# Mult{})",
+				   "{C:inactive,s:0.8}(Poker hands change end of round)",
+                   "{C:inactive,s:0.8}(Evolves when this effect triggers 3 times in one round)"
                 }
             },
 			j_poke_kingambit = {
@@ -3797,6 +3799,23 @@ return {
                   "Prevents Death if chips scored are",
                   "at least {C:attention}50%{} of required chips",
                   "{C:inactive}(#3#){}"
+                }
+            },
+			j_poke_clobbopus = {
+                name = "Clobbopus",
+                text = {
+                  "If you play a {C:attention}Pair,",
+                  "adds {C:mult}Mult{} equal to",
+				  "the scored {C:attention}rank",
+                  "{C:inactive}(Evolves after playing {C:attention}#1#{} Pairs){}"
+                }
+            },
+			j_poke_grapploct= {
+                name = "Grapploct",
+                text = {
+                   "If your played hand consists of only",
+                  "one {C:attention}rank{}, adds {C:mult}Mult{} equal to the scored {C:attention}rank",
+				  "times the number of scored cards with that rank",
                 }
             },
             j_poke_yamper = {
@@ -5086,6 +5105,7 @@ return {
 			c_poke_drill = "Rapid Spin",
 			c_poke_deer = "Seasons Greetings",
 			c_poke_shinx = "Shinx",
+			c_poke_clobber = "Clobber",
         },
         dictionary = {
             k_energy = "Energy",
@@ -5151,6 +5171,9 @@ return {
             pinkseal_variable = "Pink Seal",
             twisted_spoon_variable = "Twisted Spoon",
 
+			--From Onix Line
+			poke_onix_ex = "Rock Polish!",
+			poke_steelix_ex = "Automotize!",
             --From Gastly Line
             poke_lick_ex = "Lick!",
             poke_lick = "Lick",
@@ -5211,7 +5234,7 @@ return {
 			poke_ursaluna_ex = "Moonblast!",
 			poke_furfrou_ex = "Trim!",
 			poke_furfrou_revert_ex = "Revert!",
-			poke_bisharp_ex = "Guillotine!",
+			poke_bisharp_ex = "Swords Dance!",
 			poke_falinks_ex = "No Retreat!",
 			poke_wo_chien_ex = "Tablets of Ruin!",
 			poke_chien_pao_ex = "Sword of Ruin!",

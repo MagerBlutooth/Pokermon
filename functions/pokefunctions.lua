@@ -122,7 +122,7 @@ family = {
     {"pansear", "simisear"},
     {"panpour", "simipour"},
     {"golett", "golurk"},
-	  {"pawniard", "bisharp", "kingambit"},
+	{"pawniard", "bisharp", "kingambit"},
     {"roggenrola", "boldore", "gigalith"},
 	{"drilbur", "excadrill"},
     {"zorua", "zoroark"},
@@ -133,6 +133,7 @@ family = {
 	  {"wimpod", "golisopod"},
     {"dreepy", "drakloak", "dragapult", "dreepy_dart"},
     {"hisuian_qwilfish", "overqwil"},
+	{"clobbopus", "grapploct"},
     {"yamper","boltund"},
     {"tarountula", "spidops"},
     {"fidough", "dachsbun"},
@@ -577,6 +578,15 @@ deck_seal_evo = function (self, card, context, forced_key, seal, percentage, fla
 end
 
 deck_out_evo = function (self, card, context, forced_key, will_evolve)
+  if card.debuff then return end
+  if can_evolve(self, card, context, forced_key) and will_evolve then
+	return {
+	  message = poke_evolve(card, forced_key)
+	}
+	end
+end
+
+condition_evo = function (self, card, context, forced_key, will_evolve)
   if card.debuff then return end
   if can_evolve(self, card, context, forced_key) and will_evolve then
 	return {
@@ -1064,6 +1074,16 @@ get_next_poker_hand_name = function(hand_name)
 	return next
 end
 
+ bisharp_poker_hand_check = function(scoring_hand, target_hand, has_triggered)
+  if has_triggered then
+	  return false
+   end
+   if scoring_hand == target_hand then
+		return true
+  end
+  return false
+end
+
 table_contains = function(table, value)
   for i = 1,#table do
     if (table[i] == value) then
@@ -1172,19 +1192,6 @@ get_poke_target_card_ranks = function(seed, num, default, use_deck)
   local sort_function = function(card1, card2) return card1.id < card2.id end
   table.sort(target_ranks, sort_function)
   return target_ranks
-end
-
-get_new_random_poker_hand = function(old_hand_name)
-  local visible_hands = {}
-  for k, v in pairs(G.GAME.hands) do
-	if v.visible and k ~= old_hand_name then
-	  local hand = v
-	  hand.handname = k
-	  table.insert(visible_hands, hand.handname)
-	end
-   end
-  local random_num = math.ceil(#visible_hands * pseudorandom('bisharp'))
-  return visible_hands[random_num]
 end
 
 add_target_cards_to_vars = function(vars, targets)

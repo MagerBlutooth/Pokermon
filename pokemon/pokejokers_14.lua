@@ -156,7 +156,7 @@ local luxray={
 	if context.joker_main then
 		return {
 			message = localize{type='variable',key='a_xmult',vars={1 + math.floor(G.GAME.dollars/card.ability.extra.dollar_per_Xmult)*card.ability.extra.Xmult}},
-			mult_mod = math.floor(G.GAME.dollars/card.ability.extra.dollar_per_Xmult)*card.ability.extra.Xmult, 
+			Xmult_mod = math.floor(G.GAME.dollars/card.ability.extra.dollar_per_Xmult)*card.ability.extra.Xmult, 
 			colour = G.C.XMULT,
         }
       end

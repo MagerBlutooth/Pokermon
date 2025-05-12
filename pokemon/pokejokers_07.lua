@@ -1062,6 +1062,7 @@ local steelix={
     end
     if context.before and context.cardarea == G.jokers and not context.blueprint then
       if G.GAME.current_round.hands_played == 0 then
+		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('poke_onix_ex'), colour = G.C.FILTER})
         local card = context.scoring_hand[1]
         card:set_ability(G.P_CENTERS.m_steel, nil, true)
         G.E_MANAGER:add_event(Event({

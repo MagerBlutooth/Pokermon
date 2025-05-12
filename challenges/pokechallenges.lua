@@ -332,7 +332,7 @@ local wimpod_test = {
         }
     },
     jokers = {
-      {id = "j_poke_wimpod", eternal = false},
+      {id = "j_poke_golisopod", eternal = false},
     },
     restrictions = {
         banned_cards = {
@@ -446,7 +446,7 @@ local checkmate = {
         }
     },
     jokers = {
-      {id = "j_poke_bisharp", eternal = true},
+      {id = "j_poke_pawniard", eternal = true},
     },
 	consumeables = {
 	},
@@ -605,11 +605,10 @@ local drill = {
         modifiers = {
             {id = 'joker_slots', value = 5},
 			{id = 'discards', value = 2},
-			{id = 'dollars', value = 2000},
         }
     },
     jokers = {
-	  {id = "j_poke_drilbur", eternal = false},
+	  {id = "j_poke_excadrill", eternal = false},
     },
     restrictions = {
         banned_cards = {
@@ -674,6 +673,31 @@ local shinx = {
     },
 }
 
+local clobber = {
+    object_type = "Clobber",
+    key = "clobber",
+    rules = {
+        modifiers = {
+            {id = 'joker_slots', value = 5},
+			{id = 'discards', value = 2},
+        }
+    },
+    jokers = {
+	  {id = "j_poke_clobbopus", eternal = true},
+    },
+    restrictions = {
+        banned_cards = {
+        },
+        banned_tags = {
+        },
+        banned_other = {
+        },
+    },
+    deck = {
+      type = 'Challenge Deck',
+    },
+}
+
 return {name = "Challenges", 
-        list = {nuzlocke, goodasgold, parenthood, littlecup, hammertime, bunnelby_test, wailmer_test, kecleon_test, wimpod_test, sawk_throh, teddy_bear, furfrou, ruin, no_retreat, speed, rose, drill, deer, shinx}
+        list = {nuzlocke, goodasgold, parenthood, littlecup, hammertime, wailmer_test, kecleon_test, wimpod_test, sawk_throh, teddy_bear, furfrou, ruin, no_retreat, speed, rose, drill, deer, shinx, checkmate, clobber}
 }

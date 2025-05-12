@@ -442,7 +442,7 @@ local drilbur = {
 local excadrill = {
   name = "excadrill",
   pos = { x = 8, y = 2 },
-  config = {extra = {hazard_ratio = 10, mult = 0, mult_mod = 2, upgraded = false}},
+  config = {extra = {hazard_ratio = 10, mult = 15, mult_mod = 2, Xmult_mod = 2, upgraded = false}},
   loc_vars = function(self, info_queue, card)
     type_tooltip(self, info_queue, card)
     -- just to shorten function
@@ -460,12 +460,12 @@ local excadrill = {
       end
       to_add = math.floor(count / abbr.hazard_ratio)
     end
-    return {vars = {to_add, abbr.hazard_ratio, abbr.mult_mod, abbr.mult}}
+    return {vars = {to_add, abbr.hazard_ratio, abbr.mult_mod, abbr.mult, abbr.Xmult_mod}}
   end,
   rarity = "poke_safari",
   cost = 8,
   stage = "Basic",
-  ptype = "Fighting",
+  ptype = "Earth",
   atlas = "Pokedex5",
   volatile = true,
   blueprint_compat = false,
@@ -489,11 +489,27 @@ local excadrill = {
 		end
 	end
 	if context.joker_main then
-        return {
-			  message = localize("poke_excadrill_ex"), 
-			  colour = G.C.MULT,
-			  mult_mod = card.ability.extra.mult,
+		local has_hazard = false
+		for i=1, #G.hand.cards do
+			if SMODS.has_enhancement(G.hand.cards[i], "m_poke_hazard") and not G.hand.cards[i].debuff then
+				has_hazard = true
+				break
+			end
+		end
+		if not has_hazard then
+			return {
+				  message = localize("poke_excadrill_ex"),
+				  colour = G.C.MULT,
+				  mult_mod = card.ability.extra.mult,
+				  Xmult_mod = card.ability.extra.Xmult_mod,
+				}
+		else
+			return {
+				 message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.mult}}, 
+				 colour = G.C.MULT,
+				 mult_mod = card.ability.extra.mult
 			}
+		end
 	 elseif context.destroying_card then
 		local spin = context.destroying_card.config.center == G.P_CENTERS.m_poke_hazard
 		return not context.blueprint and spin and context.destroying_card.rapid_spin
