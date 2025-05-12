@@ -529,7 +529,8 @@ local umbreon={
     type_tooltip(self, info_queue, center)
     info_queue[#info_queue+1] = {key = 'tag_orbital', set = 'Tag', specific_vars = {"Random Hand", 3}}
     info_queue[#info_queue+1] = {key = 'tag_negative', set = 'Tag'}
-    return {vars = {center.ability.extra.hand_played or localize('poke_none'), center.ability.extra.decrease_goal, center.ability.extra.decreases}}
+    return {vars = {center.ability.extra.hand_played and localize(center.ability.extra.hand_played, 'poker_hands') or localize('poke_none'), 
+                    center.ability.extra.decrease_goal, center.ability.extra.decreases}}
   end,
   rarity = "poke_safari", 
   cost = 7, 
@@ -968,7 +969,7 @@ local forretress={
 local dunsparce={
   name = "dunsparce",
   pos = {x = 4, y = 5},
-  config = {extra = {rounds = 5,}},
+  config = {extra = {rounds = 5, rerolled = false}},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
     return {vars = {center.ability.extra.rounds, }}
@@ -982,7 +983,12 @@ local dunsparce={
   blueprint_compat = true,
   eternal_compat = false,
   calculate = function(self, card, context)
-    if context.reroll_shop then
+    if context.reroll_shop and not context.blueprint then
+      card.ability.extra.rerolled = true
+      local eval = function(card) return not card.REMOVED end
+      juice_card_until(card, eval, true)
+    end
+    if context.ending_shop and not context.blueprint and card.ability.extra.rerolled then
       G.E_MANAGER:add_event(Event({
         func = function()
           remove(self, card, context, true)
