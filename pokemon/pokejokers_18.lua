@@ -442,7 +442,7 @@ local drilbur = {
 local excadrill = {
   name = "excadrill",
   pos = { x = 8, y = 2 },
-  config = {extra = {hazard_ratio = 10, mult = 15, mult_mod = 2, Xmult_mod = 2, upgraded = false}},
+  config = {extra = {hazard_ratio = 10, mult = 0, mult_mod = 2, Xmult_mod = 2, upgraded = false}},
   loc_vars = function(self, info_queue, card)
     type_tooltip(self, info_queue, card)
     -- just to shorten function
@@ -527,7 +527,7 @@ end,
 local throh = {
   name = "throh",
   pos = { x = 2, y = 3 },
-  config = { extra = {mult = 0, mult_mod = 1, mult_cost_factor = 3, discard_mod = 1, triggered = false, volatile = "right", round_limit = 3}},
+  config = { extra = {mult = 3, mult_mod = 1, mult_cost_factor = 3, discard_mod = 1, triggered = false, volatile = "right", round_limit = 3}},
   loc_vars = function(self, info_queue, card)
     type_tooltip(self, info_queue, card)
 	info_queue[#info_queue+1] = {set = 'Other', key = 'poke_volatile_'..card.ability.extra.volatile}
@@ -581,7 +581,7 @@ local throh = {
 local sawk = {
   name = "sawk",
   pos = { x = 3, y = 3 },
-  config = { extra = {chips = 0, chip_mod = 4, chip_cost_factor = 5, hand_mod = 1, triggered = false, volatile = "left", round_limit = 3}},
+  config = { extra = {chips = 20, chip_mod = 4, chip_cost_factor = 5, hand_mod = 1, triggered = false, volatile = "left", round_limit = 3}},
   loc_vars = function(self, info_queue, card)
     type_tooltip(self, info_queue, card)
 	info_queue[#info_queue+1] = {set = 'Other', key = 'poke_volatile_'..card.ability.extra.volatile}

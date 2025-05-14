@@ -281,7 +281,7 @@ local ting_lu={
   name = "ting_lu",
   pos = {x = pokermon_config.pokemon_altart and 4, y = pokermon_config.pokemon_altart and 9},
   soul_pos = {x = 5, y = 9},
-  config = {extra = {chips = 50}},
+  config = {extra = {chips = 100}},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
 	info_queue[#info_queue+1] = G.P_CENTERS.m_stone

@@ -77,12 +77,12 @@ local grapploct={
   calculate = function(self, card, context)
 
     if context.joker_main then
-		if context.scoring_name == 'Pair' or context.scoring_name =='Three of a Kind' or context.scoring_name =='Four of a Kind' or context.scoring_name =='Five of a Kind' or context.scoring_name == 'Flush Five' then
+		if context.scoring_name == 'High Card' or context.scoring_name == 'Pair' or context.scoring_name =='Three of a Kind' or context.scoring_name =='Four of a Kind' or context.scoring_name =='Five of a Kind' or context.scoring_name == 'Flush Five' then
 		--Get the first card played with a valid rank to avoid Stone and Debuffed cards if played as leftmost card
 		local rank = 0
 		local rank_times = 0
 		for i = 1, #context.scoring_hand do
-			if context.scoring_hand[i].config.center ~= G.P_CENTERS.m_stone and not context.scoring_hand[i].debuff then
+			if context.scoring_hand[i].config.center ~= G.P_CENTERS.m_stone and not context.scoring_hand[i].debuff and not SMODS.has_enhancement(context.scoring_hand[i], "m_poke_hazard") then
 				if context.scoring_hand[i]:is_face() then
 					rank = 10
 				elseif context.scoring_hand[i]:get_id() == 14 then
