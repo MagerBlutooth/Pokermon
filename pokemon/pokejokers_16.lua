@@ -541,8 +541,8 @@ local gliscor = {
     type_tooltip(self, info_queue, card)
     local played_Xmult = 1
     if G.hand then
-        local suit_count = 0
-        for i=1, #G.hand.cards do
+      local suit_count = 0
+      for i=1, #G.hand.cards do
         if (G.hand.cards[i]:is_suit(G.GAME.current_round.gligar_suit) or G.hand.cards[i].debuff) and not G.hand.cards[i].highlighted then
           suit_count = suit_count + 1
         end
@@ -596,9 +596,9 @@ local mamoswine={
     return {vars = {center.ability.extra.mult, center.ability.extra.money, ''..(G.GAME and G.GAME.probabilities.normal or 1), center.ability.extra.odds,}}
   end,
   rarity = "poke_safari",
-  cost = 8,
-  stage = "One",
-  ptype = "Water",
+  cost = 10,
+  stage = "Two",
+  ptype = "Earth",
   atlas = "Pokedex4",
   perishable_compat = true,
   blueprint_compat = true,

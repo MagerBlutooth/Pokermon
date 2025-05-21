@@ -2623,6 +2623,25 @@ return {
                     "{C:inactive,s:0.8}(Evolves after {C:attention,s:0.8}#3#{C:inactive,s:0.8} rounds)",
                 }
             },
+            j_poke_houndour = {
+              name = "Houndour",
+              text = {
+                "Discarding more than {C:attention}3{} cards",
+                "also discards {C:attention}#3#{} random cards {C:attention}held{} in hand",
+                "{br:2}ERROR - CONTACT STEAK",
+                "Discarded cards permanently gain {C:mult}+#1#{} Mult",
+                "{C:inactive}(Evolves after {C:attention}#2#{C:inactive} rounds)",
+              }
+            },
+            j_poke_houndoom = {
+              name = "Houndoom",
+              text = {
+                "Discarding more than {C:attention}3{} cards",
+                "also discards {C:attention}all{} cards {C:attention}held{} in hand",
+                "{br:2}ERROR - CONTACT STEAK",
+                "Discarded cards permanently gain {C:mult}+#1#{} Mult",
+              }
+            },
             j_poke_miltank = {
                 name = "Miltank",
                 text = {
@@ -3188,8 +3207,9 @@ return {
               text = {
                 "Each played {C:attention}3{} or {C:attention}6{} gives",
                 "{C:chips}+#2#{} Chips and {C:mult}+#1#{} Mult when scored",
-                "{C:green}#3# in #4#{} chance each played {C:attention}3{}",
-                "or {C:attention}6{} retriggers"
+                "{br:2}ERROR - CONTACT STEAK",
+                "{C:green}#3# in #4#{} chance to retrigger each",
+                "played {C:attention}3{} or {C:attention}6{}"
               }
             },
             j_poke_leafeon = {

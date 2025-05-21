@@ -95,6 +95,7 @@ family = {
     {"bonsly", "sudowoodo"},
     {"hoppip", "skiploom", "jumpluff"},
     {"sunkern", "sunflora"},
+    {"houndour", "houndoom"},
     {"misdreavus", "mismagius"},
     {"wynaut", "wobbuffet"},
     {"pineco", "forretress"},
