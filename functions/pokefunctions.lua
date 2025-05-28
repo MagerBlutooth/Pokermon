@@ -85,6 +85,7 @@ family = {
     {"spinarak", "ariados"},
     {"sneasel", "weavile"},
     {"remoraid", "octillery"},
+    {"aipom", "ambipom"},
     {"togepi", "togetic", "togekiss"},
     {"yanma", "yanmega"},
     {"natu", "xatu"},
