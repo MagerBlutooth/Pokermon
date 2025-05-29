@@ -2,60 +2,56 @@
 local ursaluna={
   name = "ursaluna",
   pos = {x = 2, y = 8},
-  config = {extra = {card_limit = 2, club_mod = 3, clubs_in_deck = 0}},
+  config = {extra = {mult = 0,mult_mod = 3,}},
+  loc_txt = {
+    name = "Ursaluna",
+    text = {
+      "Gains {C:mult}+#2#{} Mult and creates",
+      "an {C:item}Item{} with {C:dark_edition}Polychrome{} when any",
+      "{C:attention}Booster Pack{} is skipped {C:inactive,s:0.8}(Must have room)",
+      "{C:inactive}(Currently {C:mult}+#1#{C:inactive} Mult)",
+    }
+  },
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
-	center.ability.extra.clubs_in_deck = 0
-	if center.area == G.jokers and G.playing_cards and #G.playing_cards > 0 and G.GAME.current_round.hands_played == 0 then
-		for k, v in pairs(G.playing_cards) do
-			if v.base.suit == 'Clubs' then
-				center.ability.extra.clubs_in_deck = center.ability.extra.clubs_in_deck + 1
-			end
-		end
-	end
-    return {vars = {center.ability.extra.card_limit, center.ability.extra.club_mod, center.ability.extra.clubs_in_deck}}
+    if not center.edition or (center.edition and not center.edition.polychrome) then
+      info_queue[#info_queue+1] = G.P_CENTERS.e_polychrome
+    end
+    return {vars = {center.ability.extra.mult, center.ability.extra.mult_mod}}
   end,
   rarity = "poke_safari",
-  cost = 12,
+  cost = 10,
   stage = "Two",
-  ptype = "Earth",
+  ptype = "Colorless",
   atlas = "Pokedex8",
   perishable_compat = true,
   blueprint_compat = true,
   eternal_compat = true,
   calculate = function(self, card, context)
-    if context.before and G.GAME.current_round.hands_played == 0 then
-		card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("poke_ursaluna_ex")})
-		for k, v in pairs(context.scoring_hand) do
-			if v.base.suit ~= 'Clubs' then 
-               v:change_suit('Clubs')
-			end
-		end
-		card.ability.extra.clubs_in_deck = 0
-		for k, v in pairs(G.playing_cards) do
-			if v.base.suit == 'Clubs' then
-				card.ability.extra.clubs_in_deck = card.ability.extra.clubs_in_deck + 1
-			end
-		end
-	end
-	if context.cardarea == G.jokers and context.scoring_hand and context.joker_main then
-	  return {
-		message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.club_mod * card.ability.extra.clubs_in_deck}}, 
-		  colour = G.C.MULT,
-		  mult_mod = card.ability.extra.club_mod * card.ability.extra.clubs_in_deck
-	  }
-	end
+    if context.skipping_booster then
+      if not context.blueprint then
+        card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
+      end
+      card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("k_upgrade_ex"), colour = G.C.MULT})
+      if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+        local _card = create_card('Item', G.consumeables, nil, nil, nil, nil, nil)
+        local edition = {polychrome = true}
+        _card:set_edition(edition, true)
+        _card:add_to_deck()
+        G.consumeables:emplace(_card)
+      end
+    end
+    if context.cardarea == G.jokers and context.scoring_hand then
+      if context.joker_main and card.ability.extra.mult > 0 then
+        return {
+          message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.mult}}, 
+          colour = G.C.MULT,
+          mult_mod = card.ability.extra.mult, 
+          card = card
+        }
+      end
+    end
   end,
-  add_to_deck = function(self, card, from_debuff)
-    G.E_MANAGER:add_event(Event({func = function()
-      G.consumeables.config.card_limit = G.consumeables.config.card_limit - card.ability.extra.card_limit
-      return true end }))
-  end,
-  remove_from_deck = function(self, card, from_debuff)
-    G.E_MANAGER:add_event(Event({func = function()
-      G.consumeables.config.card_limit = G.consumeables.config.card_limit + card.ability.extra.card_limit
-      return true end }))
-  end, 
 }
 -- Basculegion 902
 -- Sneasler 903
