@@ -171,6 +171,7 @@ for _, file in ipairs(pfiles) do
             item.config.extra = {ptype = item.ptype}
           end
         end
+        item.set_badges = poke_set_type_badge
         if item.item_req then
           if item.config and item.config.extra then
             item.config.extra.item_req = item.item_req
@@ -303,6 +304,7 @@ for _, file in ipairs(pseals) do
     
     for i, item in ipairs(curr_sticker.list) do
       item.discovered = not pokermon_config.pokemon_discovery
+      item.hide_badge = true
       SMODS.Sticker(item)
     end
   end
