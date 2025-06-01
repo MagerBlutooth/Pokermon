@@ -997,11 +997,7 @@ jd_def["j_poke_snubbull"] = {
     end
     local first_face = JokerDisplay.calculate_leftmost_card(face_cards)
     if first_face then
-      if first_face:get_id() == 12 then
-        xmult = card.ability.extra.Xmult2
-      else
-        xmult = card.ability.extra.Xmult
-      end
+      xmult = card.ability.extra.Xmult
     end
     card.joker_display_values.x_mult = math.max(first_face and (xmult ^ JokerDisplay.calculate_card_triggers(first_face, scoring_hand)) or 1, 1)
   end
@@ -1134,7 +1130,21 @@ jd_def["j_poke_sneasel"] = {
 }
 
 --	Teddiursa
+jd_def["j_poke_teddiursa"] = {
+  text = {
+    { text = "+", colour = G.C.MULT },
+    { ref_table = "card.ability.extra", ref_value = "mult", retrigger_type = "mult", colour = G.C.MULT },
+  }
+}
+
 --	Ursaring
+jd_def["j_poke_ursaring"] = {
+  text = {
+    { text = "+", colour = G.C.MULT },
+    { ref_table = "card.ability.extra", ref_value = "mult", retrigger_type = "mult", colour = G.C.MULT },
+  }
+}
+
 --	Slugma
 --	Magcargo
 --	Swinub
