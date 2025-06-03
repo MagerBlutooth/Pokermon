@@ -74,7 +74,7 @@ return {
         },
         Item = {
             c_poke_pokeball = {
-                name = "Pokéball",
+                name = "Poké Ball",
                 text = {
                     "Create a random",
                     "{C:attention}Basic Joker{} card",
@@ -82,7 +82,7 @@ return {
                 },
             },
             c_poke_greatball = {
-                name = "Greatball",
+                name = "Great Ball",
                 text = {
                     "Create a random",
                     "{C:attention}Stage 1 Joker{} card",
@@ -199,7 +199,8 @@ return {
                 text = {
                     "{C:attention}Type Changer:{} {X:pink,C:white}Random{}",
                     "{br:2}ERROR - CONTACT STEAK",
-                    "{C:pink}Energize{} leftmost or selected Joker{}",
+                    "{C:pink}Energize{} leftmost",
+                    "or selected Joker{}",
                 },
             },
             c_poke_metalcoat = {
@@ -703,7 +704,7 @@ return {
                     "{C:chips}+#1#{} Chips if played hand",
                     "contains a {C:attention}Straight{}",
                     "{br:2}ERROR - CONTACT STEAK",
-                    "Create a {C:attention}Tarot{} card if",
+                    "Create a {C:tarot}Tarot{} card if",
                     "it also contains an {C:attention}Ace{}"
                 } 
             },
@@ -821,7 +822,7 @@ return {
                 text = {
                     "{C:green}#1# in #2#{} chance for each",
                     "played {C:attention}9{} to create a",
-                    "{C:attention}Tarot{} card when scored",
+                    "{C:tarot}Tarot{} card when scored",
                     "{C:inactive,s:0.8}(Must have room)",
                     "{C:inactive,s:0.8}(Evolves with a {C:attention,s:0.8}Fire Stone{C:inactive,s:0.8})"
                 } 
@@ -829,10 +830,10 @@ return {
             j_poke_ninetales = {
                 name = "Ninetales",
                 text = {
-                    "{C:attention}Holding {C:dark_edition}Negative{} Medium{}",
+                    "{C:attention}Holding {C:dark_edition}Negative {C:spectral}Medium{}",
                     "{C:green}#1# in #2#{} chance for each",
                     "played {C:attention}9{} to create a",
-                    "{C:attention}Tarot{} card when scored",
+                    "{C:tarot}Tarot{} card when scored",
                     "{C:inactive,s:0.8}(Must have room)",
                 } 
             },
@@ -1249,7 +1250,7 @@ return {
             j_poke_farfetchd = {
                 name = 'Farfetch\'d',      
                 text = {
-                    "{C:attention}Holding Leek{}",
+                    "{C:attention}Holding {C:item}Leek{}",
                     "{C:green}#2# in #3#{} chance to earn {C:money}$#1#",
                     "when a {C:attention}Consumable{} is used",
                     "{C:money}${} guaranteed when using {C:attention}Leeks{}",
@@ -1352,10 +1353,10 @@ return {
             j_poke_gengar = {
                 name = 'Gengar',      
                 text = {
-                    "{C:green}Percent Chance{}",
-                    "Sometimes {C:attention}replaces{} the edition",
-                    "of a random {C:attention}Joker{} with",
+                    "{C:green}#1#%{} chance to {C:attention}replace{} the",
+                    "edition of a random {C:attention}Joker{} with",
                     "{C:dark_edition}Negative{} at end of round",
+                    "{C:inactive,s:0.8}(Odds can't be increased){}",
                     "{C:inactive,s:0.8}(Excludes Gengars){}",
                 } 
             },
@@ -1388,7 +1389,7 @@ return {
             j_poke_hypno = {
                 name = 'Hypno',      
                 text = {
-                    "{C:attention}Holding Trance{}",
+                    "{C:attention}Holding {C:spectral}Trance{}",
                     "{X:mult,C:white}X#2#{} Mult per unique",
                     "{C:planet}Planet{} card used this run",
                     "{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive} Mult)",
@@ -1445,7 +1446,7 @@ return {
             j_poke_cubone = {
                 name = 'Cubone',
                 text = {
-                    "{C:attention}Holding Thick Club{}",
+                    "{C:attention}Holding {C:item}Thick Club{}",
                     "Gives {C:mult}+#1#{} Mult for",
                     "each {C:attention}held{} consumable",
                     "{C:inactive,s:0.8}({C:attention,s:0.8}Thick Clubs{C:inactive,s:0.8} count as double){}",
@@ -1838,7 +1839,7 @@ return {
             j_poke_snorlax = {
                 name = 'Snorlax',
                 text = {
-                    "{C:attention}Holding Leftovers{}",
+                    "{C:attention}Holding {C:item}Leftovers{}",
                     "At end of round gain {X:red,C:white}X#1#{} Mult",
                     "for each {C:attention}Leftovers{} you have",
                     "{C:inactive}(Currently {X:red,C:white} X#2# {C:inactive} Mult)"
@@ -1921,17 +1922,20 @@ return {
                     "at end of shop",
                     "{br:2}ERROR - CONTACT STEAK",
                     "{C:pink}+1{} Energy Limit when",
-                    "{C:attention}Boss Blind{} is defeated"
+                    "{C:attention}Boss Blind{} is defeated",
+                    "{C:inactive}(Can't {C:pink}Energize{C:inactive} self)",
                 } 
             },
             j_poke_mew = {
                 name = 'Mew',
                 text = {
-                    "At end of shop, create",
-                    "a random {C:dark_edition}Negative{} {C:attention}Tarot{},",
+                    "At the end of the {C:attention}shop{},",
+                    "create a {C:dark_edition}Negative{} {C:tarot}Tarot{},",
                     "{C:spectral}Spectral{} or {C:item}Item{} card",
-                    "Sometimes creates a random",
+                    "{br:3}ERROR - CONTACT STEAK",
+                    "{C:green}#1#%{} chance to create a",
                     "{C:dark_edition}Negative{} Joker {C:attention}instead{}",
+                    "{C:inactive,s:0.8}(Odds can't be increased){}",
                 } 
             },
             j_poke_chikorita = {
@@ -2153,6 +2157,36 @@ return {
                     "{C:planet}Celestial Packs{} contain every {C:planet}Planet{} card",
                 }
             },
+            j_poke_mareep = {
+                name = "Mareep",
+                text = {
+                  "Gains {X:red,C:white}X#2#{} Mult when one or more",
+                  "{C:attention}playing cards{} are {C:attention}added{} to deck",
+                  "{br:3}ERROR - CONTACT STEAK",
+                  "Loses {X:red,C:white}X#3#{} Mult when one or more",
+                  "{C:attention}playing cards{} are {C:attention}destroyed",
+                  "{C:inactive}(Evolves at {X:red,C:white}X#1#{C:inactive} / X#4# Mult)",
+                }
+            },
+            j_poke_flaaffy = {
+                name = "Flaaffy",
+                text = {
+                  "Gains {X:red,C:white}X#2#{} Mult when one or more",
+                  "{C:attention}playing cards{} are {C:attention}added{} to deck",
+                  "{br:3}ERROR - CONTACT STEAK",
+                  "Loses {X:red,C:white}X#3#{} Mult when one or more",
+                  "{C:attention}playing cards{} are {C:attention}destroyed",
+                  "{C:inactive}(Evolves at {X:red,C:white}X#1#{C:inactive} / X#4# Mult)",
+                }
+            },
+            j_poke_ampharos = {
+                name = "Ampharos",
+                text = {
+                  "Gains {X:red,C:white}X#2#{} Mult when one or more",
+                  "{C:attention}playing cards{} are {C:attention}added{} to deck",
+                  "{C:inactive}(Currently {X:red,C:white}X#1#{C:inactive} Mult)",
+                }
+            },
             j_poke_azurill = {
                 name = 'Azurill',
                 text = {
@@ -2183,7 +2217,7 @@ return {
             j_poke_sudowoodo = {
                 name = "Sudowoodo",
                 text = {
-                  "{C:attention}Type Changer Pokemon{}",
+                  "{C:attention}Type Changer: {X:grass,C:white}Grass{}",
                   "Played {C:attention}face{} cards give {C:mult}+#1#{} Mult when scored",
                   "{br:3.5}ERROR - CONTACT STEAK",
                   "Retrigger all played {C:attention}face{} cards if",
@@ -2711,8 +2745,8 @@ return {
             j_poke_treecko = {
                 name = "Treecko",
                 text = {
-                    "{C:attention}+#3#{} hand size, {C:attention}Nature{}",
-                    "Played {C:attention}#6#s, #7#s or #8#s{} have",
+                    "{C:attention}+#3#{} hand size, {C:attention}Nature: {C:inactive}({C:attention}#6#, #7#, #8#{C:inactive}){}",
+                    "Played {C:attention}Nature{} cards have a",
                     "a {C:green}#4# in #5#{} chance to earn {C:money}$#1#{} when scored",
                     "Guaranteed if you have other {X:grass,C:white}Grass{} cards",
                     "{C:inactive,s:0.8}(includes Jokers and Energy cards){}",
@@ -2722,9 +2756,9 @@ return {
             j_poke_grovyle = {
                 name = "Grovyle",
                 text = {
-                    "{C:attention}+#3#{} hand size, {C:attention}Nature{}",
-                    "Played {C:attention}#6#s, #7#s or #8#s{} have",
-                    "a {C:green}#4# in #5#{} chance to earn {C:money}$#1#{} when scored",
+                    "{C:attention}+#3#{} hand size, {C:attention}Nature: {C:inactive}({C:attention}#6#, #7#, #8#{C:inactive}){}",
+                    "Played {C:attention}Nature{} cards have a",
+                    "{C:green}#4# in #5#{} chance to earn {C:money}$#1#{} when scored",
                     "Guaranteed if you have other {X:grass,C:white}Grass{} cards",
                     "{C:inactive,s:0.8}(includes Jokers and Energy cards){}",
                     "{C:inactive,s:0.8}(Evolves after earning {C:money,s:0.8}$#2#{C:inactive,s:0.8})",
@@ -2733,8 +2767,8 @@ return {
             j_poke_sceptile = {
                 name = "Sceptile",
                 text = {
-                    "{C:attention}+#3#{} hand size, {C:attention}Nature{}",
-                    "Played {C:attention}#5#s, #6#s or #7#s{} earn {C:money}$#1#{} when scored",
+                    "{C:attention}+#3#{} hand size, {C:attention}Nature: {C:inactive}({C:attention}#5#, #6#, #7#{C:inactive}){}",
+                    "Played {C:attention}Nature{} cards earn {C:money}$#1#{} when scored",
                     "{br:5}ERROR - CONTACT STEAK",
                     "Earn {C:money}$#1#{} at end of round for",
                     "each other {X:grass,C:white}Grass{} card you have",
@@ -2745,8 +2779,8 @@ return {
             j_poke_torchic = {
                 name = "Torchic",
                 text = {
-                    "{C:mult}+#3#{} discards, {C:attention}Nature{}",
-                    "{C:mult}+#1#{} Mult for each {C:attention}#5#, #6# or #7#{} discarded this round",
+                    "{C:mult}+#3#{} discards, {C:attention}Nature: {C:inactive}({C:attention}#5#, #6#, #7#{C:inactive}){}",
+                    "{C:mult}+#1#{} Mult for each {C:attention}Nature{} card discarded this round",
                     "Doubled with other {X:fire,C:white}Fire{} or {X:earth,C:white}Fighting{} cards",
                     "{C:inactive,s:0.8}(includes Jokers and Energy cards){}",
                     "{C:inactive}(Currently {C:mult}+#4#{C:inactive} Mult)",
@@ -2756,8 +2790,8 @@ return {
             j_poke_combusken = {
                 name = "Combusken",
                 text = {
-                    "{C:mult}+#3#{} discards, {C:attention}Nature{}",
-                    "{C:mult}+#1#{} Mult for each {C:attention}#5#, #6# or #7#{} discarded this round",
+                    "{C:mult}+#3#{} discards, {C:attention}Nature: {C:inactive}({C:attention}#5#, #6#, #7#{C:inactive}){}",
+                    "{C:mult}+#1#{} Mult for each {C:attention}Nature{} card discarded this round",
                     "Doubled with other {X:fire,C:white}Fire{} or {X:earth,C:white}Fighting{} cards",
                     "{C:inactive,s:0.8}(includes Jokers and Energy cards){}",
                     "{C:inactive}(Currently {C:mult}+#4#{C:inactive} Mult)",
@@ -2767,8 +2801,8 @@ return {
             j_poke_blaziken = {
                 name = "Blaziken",
                 text = {
-                    "{C:mult}+#2#{} discards, {C:attention}Nature{}",
-                    "For each {C:attention}#6#, #7# or #8#{} discarded this round",
+                    "{C:mult}+#2#{} discards, {C:attention}Nature: {C:inactive}({C:attention}#6#, #7#, #8#{C:inactive}){}",
+                    "For each {C:attention}Nature{} card discarded this round",
                     "gain {C:mult}+#4#{} Mult and {X:red,C:white}X#1#{} Mult for",
                     "each {X:fire,C:white}Fire{} or {X:earth,C:white}Fighting{} card you have",
                     "{C:inactive,s:0.8}(includes Jokers and Energy cards){}",
@@ -2778,8 +2812,8 @@ return {
             j_poke_mudkip = {
                 name = "Mudkip",
                 text = {
-                    "{C:chips}+#3#{} hands, {C:attention}Nature{}",
-                    "Played {C:attention}#4#s, #5#s or #6#s{} give {C:chips}+#1#{} Chips",
+                    "{C:chips}+#3#{} hands, {C:attention}Nature: {C:inactive}({C:attention}#4#, #5#, #6#{C:inactive}){}",
+                    "Played {C:attention}Nature{} cards give {C:chips}+#1#{} Chips",
                     "Doubled with other {X:water,C:white}Water{} or {X:earth,C:white}Earth{} cards",
                     "{C:inactive,s:0.8}(includes Jokers and Energy cards){}",
                     "{C:inactive,s:0.8}(Evolves after gaining {C:chips,s:0.8}#2#{C:inactive,s:0.8} Chips)"
@@ -2788,8 +2822,8 @@ return {
             j_poke_marshtomp = {
                 name = "Marshtomp",
                 text = {
-                    "{C:chips}+#3#{} hands, {C:attention}Nature{}",
-                    "Played {C:attention}#4#s, #5#s or #6#s{} give {C:chips}+#1#{} Chips",
+                    "{C:chips}+#3#{} hands, {C:attention}Nature: {C:inactive}({C:attention}#4#, #5#, #6#{C:inactive}){}",
+                    "Played {C:attention}Nature{} cards give {C:chips}+#1#{} Chips",
                     "Doubled with other {X:water,C:white}Water{} or {X:earth,C:white}Earth{} cards",
                     "{C:inactive,s:0.8}(includes Jokers and Energy cards){}",
                     "{C:inactive,s:0.8}(Evolves after gaining {C:chips,s:0.8}#2#{C:inactive,s:0.8} Chips)"
@@ -2798,8 +2832,8 @@ return {
             j_poke_swampert = {
                 name = "Swampert",
                 text = {
-                    "{C:chips}+#3#{} hands, {C:attention}Nature{}",
-                    "Played {C:attention}#6#s, #7#s or #8#s{} give {C:chips}+#1#{} Chips",
+                    "{C:chips}+#3#{} hands, {C:attention}Nature: {C:inactive}({C:attention}#6#, #7#, #8#{C:inactive}){}",
+                    "Played {C:attention}Nature{} cards give {C:chips}+#1#{} Chips",
                     "and {C:chips}+#5#{} Chips per other {X:water,C:white}Water{} or {X:earth,C:white}Earth{} card",
                     "{C:inactive,s:0.8}(includes Jokers and Energy cards){}",
                     "{C:inactive}(Currently {C:chips}+#4#{C:inactive} total)"
@@ -4308,10 +4342,11 @@ return {
             j_poke_treasure_eatery = {
                 name = "Treasure Eatery",
                 text = {
+                  "{C:attention}Type Changer{}",
+                  "{br:2}ERROR - CONTACT STEAK",
                   "Convert the leftmost Joker's {C:pink}type{}",
                   "into the rightmost Joker's {C:pink}type{}",
                   "when blind is selected",
-                  "{C:attention}Type Changer{}",
                   "{C:inactive}({C:attention}#1#{C:inactive} rounds remaining){}"
                 }
             },
@@ -4410,7 +4445,7 @@ return {
         },
         Spectral = {
             c_poke_ultraball = {
-                name = "Ultraball",
+                name = "Ultra Ball",
                 text = {
                     "Create a random",
                     "{C:attention}Stage 2 Joker{} card",
@@ -4418,7 +4453,7 @@ return {
                 },
             },
             c_poke_masterball = {
-                name = "Masterball",
+                name = "Master Ball",
                 text = {
                     "Create a random",
                     "{C:attention}Legendary Pokemon Joker{} card",
@@ -4436,6 +4471,7 @@ return {
                 name = "Mega Stone",
                 text = {
                     "{C:attention}Reusable{}",
+                    "{br:2}ERROR - CONTACT STEAK",
                     "{C:attention}Mega Evolves{} a Pokemon", 
                     "or {C:attention}devolves{} a Mega",
                     "{C:attention}Devolves{} Mega if sold",
@@ -4512,8 +4548,9 @@ return {
                 name = "Pocket Tag",
                 text = {
                     "Gives a free {C:pink}Mega Pocket Pack",
-                    "{C:green}25%{} chance pack contains",
-                    "a {C:attention}Mega Stone{} on {C:attention}Ante 5+{}"
+                    "{C:green}#1#%{} chance pack contains",
+                    "a {C:attention}Mega Stone{} on {C:attention}Ante 5+{}",
+                    "{C:inactive,s:0.8}(Odds can't be increased){}",
                 }, 
             },
             tag_poke_shiny_tag = {
@@ -4713,10 +4750,10 @@ return {
                 }
             },
             typechangerpoke = {
-                name = "Type Changer Pokemon",
+                name = "Type Changer",
                 text = {
                     "Applies a {V:1}#1#{} sticker",
-                    "to self"
+                    "to itself on creation"
                 }
             },
             basic = {
@@ -4820,9 +4857,9 @@ return {
             nature = {
                 name = "Nature",
                 text = {
-                    "Desired {C:attention}#1#{} are",
-                    "set at random upon",
-                    "Joker creation"
+                    "A unique {C:attention}#1#{} or set of {C:attention}#1#s{}",
+                    "that trigger this Joker",
+                    "Set once upon Joker creation",
                 }
             },
             scry_cards = {
@@ -4894,14 +4931,6 @@ return {
                 "Creates a random Joker",
                 "with a certain quality",
               }
-            },
-            percent_chance = {
-                name = "Percent Chance",
-                text = {
-                  "{C:green}#1#%{} chance",
-                  "for {C:attention}effect{} to occur",
-                  "{C:inactive}(Odds can't be increased){}"
-                }
             },
             holding = {
                 name = "Holding",
