@@ -288,30 +288,23 @@ jd_def["j_poke_crobat"] = {
 --	Lanturn
 --	Pichu
 jd_def["j_poke_pichu"] = {
-    extra = {{
-        {
-            border_nodes = {
-                { text = "X" },
-                { ref_table = "card.ability.extra", ref_value = "Xmult_minus", retrigger_type = "exp" },
-            },
-        },
-    },},
-    text = {
-        {text = "$", colour = G.C.GOLD},
-        { ref_table = "card.joker_display_values", ref_value = "money", colour = G.C.GOLD  },
-    
+  text = {
+    {
+      border_nodes = {
+        { text = "X" },
+        { ref_table = "card.ability.extra", ref_value = "Xmult_minus", retrigger_type = "exp" },
+      },
     },
-    reminder_text = {
-        { ref_table = "card.joker_display_values", ref_value = "localized_text" },
-    },
-    calc_function = function(card)
-        local money
-        money = math.min(10, #G.jokers.cards * card.ability.extra.money)
-        card.joker_display_values.money = money
-        card.joker_display_values.localized_text = "(" .. localize("k_round") .. ")"
-    end
+    { text = " +$", colour = G.C.GOLD },
+    { ref_table = "card.ability.extra", ref_value = "money", colour = G.C.GOLD },
+  },
+  reminder_text = {
+    { ref_table = "card.joker_display_values", ref_value = "localized_text" },
+  },
+  calc_function = function(card)
+    card.joker_display_values.localized_text = "(" .. localize("k_round") .. ")"
+  end
 }
-
 
 --	Cleffa
 jd_def["j_poke_cleffa"] = {
@@ -397,8 +390,41 @@ jd_def["j_poke_togetic"] = {
 --	Natu
 --	Xatu
 --	Mareep
+jd_def["j_poke_mareep"] = {
+  text = {
+    {
+      border_nodes = {
+        { text = "X" },
+        { ref_table = "card.ability.extra", ref_value = "Xmult", retrigger_type = "exp" },
+      },
+    },
+  },
+}
+
 --	Flaaffy
+jd_def["j_poke_flaaffy"] = {
+  text = {
+    {
+      border_nodes = {
+        { text = "X" },
+        { ref_table = "card.ability.extra", ref_value = "Xmult", retrigger_type = "exp" },
+      },
+    },
+  },
+}
+
 --	Ampharos
+jd_def["j_poke_ampharos"] = {
+  text = {
+    {
+      border_nodes = {
+        { text = "X" },
+        { ref_table = "card.ability.extra", ref_value = "Xmult", retrigger_type = "exp" },
+      },
+    },
+  },
+}
+
 --	Bellossom
 jd_def["j_poke_bellossom"] = {
     text = {
@@ -1356,6 +1382,7 @@ jd_def["j_poke_donphan"] = {
 
 --	Porygon2
 --	Stantler
+--[[
 jd_def["j_poke_stantler"] = { 
     text = {
         { text = "+" },
@@ -1389,7 +1416,7 @@ calc_function = function(card)
     end
     card.joker_display_values.localized_text = localize('Pair', 'poker_hands')
 end
-}
+}--]]
 
 --	Smeargle
 --	Tyrogue
