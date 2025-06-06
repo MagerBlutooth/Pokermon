@@ -2187,15 +2187,6 @@ return {
                   "{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive} Mult)",
                 }
             },
-            j_poke_azurill = {
-                name = 'Azurill',
-                text = {
-                    "{C:attention}Baby{}, {X:mult,C:white}X#1#{} Mult",
-                    "Creates a {C:dark_edition}Negative{} copy of",
-                    "{C:attention}The Hierophant{} at end of round",
-                    "{C:inactive,s:0.8}(Evolves after {C:attention,s:0.8}#2#{C:inactive,s:0.8} rounds)",
-                }
-            },
             j_poke_marill = {
                 name = 'Marill',
                 text = {
@@ -2875,6 +2866,15 @@ return {
                   "{C:chips}+#1#{} hands, {C:mult}+#2#{} discards, or {C:attention}+#3#{} hand size",
                 }
             }, 
+            j_poke_azurill = {
+                name = 'Azurill',
+                text = {
+                    "{C:attention}Baby{}, {X:mult,C:white}X#1#{} Mult",
+                    "Creates a {C:dark_edition}Negative{} copy of",
+                    "{C:attention}The Hierophant{} at end of round",
+                    "{C:inactive,s:0.8}(Evolves after {C:attention,s:0.8}#2#{C:inactive,s:0.8} rounds)",
+                }
+            },
             j_poke_nosepass = {
                 name = 'Nosepass',      
                 text = {
