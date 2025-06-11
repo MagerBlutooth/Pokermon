@@ -104,6 +104,7 @@ family = {
     {"pineco", "forretress"},
     {"dunsparce", {key = "dudunsparce", form = 0}, {key = "dudunsparce", form = 1}},
     {"gligar", "gliscor"},
+    {"slugma", "magcargo"},
     {"swinub", "piloswine", "mamoswine"},
     {"snubbull", "granbull"},
     {"mantyke", "mantine"},
@@ -151,6 +152,12 @@ family = {
 	{{key = "furfrou", form = 0},{key = "furfrou", form = 1},{key = "furfrou", form = 2},{key = "furfrou", form = 3},{key = "furfrou", form = 4},{key = "furfrou", form = 5},{key = "furfrou", form = 6},{key = "furfrou", form = 7},{key = "furfrou", form = 8},{key = "furfrou", form = 9}},
 	{{key = "deerling", form = 0},{key = "deerling", form = 1},{key = "deerling", form = 2},{key = "deerling", form = 3}},
 	{{key = "sawsbuck", form = 0},{key = "sawsbuck", form = 1},{key = "sawsbuck", form = 2},{key = "sawsbuck", form = 3}},
+    {{key = "unown", form = "A"},{key = "unown", form = "B"},{key = "unown", form = "C"}, {key = "unown", form = "D"}, {key = "unown", form = "E"}, {key = "unown", form = "F"},
+     {key = "unown", form = "G"}, {key = "unown", form = "H"}, {key = "unown", form = "I"}, {key = "unown", form = "J"}, {key = "unown", form = "K"}, {key = "unown", form = "L"},
+     {key = "unown", form = "M"}, {key = "unown", form = "N"}, {key = "unown", form = "O"}, {key = "unown", form = "P"}, {key = "unown", form = "Q"}, {key = "unown", form = "R"},
+     {key = "unown", form = "S"}, {key = "unown", form = "T"}, {key = "unown", form = "U"}, {key = "unown", form = "V"}, {key = "unown", form = "W"}, {key = "unown", form = "X"}, 
+     {key = "unown", form = "Y"}, {key = "unown", form = "Z"}, {key = "unown", form = "Ex"}, {key = "unown", form = "Qu"}
+    },
 }
 
 extended_family = {
