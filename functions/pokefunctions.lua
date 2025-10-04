@@ -121,6 +121,7 @@ pokermon.family = {
     {"shroomish", "breloom"},
     {"aron","lairon","aggron"},
     {"duskull", "dusclops", "dusknoir"},
+    {"bidoof", "bibarel"},
     {"kricketot", "kricketune"},
     {"buizel", "floatzel"},
     {"buneary", "lopunny", "mega_lopunny"},
@@ -136,6 +137,7 @@ pokermon.family = {
     {"pansear", "simisear"},
     {"panpour", "simipour"},
     {"golett", "golurk"},
+    {"pawniard", "bisharp", "kingambit"},
     {"roggenrola", "boldore", "gigalith"},
     {"ferroseed", "ferrothorn"},
     {"zorua", "zoroark"},
@@ -166,6 +168,7 @@ pokermon.family = {
 }
 
 extended_family = {
+  slowpoke = {"shell"},
   tauros = {"miltank"},
   unown = {"ruins_of_alph", "unown_swarm"},
   luvdisc = {{item = true, name = "heartscale"}},
