@@ -48,7 +48,7 @@ local blissey={
   cost = 10,
   ptype = "Colorless",
   enhancement_gate = 'm_lucky',
-  stage = "Two", 
+  stage = "One", 
   atlas = "Pokedex2",
   gen = 2,
   blueprint_compat = true,
@@ -567,7 +567,9 @@ local treecko={
         for i=1, #card.ability.extra.targets do
           if context.other_card:get_id() == card.ability.extra.targets[i].id then
               local earned = ease_poke_dollars(card, "grovyle", card.ability.extra.money_mod, true)
-              card.ability.extra.money_earned = card.ability.extra.money_earned + earned
+              if not context.blueprint then
+                card.ability.extra.money_earned = card.ability.extra.money_earned + earned
+              end
               return {
                 dollars = earned,
                 card = card
@@ -625,7 +627,9 @@ local grovyle={
         for i=1, #card.ability.extra.targets do
           if context.other_card:get_id() == card.ability.extra.targets[i].id then
               local earned = ease_poke_dollars(card, "grovyle", card.ability.extra.money_mod, true)
-              card.ability.extra.money_earned = card.ability.extra.money_earned + earned
+              if not context.blueprint then
+                card.ability.extra.money_earned = card.ability.extra.money_earned + earned
+              end
               return {
                 dollars = earned,
                 card = card
