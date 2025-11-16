@@ -118,6 +118,14 @@ return {
                     "every hand",
                 }, 
             },
+            bl_poke_mirror = {
+                name = "The Mirror",
+                text = {
+                    "Rightmost Joker",
+                    "transforms into a {c:attention}Ditto",
+                    "when {C:attention}Blind{} selected",
+                }, 
+            },
         },
         Item = {
             c_poke_pokeball = {
@@ -1051,8 +1059,8 @@ return {
                     "Gain {C:chips}+#4#{} for scoring {C:attention}Bonus{} / {C:attention}Stone{} cards",
                     "{C:mult}+#2#{} for scoring {C:attention}Mult{} / {C:attention}Wild{} cards",
                     "{X:mult,C:white}X#6#{} for scoring {C:attention}Steel{} / {C:attention}Glass{} cards",
-                    "{C:money}$#8#{} for scoring {C:attention}Gold{} / {C:attention}Lucky{} cards",
-                    "Then remove scoring card {C:dark_edition}Enhancements",
+                    "{C:money}$#8#{} for scoring {C:attention}Gold{} / {C:attention}Lucky{} cards,",
+                    "removes card {C:attention}Enhancement",
                     "{C:inactive}(Currently {C:chips}+#3#{C:inactive}, {C:mult}+#1#{C:inactive}, {X:mult,C:white}X#5#{C:inactive}, {C:money}$#7#{C:inactive} end of round)",
                     "{C:inactive,s:0.8}(Evolves after eating {C:attention,s:0.8}#9#{C:inactive,s:0.8} Enhancements)",
                 } 
@@ -3056,8 +3064,9 @@ return {
             j_poke_suicune = {
                 name = "Suicune",
                 text = {
-                  "Permanently {C:attention}doubles{} the total chips",
-                  "of each card in played hand",
+                  "Permanently {C:attention}doubles{} the",
+                  "total chips of each scoring",
+                  "card in played hand",
                   "{C:inactive}(Up to {C:chips}+#1#{C:inactive} Chips per increase)",
                 }
             },
@@ -3297,7 +3306,7 @@ return {
                 name = 'Aron',
                 text = {
                     "Gain {X:mult,C:white}X#2#{} Mult for each",
-                    "{C:attention}Steel{} card in poker hand,",
+                    "{C:attention}Steel{} card in {C:attention}poker hand{},",
                     "then destroy them",
                     "{C:inactive}(Evolves at {X:mult,C:white}X#1#{C:inactive} / {X:inactive,C:white}X2{C:inactive} Mult)",
                 }
@@ -3307,7 +3316,7 @@ return {
                 text = {
                     "Gain {X:mult,C:white}X#2#{} Mult for each",
                     "{C:attention}Steel{} and {C:attention}Stone{} card in",
-                    "poker hand, then destroy them",
+                    "{C:attention}poker hand{}, then destroy them",
                     "{C:inactive}(Evolves at {X:mult,C:white}X#1#{C:inactive} / {X:inactive,C:white}X4{C:inactive} Mult)"
                 }
             },
@@ -3316,7 +3325,7 @@ return {
                 text = {
                     "Gain {X:mult,C:white}X#2#{} Mult for each",
                     "{C:attention}Steel{}, {C:attention}Stone{} and {C:attention}Gold{} card in",
-                    "poker hand, then destroy them",
+                    "{C:attention}poker hand{}, then destroy them",
                     "{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive} Mult)"
                 }
             },
@@ -3873,7 +3882,7 @@ return {
                   "{C:inactive}(Must have room){}",
                   "{br:2}ERROR - CONTACT STEAK",
                   "Earn {C:money}$#3#{} per scoring",
-                  "{C:attention}Enhanced{} card played",
+                  "{C:attention}Enhanced{} card played,",
                   "removes card {C:attention}Enhancement",
                   "{C:inactive}(Transforms when using a {C:attention}Machine{C:inactive}){}"
                 }
@@ -4170,7 +4179,7 @@ return {
                 text = {
                     "When {C:attention}Blind{} is selected, create a",
                     "{C:dark_edition}Negative{} {C:planet}Planet{} card of one of",
-                    "your {C:attention}#1#{} highest level poker hands",
+                    "your {C:attention}#1#{} highest level {C:attention}poker hands",
                     "{C:inactive,s:0.8}(Evolves when holding #2#/{C:planet,s:0.8}#3#{C:inactive,s:0.8} different planet cards){}"
                 }
             },
@@ -4179,7 +4188,7 @@ return {
                 text = {
                     "When {C:attention}Blind{} is selected, create a",
                     "{C:dark_edition}Negative{} {C:planet}Planet{} card of one of",
-                    "your {C:attention}#1#{} highest level poker hands",
+                    "your {C:attention}#1#{} highest level {C:attention}poker hands",
                     "{br:3.5}ERROR - CONTACT STEAK",
                     "After opening {C:attention}#2# Boosters{}, create a",
                     "{C:attention}Telescope{} or {C:attention}Observatory{} if able"
@@ -4438,7 +4447,7 @@ return {
                 "{br:3}ERROR - CONTACT STEAK",
                 "If first played hand has",
                 "exactly {C:attention}1{} card it gives", 
-                "{C:chips}+#2#{} Chips and {C:attention}+1{} hand this",
+                "{C:chips}+#2#{} Chips and {C:blue}+1{} hand this",
                 "round when scored"
               }
             },
@@ -4956,6 +4965,13 @@ return {
                     "and a {C:tarot,T:c_poke_pokeball}#2#{} card",
                 },
             },
+            sleeve_poke_pokemonsleeve_alt = {
+                name = "Trainer Sleeve",
+                text = {
+                    "Start run with a {C:tarot,T:c_poke_greatball}#3#{} card",
+                    "instead of a {C:tarot,T:c_poke_pokeball}#2#{} card",
+                },
+            },
             sleeve_poke_obituarysleeve = {
                 name = "Obituary Sleeve",
                 text = {
@@ -5000,6 +5016,13 @@ return {
                     "{C:purple}+#1# Foresight{}",
                 } 
             },
+            sleeve_poke_futuresleeve_alt = {
+                name = "Future Sleeve",
+                text = {
+                  "Gain {C:purple}+#2# Foresight{} when hand is played",
+                  "{C:inactive,s:0.8}(Resets at end of round)",
+                } 
+            },
             sleeve_poke_stadiumsleeve = {
                 name = "Stadium Sleeve",
                 text = {
@@ -5007,6 +5030,14 @@ return {
                     "an additional {C:attention}Bonus, Mult,",
                     "{C:attention}Wild, Glass, Steel, Stone,",
                     "{C:attention}Gold{}, and {C:attention}Lucky{} card"
+                } 
+            },
+            sleeve_poke_stadiumsleeve_alt = {
+                name = "Stadium Sleeve",
+                text = {
+                    "After defeating each",
+                    "{C:attention}Boss Blind{}, create a random",
+                    "{C:dark_edition}Negative{} {C:attention}Enhancement{} {C:tarot}Tarot{} card"
                 } 
             },
             sleeve_poke_megasleeve = {
@@ -5024,6 +5055,14 @@ return {
                     "After defeating each",
                     "{C:attention}Odd Boss Blind{}, gain a",
                     "{C:attention,T:tag_vremade_double}#1#",
+                } 
+            },
+            sleeve_poke_vendingsleeve_alt = {
+                name = "Vending Sleeve",
+                text = {
+                    "Gain a {C:attention,T:tag_vremade_double}#1#",
+                    "after defeating every",
+                    "{C:attention}Boss Blind{} instead"
                 } 
             },
         },
@@ -5308,7 +5347,7 @@ return {
                 text = {
                     "Effect based on",
                     "number of {C:attention}#1#s{}",
-                    "in poker hand",
+                    "in {C:attention}poker hand",
                     "{C:inactive}(Effects are {C:attention}cumulative{C:inactive})"
                 }
             },
@@ -6175,6 +6214,7 @@ return {
             cubone_marowak_infoqueue = "Cubone and Marowak",
             snorlax_infoqueue = "Snorlax",
             pokeball_variable = "Pokéball",
+            greatball_variable = "Greatball",
             goodrod_variable = "Good Rod",
             pinkseal_variable = "Pink Seal",
             silverseal_variable = "Silver Seal",
