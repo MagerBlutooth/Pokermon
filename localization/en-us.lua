@@ -126,6 +126,25 @@ return {
                     "when {C:attention}Blind{} selected",
                 }, 
             },
+            bl_poke_rocket = {
+                name = "The Rocket",
+                text = {
+                    "All cards are drawn face down",
+                    "if you have $25 or more"
+                }, 
+            },
+            bl_poke_magma = {
+                name = "The Magma",
+                text = {
+                    "Base Chips are quartered",
+                }, 
+            },
+            bl_poke_aqua = {
+                name = "The Aqua",
+                text = {
+                    "Base Mult is quartered",
+                }, 
+            },
         },
         Item = {
             c_poke_pokeball = {
@@ -1617,7 +1636,7 @@ return {
                     "{C:attention}Volatile Right{}",
                     "{X:mult,C:white} X#1# {} Mult then",
                     "debuff self this round",
-                    "{C:inactive,s:0.8}(Evolves after {C:attention,s:0.8}#2#{C:inactive,s:0.8} rounds)",
+                    "{C:inactive,s:0.8}(Evolves after {C:attention,s:0.8}#2#{C:inactive,s:0.8} rounds not debuffed)",
                 } 
             },
             j_poke_electrode = {
@@ -2646,7 +2665,7 @@ return {
                 "{C:attention}Volatile Left{}",
                 "{C:chips}+#1#{} Chips then",
                 "debuff self this round",
-                "{C:inactive}(Evolves after {C:attention}#2#{C:inactive} rounds)",
+                "{C:inactive}(Evolves after {C:attention}#2#{C:inactive} rounds not debuffed)",
               }
             },
             j_poke_forretress = {
@@ -3129,7 +3148,11 @@ return {
                 name = "Celebi",
                 text = {
                     "{C:attention}-#2#{} Ante after skipping {C:attention}#1#{} {C:inactive}[#3#]{} {C:attention}Blinds{}",
-                    "{C:inactive}(Required skips increase each time)"
+                    "{C:inactive}(Required skips increase each time)",
+                    "{br:2}ERROR - CONTACT STEAK",
+                    "{X:mult,C:white} X#4# {} Mult for each round played",
+                    "{C:inactive}(Currently {X:mult,C:white} X#5# {C:inactive} Mult){}"
+                    
                 } 
             },
             j_poke_treecko = {
@@ -6174,8 +6197,10 @@ return {
             poke_settings_enable_animations = "Enable Animations?",
             poke_settings_pokemon_master = "Pokemon Master Mode?",
             poke_settings_pokemon_spritesheet = "Default Sprite Sheet (Resets Individual)",
+            poke_settings_pokemon_sprites_right_click_to_change = "Right Click to Change",
             poke_settings_pokemon_spritesheet_classic = "Classic",
             poke_settings_pokemon_spritesheet_seriesa = "Series A",
+            poke_settings_pokemon_spritesheet_seriesb = "Series B",
             
             poke_credits_actualcredits = "Credits",
             poke_credits_thanks = "Thanks to",
@@ -6190,6 +6215,27 @@ return {
             poke_credits_sound = "Audio Engineer: ",
             poke_credits_artist = "Artist: ",
             poke_credits_designer = "Designer: ",
+
+            poke_artist_credits_art_credits = "Art Credits",
+            poke_artist_credits_artists = "Artists:",
+            poke_artist_credits_basic_sprites_by = "Basic Pokémon sprites by:",
+            poke_artist_credits_sprite_resource = "the 64x64 Pokémon sprite resource",
+            poke_artist_credits_artist_info = "Artist info",
+            poke_artist_credits_art_collection = "Art collection",
+            poke_artist_credits_toggle_shiny = "Right Click to toggle Shiny",
+            poke_artist_credits_cycle_draw_layers = "Double Click to cycle through layers",
+            poke_artist_credits_toggle_center_layer = "Double Click to hide background",
+            poke_artist_credits_toggle_soul_layer = "Double Click to hide Soul Layer",
+
+            poke_artist_credits_sprite_resource_content = {
+                "The basic sprites art style uses sprites from",
+                "the 64x64 Pokémon sprites resource, as well as its successors.",
+                "While the plan is to eventually use Series A as the new standard,",
+                "we'd like to thank all contributors to these resources",
+                "for the opportunity to use these sprites.",
+                "You may find the Pokecommunity threads for these resources",
+                "by clicking their respective buttons:"
+            },
 
             poke_plus_pokeitem = "+1 Item",
             poke_plus_energy = "+1 Energy",
