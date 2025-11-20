@@ -86,17 +86,17 @@ return {
             b_poke_stadiumdeck = {
                 name = "Stadium Deck",
                 text = {
-                    "Start the run with",
-                    "an additional {C:attention}Bonus, Mult,",
+                    "Deck starts with a {C:attention}Bonus, Mult,",
                     "{C:attention}Wild, Glass, Steel, Stone,",
-                    "{C:attention}Gold{}, and {C:attention}Lucky{} card"
+                    "{C:attention}Gold,{} and {C:attention}Lucky{} card"
                 } 
             },
             b_poke_megadeck = {
                 name = "Mega Deck",
                 text = {
                     "Start the run with the",
-                    "{C:tarot,T:v_reroll_surplus}#2#{} and {C:tarot,T:v_reroll_glut}#3#{} vouchers",
+                    "{C:tarot,T:v_reroll_surplus}#2#{}, {C:tarot,T:v_reroll_glut}#3#{}",
+                    "and {C:tarot,T:v_crystal_ball}#5#{} vouchers",
                     "and a {C:spectral,T:c_poke_megastone}#1#{} card",
                     "{C:red}-#4#{} shop slot"
                 } 
@@ -150,7 +150,7 @@ return {
             c_poke_pokeball = {
                 name = "Poké Ball",
                 text = {
-                    "Create a random",
+                    "Creates a",
                     "{C:attention}Basic Joker{} card",
                     "{C:inactive}(Must have room)"
                 },
@@ -158,7 +158,7 @@ return {
             c_poke_greatball = {
                 name = "Great Ball",
                 text = {
-                    "Create a random",
+                    "Creates a",
                     "{C:attention}Stage 1 Joker{} card",
                     "{C:inactive}(Must have room)"
                 },
@@ -253,7 +253,7 @@ return {
                     "{br:2}ERROR - CONTACT STEAK",
                     "{C:green}#1# in #2#{} chance to add",
                     "{C:dark_edition}Foil{}, {C:dark_edition}Holographic{}, or",
-                    "{C:dark_edition}Polychrome{} to self",
+                    "{C:dark_edition}Polychrome{} to self,",
                     "remove {C:attention}Edition{} at end of round",
                     "{C:inactive}(Useable once per round)",
                 }
@@ -920,21 +920,24 @@ return {
             j_poke_pikachu = {
                 name = "Pikachu",
                 text = {
-                    "Earn {C:money}$#1#{} for each Joker card",
-                    "you have at end of round",
-                    "{C:inactive,s:0.8}(Max of {C:money,s:0.8}$10{C:inactive,s:0.8})",
+                    "{C:mult}+#1#{} Mult if you",
+                    "have {C:money}#3#${} or more",
+                    "{br:2}ERROR - CONTACT STEAK",
+                    "Earn {C:money}#2#${} when {C:attention}Blind{}",
+                    "is selected if you have",
+                    "less than {C:money}#3#$",
                     "{C:inactive,s:0.8}(Evolves with a {C:attention,s:0.8}Thunder Stone{C:inactive,s:0.8})"
                 }
             },
             j_poke_raichu = {
                 name = "Raichu",
                 text = {
-                    "Gains {C:dark_edition}Negative{} at end of round",
-                    "if you have at least {C:money}$#2#{}",
-                    "{C:inactive,s:0.8}(Increases per Raichu you have){}",
-                    "Earn {C:money}$#1#{} for each Joker card",
-                    "you have at end of round",
-                    "{C:inactive,s:0.8}(Max of {C:money,s:0.8}$#3#{C:inactive,s:0.8})"
+                    "{C:mult}+#1#{} Mult for every",
+                    "{C:money}$#2#{} you have",
+                    "{C:inactive}(Currently {C:mult}+#3#{C:inactive} Mult)",
+                    "{br:2}ERROR - CONTACT STEAK",
+                    "Earn interest when",
+                    "{C:attention}Blind{} is selected",
                 } 
             },
             j_poke_sandshrew = {
@@ -1473,7 +1476,7 @@ return {
                 text = {
                     "{C:attention}Holding {C:item}Leek{}",
                     "{C:green}#2# in #3#{} chance to earn {C:money}$#1#",
-                    "when a {C:attention}Consumable{} is used",
+                    "when a {C:attention}Consumable{} is used,",
                     "{C:money}${} guaranteed when using {C:attention}Leeks{}",
                 } 
             },
@@ -3599,7 +3602,7 @@ return {
               name = "Buneary",
               text = {
                 "{C:mult}+#1#{} Mult for",
-                "each unscored card",
+                "each {C:attention}unscored{} card",
                 "in played hand",
                 "{C:inactive}(Evolves after {C:attention}#2#{C:inactive} rounds)",
               }
@@ -5049,10 +5052,9 @@ return {
             sleeve_poke_stadiumsleeve = {
                 name = "Stadium Sleeve",
                 text = {
-                    "Start the run with",
-                    "an additional {C:attention}Bonus, Mult,",
+                    "Deck starts with a {C:attention}Bonus, Mult,",
                     "{C:attention}Wild, Glass, Steel, Stone,",
-                    "{C:attention}Gold{}, and {C:attention}Lucky{} card"
+                    "{C:attention}Gold,{} and {C:attention}Lucky{} card"
                 } 
             },
             sleeve_poke_stadiumsleeve_alt = {
@@ -5067,7 +5069,8 @@ return {
                 name = "Mega Sleeve",
                 text = {
                     "Start the run with the",
-                    "{C:tarot,T:v_reroll_surplus}#2#{} and {C:tarot,T:v_reroll_glut}#3#{} vouchers",
+                    "{C:tarot,T:v_reroll_surplus}#2#{}, {C:tarot,T:v_reroll_glut}#3#{}",
+                    "and {C:tarot,T:v_crystal_ball}#5#{} vouchers",
                     "and a {C:spectral,T:c_poke_megastone}#1#{} card",
                     "{C:red}-#4#{} shop slot"
                 } 
@@ -5093,7 +5096,7 @@ return {
             c_poke_ultraball = {
                 name = "Ultra Ball",
                 text = {
-                    "Create a random",
+                    "Creates a",
                     "{C:attention}Stage 2 Joker{} card",
                     "{C:inactive}(Must have room)"
                 },
