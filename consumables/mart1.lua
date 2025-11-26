@@ -641,7 +641,7 @@ local transformation = {
     else
       return false
     end
-    if choice.ability and choice.ability.extra and type(choice.ability.extra) == "table" and choice.ability.extra.ptype and not choice.config.center.aux_poke then
+    if choice.ability and choice.ability.extra and type(choice.ability.extra) == "table" and choice.ability.extra.ptype then
       return true
     else
       return false
@@ -659,12 +659,14 @@ local transformation = {
     elseif type_sticker_applied(choice) then
       energy_increase(choice, type_sticker_applied(choice))
     end
-    local highest = get_highest_evo(choice)
-    if highest and type(highest) == "string" then
-      local prefix = choice.config.center.poke_custom_prefix or "poke"
-      local forced_key = "j_"..prefix.."_"..highest
-      local context = {}
-      poke_evolve(choice, forced_key)
+    if not choice.config.center.aux_poke then
+      local highest = get_highest_evo(choice)
+      if highest and type(highest) == "string" then
+        local prefix = choice.config.center.poke_custom_prefix or "poke"
+        local forced_key = "j_"..prefix.."_"..highest
+        local context = {}
+        poke_evolve(choice, forced_key)
+      end
     end
   end
 }
@@ -677,7 +679,9 @@ local megastone = {
   config = {extra = {usable = true, used_on = nil}},
   loc_vars = function(self, info_queue, center)
     info_queue[#info_queue + 1] = { set = 'Other', key = 'endless' }
-    info_queue[#info_queue+1] = {set = 'Other', key = 'mega_rule'}
+    if not G.GAME.modifiers.infinite_megastone then
+      info_queue[#info_queue+1] = {set = 'Other', key = 'mega_rule'}
+    end
     if center and center.ability.extra.used_on then
       info_queue[#info_queue+1] = {set = 'Other', key = 'mega_used_on', vars = {localize({ type = "name_text", set = "Joker", key = center.ability.extra.used_on})}}
     end
@@ -741,7 +745,9 @@ local megastone = {
         end
       end
       forced_key = forced_mega_key.. mega
-      card.ability.extra.used_on = forced_key
+      if not G.GAME.modifiers.infinite_megastone then
+        card.ability.extra.used_on = forced_key
+      end
     else
       forced_key = get_previous_evo(target, true)
       card.ability.extra.used_on = nil
@@ -857,20 +863,34 @@ local nightmare = {
   unlocked = true,
   discovered = true,
   use = function(self, card)
-    local selected = G.jokers.highlighted[1]
-    local energy = matching_energy(selected)
-    local context = {}
-    remove(self, selected, context)
-    for i= 1, 2 do
-      local _card = create_card("Energy", G.pack_cards, nil, nil, true, true, energy, nil)
-      local edition = {negative = true}
-      _card:set_edition(edition, true)
-      _card:add_to_deck()
-      G.consumeables:emplace(_card)
+    local choice = nil
+    if G.jokers.highlighted and #G.jokers.highlighted == 1 then
+      choice = G.jokers.highlighted[1]
+    else
+      choice = G.jokers.cards[1]
     end
+    local energy = matching_energy(choice, true) or "c_poke_colorless_energy"
+    if energy then
+      local max = (energy == "c_poke_bird_energy") and 1 or 2
+      local context = {}
+      for i= 1, max do
+        local _card = create_card("Energy", G.pack_cards, nil, nil, true, true, energy, nil)
+        local edition = {negative = true}
+        _card:set_edition(edition, true)
+        _card:add_to_deck()
+        G.consumeables:emplace(_card)
+      end
+    end
+    remove(self, choice)
   end,
   can_use = function(self, card)
-    return G.jokers.highlighted and #G.jokers.highlighted == 1 and has_type(G.jokers.highlighted[1]) and not G.jokers.highlighted[1].ability.eternal
+    local choice = nil
+    if G.jokers.highlighted and #G.jokers.highlighted == 1 then
+      choice = G.jokers.highlighted[1]
+    else
+      choice = G.jokers.cards[1]
+    end
+    return not choice.ability.eternal
   end,
 }
 

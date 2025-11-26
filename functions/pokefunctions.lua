@@ -218,11 +218,12 @@ type_sticker_applied = function(card)
   
 end
 
-find_pokemon_type = function(target_type)
+find_pokemon_type = function(target_type, exclude_card)
   local found = {}
   if G.jokers and G.jokers.cards then
     for k, v in pairs(G.jokers.cards) do
-      if v.ability and ((v.ability.extra and type(v.ability.extra) == "table" and target_type == v.ability.extra.ptype) or v.ability[string.lower(target_type).."_sticker"]) then
+      if v.ability and ((v.ability.extra and type(v.ability.extra) == "table" and target_type == v.ability.extra.ptype) or v.ability[string.lower(target_type).."_sticker"]) 
+      and v ~= exclude_card then
         table.insert(found, v)
       end
     end
@@ -267,6 +268,12 @@ copy_scaled_values = function(card)
 end
 
 remove = function(self, card, context, check_shiny)
+  card.getting_sliced = true
+  local flags = SMODS.calculate_context({ joker_type_destroyed = true, card = card })
+  if flags.no_destroy then
+    card.getting_sliced = nil
+    return
+  end
   if check_shiny and card.edition and card.edition.poke_shiny then
     SMODS.change_booster_limit(-1)
   end
@@ -1127,19 +1134,9 @@ get_random_poke_key = function(pseed, stage, pokerarity, area, poketype, exclude
     
   for k, v in pairs(G.P_CENTERS) do
     if v.stage and v.stage ~= "Other" and not (stage and v.stage ~= stage) and not (pokerarity and v.rarity ~= pokerarity) and get_gen_allowed(v)
-       and not (poketype and poketype ~= v.ptype) and pokemon_in_pool(v) and not v.aux_poke and v.rarity ~= "poke_mega" and not exclude_keys[v.key]
-       and not G.GAME.banned_keys[v.key] then
-      local no_dup = true
-      if G.jokers and G.jokers.cards and not next(find_joker("Showman")) then
-        for l, m in pairs(G.jokers.cards) do
-          if v.key == m.config.center_key then
-            no_dup = false
-          end
-        end
-      end
-      if no_dup then
-        table.insert(poke_keys, v.key)
-      end
+       and not (poketype and poketype ~= v.ptype) and v:in_pool() and not v.aux_poke and v.rarity ~= "poke_mega" and not exclude_keys[v.key]
+       and not G.GAME.banned_keys[v.key] and not (G.GAME.used_jokers[v.key] and not SMODS.showman(v.key)) then
+      table.insert(poke_keys, v.key)
     end
   end
   

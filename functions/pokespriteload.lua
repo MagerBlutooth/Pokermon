@@ -659,8 +659,8 @@ PokemonSprites = {
 {name = "unfezant", base = {pos = {x = 20, y = 34}},},
 {name = "blitzle", base = {pos = {x = 22, y = 34}},},
 {name = "zebstrika", base = {pos = {x = 24, y = 34}},},
-{name = "roggenrola", base = {pos = {x = 26, y = 34}},},
-{name = "boldore", base = {pos = {x = 28, y = 34}},},
+{name = "roggenrola", base = {pos = {x = 26, y = 34}}, alts = {AtlasJokersSeriesA = {artist = 'Sunny'}}},
+{name = "boldore", base = {pos = {x = 28, y = 34}}, alts = {AtlasJokersSeriesA = {artist = 'Sunny'}}},
 {name = "gigalith", base = {pos = {x = 0, y = 35}},},
 {name = "woobat", base = {pos = {x = 2, y = 35}},},
 {name = "swoobat", base = {pos = {x = 4, y = 35}},},
@@ -1228,7 +1228,7 @@ PokemonSprites = {
 {name = "terapagos_stellar", base = {pos = {x = 4, y = 6}, soul_pos =  {x = 5, y = 6}},gen_atlas = 9},
 {name = "pecharunt", base = {pos = {x = 8, y = 68}, soul_pos =  {x = 9, y = 68}},},
 {name = "pokedex", base = {pos = {x = 0, y = 0}}, others_atlas = true,},
---rotomdex", base = {pos = {x = 0, y = 0}}, others_atlas = true,},
+{name = "rotomdex", base = {pos = {x = 0, y = 4}}, others_atlas = true,},
 {name = "everstone", base = {pos = {x = 2, y = 0}}, others_atlas = true,},
 {name = "tall_grass", base = {pos = {x = 4, y = 0}}, others_atlas = true,},
 {name = "jelly_donut", base = {pos = {x = 6, y = 0}}, others_atlas = true,},
@@ -1268,9 +1268,18 @@ local poke_artist_info = {
   Gappie = {display_name = 'Gappie', artist_colour = HEX('FFE062')},
   InertSteak = {display_name = 'InertSteak', artist_colour = HEX('77A5BC'), highlight_colour = HEX('C1C3C2')},
   Maelmc = {display_name = 'Maelmc', artist_colour = HEX("EA6F22")},
-  MyDude_YT = {display_name = 'MyDude YT', artist_colour = HEX("FFFFFF"), highlight_colour = HEX("4428BC")},
+  MyDude_YT = {display_name = 'MyDude YT', artist_colour = HEX("FFFFFF"), highlight_colour = HEX("4428BC"), links = {
+  {url = 'https://www.youtube.com/@mydudestudios6244', account = 'MyDude Studios'},
+  {url = 'https://www.reddit.com/user/My_Dude_CBC/', account = 'My_Dude_CBC'},
+  {url = 'https://x.com/MyDude81058128'},
+  {url = 'https://steamcommunity.com/profiles/76561198905899441',site = 'Steam', account = 'MyDude'},
+  {url = 'https://pacmanforever.itch.io/', account = 'My Dude Studios', site = 'Itch.io', colour = HEX("FA5C5C")}
+
+  }},
   PrincessRoxie = {display_name = 'PrincessRoxie', artist_colour = HEX("FF88FF")},
-  RedHaering = {display_name = 'RedHaering', artist_colour = HEX("D44540")},
+  RedHaering = {display_name = 'RedHaering', artist_colour = HEX("D44540"), links = {
+    {url = 'https://redhaering.carrd.co/', account = 'RedHaering'}
+  }},
   RibbonOnline = {display_name = 'RibbonOnline', artist_colour = HEX("F11250")},
   Sonfive = {display_name = 'Sonfive', artist_colour = HEX("87DEFF")},
   Silverfish07 = {display_name = 'Silverfish07', artist_colour = HEX('FFAE00')},
@@ -1370,6 +1379,19 @@ poke_get_artist_list = function()
   return list
 end
 
+function poke_get_artist_layer(obj, by_artist)
+  local artists = (type(obj.artist) == 'table' and not obj.artist.name)
+      and obj.artist
+      or { obj.artist }
+
+  for _, _artist in ipairs(artists) do
+    local artist_name = type(_artist) == 'table' and _artist.name or _artist
+    if by_artist == artist_name then
+      return _artist.layer or 'both'
+    end
+  end
+end
+
 poke_get_artist_sprites = function(artist)
   local sprites = {}
 
@@ -1377,26 +1399,19 @@ poke_get_artist_sprites = function(artist)
 
     if sprite.alts then
       for atlas_prefix, alt in pairs(sprite.alts) do
-        local artists = (type(alt.artist) == 'table' and not alt.artist.name)
-            and alt.artist
-            or {alt.artist}
+        local layer = poke_get_artist_layer(alt, artist)
 
-        for _, alt_artist in ipairs(artists) do
-          local artist_name = type(alt_artist) == 'table' and alt_artist.name or alt_artist
-          local layer = type(alt_artist) == 'table' and alt_artist.layer or 'both'
-
-          if artist == artist_name then
-            table.insert(sprites, {
-              name = sprite.name,
-              pos = sprite.base.pos,
-              soul_pos = alt.soul_pos or sprite.base.soul_pos,
-              atlas_prefix = atlas_prefix,
-              gen_atlas = sprite.gen_atlas,
-              others_atlas = sprite.others_atlas,
-              anim_atlas = alt.anim_atlas,
-              layer = layer
-            })
-          end
+        if layer then
+          table.insert(sprites, {
+            name = sprite.name,
+            pos = sprite.base.pos,
+            soul_pos = alt.soul_pos or sprite.base.soul_pos,
+            atlas_prefix = atlas_prefix,
+            gen_atlas = sprite.gen_atlas,
+            others_atlas = sprite.others_atlas,
+            anim_atlas = alt.anim_atlas,
+            layer = layer
+          })
         end
       end
     end
