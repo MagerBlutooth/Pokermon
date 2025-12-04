@@ -5,7 +5,6 @@ local ampharos={
   config = {extra = {Xmult = 1,Xmult_mod = 0.3}},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
-    info_queue[#info_queue + 1] = {set = 'Other', key = 'mega_poke'}
     return {vars = {center.ability.extra.Xmult, center.ability.extra.Xmult_mod}}
   end,
   rarity = "poke_safari",
@@ -225,7 +224,7 @@ local azumarill={
         local bonus = nil
         local unbonus = nil
         for k, v in pairs(context.scoring_hand) do
-          if SMODS.has_enhancement(v, 'm_bonus') then
+          if SMODS.has_enhancement(v, 'm_bonus') and not v.debuff then
             bonus = true
           else
             unbonus = true
@@ -352,7 +351,6 @@ local politoed={
       local scoring_suit = G.GAME.poke_poli_suit or "Spades"
       if context.other_card:is_suit(scoring_suit) then
         return {
-          message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.mult}}, 
           colour = G.C.MULT,
           mult = card.ability.extra.mult,
           card = card
@@ -364,9 +362,9 @@ local politoed={
       if context.other_card:is_suit(scoring_suit) then
         local total = #find_pokemon_type("Water")
         local cards = #context.scoring_hand
-        local pos
-        local remainder
-        local retriggers
+        local pos = 0
+        local remainder = 0
+        local retriggers = 0
         for i=1, #context.scoring_hand do
           if context.scoring_hand[i] == context.other_card then
             pos = i
@@ -376,11 +374,13 @@ local politoed={
         retriggers = math.floor(total/cards)
         remainder = total % cards
         if pos <= remainder then retriggers = retriggers + 1 end
-        return {
-          message = localize('k_again_ex'),
-          repetitions = retriggers,
-          card = card
-        }
+        if retriggers > 0 then
+          return {
+            message = localize('k_again_ex'),
+            repetitions = retriggers,
+            card = card
+          }
+        end
       end
     end
   end,
@@ -1433,7 +1433,6 @@ local steelix={
     if pokermon_config.detailed_tooltips then
       info_queue[#info_queue+1] = G.P_CENTERS.m_stone
       info_queue[#info_queue+1] = G.P_CENTERS.m_steel
-      info_queue[#info_queue + 1] = {set = 'Other', key = 'mega_poke'}
     end
   end,
   rarity = "poke_safari", 

@@ -121,6 +121,8 @@ pokermon.family = {
     {"shroomish", "breloom"},
     {"aron","lairon","aggron"},
     {"duskull", "dusclops", "dusknoir"},
+    {"lileep", "cradily"},
+    {"anorith", "armaldo"},
     {"bidoof", "bibarel"},
     {"kricketot", "kricketune"},
     {"buizel", "floatzel"},
@@ -1043,6 +1045,18 @@ type_tooltip = function(self, info_queue, center)
         end
       end
   end
+  if self.megas and pokermon_config.detailed_tooltips then
+    info_queue[#info_queue+1] = {set = 'Other', key = 'mega_poke'}
+    if #self.megas > 1 and next(SMODS.find_card('c_poke_megastone')) then
+      local mega_names = {}
+      for _, mega in ipairs(self.megas) do
+        local prefix = self.poke_custom_prefix or "poke"
+        local key = "j_"..prefix.."_"..mega
+        mega_names[#mega_names+1] = localize({type = "name_text", set = "Joker", key = key})
+      end
+      info_queue[#info_queue+1] = {set = 'Other', key = 'split_mega', vars = mega_names}
+    end
+  end
 end
 
 poke_set_type_badge = function(self, card, badges)
@@ -1637,6 +1651,18 @@ poke_create_treasure = function(card, seed, megastone)
       }))
     end
   end
+end
+
+get_ancient_amount = function(hand, id, append_to_card)
+  local count = 0
+  for i = 1, #hand do
+    if hand[i]:get_id() == id then count = count + 1 end
+  end
+  
+  if append_to_card then
+    append_to_card.ability.extra.ancient_count = count
+  end
+  return count
 end
 
 --[[ Putting this here for later use
