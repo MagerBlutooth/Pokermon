@@ -40,15 +40,8 @@ local moonstone = {
     set_spoon_item(card)
     if #G.hand.highlighted >= self.config.min_highlighted then
       if SMODS.pseudorandom_probability(card, 'moonstone', self.config.num, self.config.dem, 'moonstone') then
-        local text,disp_text,poker_hands,scoring_hand,non_loc_disp_text = G.FUNCS.get_poker_hand_info(G.hand.highlighted)
-
-        level_up_hand(card, text)
-        if G.STATE == G.STATES.SMODS_BOOSTER_OPENED or G.STATE == G.STATES.TAROT_PACK or G.STATE == G.STATES.SPECTRAL_PACK or G.STATE == G.STATES.PLANET_PACK
-          or G.STATE == G.STATES.STANDARD_PACK then
-          update_hand_text({nopulse = true, delay = 0.3}, {mult = 0, chips = 0, level = '', handname = ''})
-        else
-          update_hand_text({nopulse = nil, delay = 0.3}, {handname=disp_text, level=G.GAME.hands[text].level, mult = G.GAME.hands[text].mult, chips = G.GAME.hands[text].chips})
-        end
+        local hand = G.FUNCS.get_poker_hand_info(G.hand.highlighted)
+        SMODS.smart_level_up_hand(card, hand)
       else
         G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.4, func = function()
             attention_text({
@@ -622,20 +615,9 @@ local teraorb = {
   end,
   use = function(self, card, area, copier)
     set_spoon_item(card)
-    local choice = nil
-    if G.jokers.highlighted and #G.jokers.highlighted == 1 then
-      choice = G.jokers.highlighted[1]
-    elseif G.jokers.cards and #G.jokers.cards > 0 then
-      choice = G.jokers.cards[1]
-    else
-      return
-    end
+    local choice = poke_find_leftmost_or_highlighted()
     if is_type(choice, card.ability.extra.change_to_type) then
-      if choice.config and choice.config.center.stage and not type_sticker_applied(choice) then
-        energy_increase(choice, choice.ability.extra.ptype)
-      elseif type_sticker_applied(choice) then
-        energy_increase(choice, type_sticker_applied(choice))
-      end
+      energy_increase(choice, get_type(choice))
     end
     apply_type_sticker(choice, card.ability.extra.change_to_type)
     card_eval_status_text(choice, 'extra', nil, nil, nil, {message = localize("poke_tera_ex"), colour = G.C.SECONDARY_SET.Spectral})

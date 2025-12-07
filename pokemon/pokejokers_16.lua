@@ -688,7 +688,7 @@ local porygonz={
     end
     if context.using_consumeable and context.consumeable.ability.set == 'Energy' and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
       local energy_key = nil
-      if pseudorandom('porygonz') < .05 then
+      if pseudorandom('porygonz') < (1/256) then
         energy_key = 'c_poke_bird_energy'
       end
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
@@ -702,7 +702,7 @@ local porygonz={
                   G.GAME.consumeable_buffer = 0
               return true
           end)}))
-      card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("poke_plus_energy"), colour = G.ARGS.LOC_COLOURS["pink"]})
+      card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize("poke_plus_energy"), colour = G.ARGS.LOC_COLOURS["pink"]})
     end
   end,
   add_to_deck = function(self, card, from_debuff)
