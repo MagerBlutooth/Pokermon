@@ -29,11 +29,11 @@ function PokeDisplayCard:init(args, x, y, w, h)
   h = h or args.h or G.CARD_H
 
   Moveable.init(self, x, y, w, h)
-
+  
   self.atlas = args.atlas
   self.has_shiny = G.ASSET_ATLAS[self.atlas .. 'Shiny'] ~= nil
   self.shiny = false
-
+  
   self.shader = args.shader
 
   self:set_sprites()
@@ -54,7 +54,15 @@ function PokeDisplayCard:set_card_area(area)
   self.parent = area
 end
 
-function PokeDisplayCard:remove_card_area()
+function PokeDisplayCard:remove()
+  if self.area then self.area:remove_card(self) end
+
+  remove_all(self.children)
+
+  Moveable.remove(self)
+end
+
+function PokeDisplayCard:remove_from_area()
   self.area = nil
   self.parent = nil
 end
@@ -345,6 +353,153 @@ function PokeDisplayCard:init_from_existing(key, args, x, y, w, h)
   end
 
   self:init(new_args, x, y, w, h)
+end
+
+function PokeDisplayCard:set_seal()
+  --does nothing for now, prevents crash
+end
+
+--copied from Card
+function PokeDisplayCard:start_materialize(dissolve_colours, silent, timefac)
+    local dissolve_time = 0.6*(timefac or 1)
+    self.states.visible = true
+    self.states.hover.can = false
+    self.dissolve = 1
+    self.dissolve_colours = dissolve_colours or
+    (self.ability.set == 'Joker' and {G.C.RARITY[self.config.center.rarity]}) or
+    (self.ability.set == 'Planet'  and {G.C.SECONDARY_SET.Planet}) or
+    (self.ability.set == 'Tarot' and {G.C.SECONDARY_SET.Tarot}) or
+    (self.ability.set == 'Spectral' and {G.C.SECONDARY_SET.Spectral}) or
+    (self.ability.set == 'Booster' and {G.C.BOOSTER}) or
+    (self.ability.set == 'Voucher' and {G.C.SECONDARY_SET.Voucher, G.C.CLEAR}) or 
+    {G.C.GREEN}
+    self:juice_up()
+    self.children.particles = Particles(0, 0, 0,0, {
+        timer_type = 'TOTAL',
+        timer = 0.025*dissolve_time,
+        scale = 0.25,
+        speed = 3,
+        lifespan = 0.7*dissolve_time,
+        attach = self,
+        colours = self.dissolve_colours,
+        fill = true
+    })
+    if not silent then 
+        if not G.last_materialized or G.last_materialized +0.01 < G.TIMERS.REAL or G.last_materialized > G.TIMERS.REAL then
+            G.last_materialized = G.TIMERS.REAL
+            G.E_MANAGER:add_event(Event({
+                blockable = false,
+                func = (function()
+                        play_sound('whoosh1', math.random()*0.1 + 0.6,0.3)
+                        play_sound('crumple'..math.random(1,5), math.random()*0.2 + 1.2,0.8)
+                    return true end)
+            }))
+        end
+    end
+    G.E_MANAGER:add_event(Event({
+        trigger = 'after',
+        blockable = false,
+        delay =  0.5*dissolve_time,
+        func = (function() if self.children.particles then self.children.particles.max = 0 end return true end)
+    }))
+    G.E_MANAGER:add_event(Event({
+        trigger = 'ease',
+        blockable = false,
+        ref_table = self,
+        ref_value = 'dissolve',
+        ease_to = 0,
+        delay =  1*dissolve_time,
+        func = (function(t) return t end)
+    }))
+    G.E_MANAGER:add_event(Event({
+        trigger = 'after',
+        blockable = false,
+        delay =  1.05*dissolve_time,
+        func = (function() self.states.hover.can = true; if self.children.particles then self.children.particles:remove(); self.children.particles = nil end return true end)
+    }))
+end
+
+--copied from Card
+function PokeDisplayCard:start_dissolve(dissolve_colours, silent, dissolve_time_fac, no_juice)
+    if self.skip_destroy_animation then
+        G.E_MANAGER:add_event(Event({
+            func = function()
+                play_sound('tarot1')
+                self.T.r = -0.2
+                self:juice_up(0.3, 0.4)
+                self.states.drag.is = true
+                self.children.center.pinch.x = true
+                G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
+                    func = function()
+                            G.jokers:remove_card(self)
+                            self:remove()
+                            self = nil
+                        return true; end})) 
+                return true
+            end
+        })) 
+        return
+    end
+    dissolve_colours = dissolve_colours or (type(self.destroyed) == 'table' and self.destroyed.colours) or nil
+    dissolve_time_fac = dissolve_time_fac or (type(self.destroyed) == 'table' and self.destroyed.time) or nil
+    local dissolve_time = 0.7*(dissolve_time_fac or 1)
+    self.dissolve = 0
+    self.dissolve_colours = dissolve_colours
+        or {G.C.BLACK, G.C.ORANGE, G.C.RED, G.C.GOLD, G.C.JOKER_GREY}
+    if not no_juice then self:juice_up() end
+    local childParts = Particles(0, 0, 0,0, {
+        timer_type = 'TOTAL',
+        timer = 0.01*dissolve_time,
+        scale = 0.1,
+        speed = 2,
+        lifespan = 0.7*dissolve_time,
+        attach = self,
+        colours = self.dissolve_colours,
+        fill = true
+    })
+    G.E_MANAGER:add_event(Event({
+        trigger = 'after',
+        blockable = false,
+        delay =  0.7*dissolve_time,
+        func = (function() childParts:fade(0.3*dissolve_time) return true end)
+    }))
+    if not silent then 
+        G.E_MANAGER:add_event(Event({
+            blockable = false,
+            func = (function()
+                    play_sound('whoosh2', math.random()*0.2 + 0.9,0.5)
+                    play_sound('crumple'..math.random(1, 5), math.random()*0.2 + 0.9,0.5)
+                return true end)
+        }))
+    end
+    G.E_MANAGER:add_event(Event({
+        trigger = 'ease',
+        blockable = false,
+        ref_table = self,
+        ref_value = 'dissolve',
+        ease_to = 1,
+        delay =  1*dissolve_time,
+        func = (function(t) return t end)
+    }))
+    G.E_MANAGER:add_event(Event({
+        trigger = 'after',
+        blockable = false,
+        delay =  1.05*dissolve_time,
+        func = (function() self:remove() return true end)
+    }))
+    G.E_MANAGER:add_event(Event({
+        trigger = 'after',
+        blockable = false,
+        delay =  1.051*dissolve_time,
+    }))
+end
+
+--copied from Card
+function PokeDisplayCard:juice_up(scale, rot_amount)
+    --G.VIBRATION = G.VIBRATION + 0.4
+    local rot_amt = rot_amount and 0.4*(math.random()>0.5 and 1 or -1)*rot_amount or (math.random()>0.5 and 1 or -1)*0.16
+    scale = scale and scale*0.4 or 0.11
+    Moveable.juice_up(self, scale, rot_amt)
 end
 
 poke_input_manager:add_listener({ 'right_click', 'right_stick' }, function(target)

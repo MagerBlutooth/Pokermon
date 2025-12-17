@@ -133,6 +133,31 @@ return {
                     "if you have $25 or more"
                 }, 
             },
+            bl_poke_star = {
+                name = "The Star",
+                text = {
+                    "A random type is debuffed",
+                    "every hand",
+                },
+            },
+            bl_poke_gray_godfather = {
+                name = "Gray Godfather",
+                text = {
+                    "-$#1# when hand is played",
+                    "or discarded, then",
+                    "destroy a random Joker",
+                    "if you are in debt",
+                }, 
+            },
+            bl_poke_white_executive = {
+                name = "White Executive",
+                text = {
+                    "Debuffs #1# cards in your deck,",
+                    "equal to the total sell value",
+                    "of every Joker and Consumable,",
+                    "when {C:attention}Blind{} selected",
+                }, 
+            },
             bl_poke_magma = {
                 name = "The Magma",
                 text = {
@@ -144,6 +169,13 @@ return {
                 text = {
                     "Base Mult is quartered",
                 }, 
+            },
+            bl_poke_iridescent_hacker = {
+                name = "Iridescent Hacker",
+                text = {
+                    "Random types are debuffed",
+                    "every hand",
+                },
             },
         },
         Item = {
@@ -4042,8 +4074,8 @@ return {
                 name = "Simisage",
                 text = {
                     "Applies {C:attention}Shortcut",
-                    "All played unenhanced cards have a",
-                    "{C:green}#1# in #2#{} chance to become {C:attention}Lucky{}"
+                    "Each played unenhanced card has",
+                    "a {C:green}#1# in #2#{} chance to become {C:attention}Lucky{}",
                 }
             },
             j_poke_pansear = {
@@ -5616,11 +5648,10 @@ return {
             merge = {
                 name = "Merge",
                 text = {
-                  "Removes card and adds it",
-                  "to this Joker",
-                  "Right click to view",
-                  "merged cards",
-                  "{C:inactive}(Merged Jokers can't be copied){}"
+                  "Removes card and adds it to",
+                  "this Joker, right click to",
+                  "view merged cards",
+                  "{C:inactive}(Merged Jokers aren't copiable){}"
                 }
             },
             rewards_ruins_of_alph = {
@@ -5628,6 +5659,7 @@ return {
                 text = {
                   "{C:attention}#1#{} - {C:attention}Safari{} Joker",
                   "{C:attention}#2#{} - {C:attention}Duplicate{} a random Joker",
+                  "{C:inactive}(removes Negative)",
                   "{C:attention}#3#{} - {C:attention}Brainstorm{}",
                   "{C:attention}#4#{} - {C:attention}Unown Swarm and The Soul",
                   "{C:inactive}(Rewards are not cumulative){}"
@@ -5681,7 +5713,7 @@ return {
                 name = "Presents",
                 text = {
                     "{C:green}35%{} - {C:money}$8{}",
-                    "{C:green}30%{} - {C:item}Item{} {C:attention}Card",
+                    "{C:green}30%{} - {C:item}Item{} card",
                     "{C:green}20%{} - {C:attention}Coupon Tag",
                     "{C:green}15%{} - {C:dark_edition}Polychrome{} {C:attention}Gift Card",
                 }
@@ -6059,10 +6091,9 @@ return {
             poke_pink_seal_seal = {
                 name = "Pink Seal",
                 text = {
-                    "Creates an {C:pink}Energy{} card",
-                    "matching an owned Joker's {C:attention}type",
-                    "if it scores in",
-                    "{C:attention}first hand{} of round",
+                    "Creates an {C:pink}Energy{} card that",
+                    "matches an owned Joker's {C:pink}Type",
+                    "if scored in {C:attention}first hand{} of round",
                     "{C:inactive}(Must have room){}"
                 },
             },

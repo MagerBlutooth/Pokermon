@@ -286,6 +286,7 @@ local mystery_egg = {
   blueprint_compat = false,
   eternal_compat = false,
   perishable_compat = false,
+  rental_compat = false,
   calculate = function(self, card, context)
     if context.end_of_round and not context.repetition and not context.individual and not context.blueprint then
       local adjacent = 0
@@ -303,7 +304,7 @@ local mystery_egg = {
         juice_card_until(card, eval, true)
       end
       if card.ability.extra.rounds <= 0 then
-        poke_evolve(card, card.ability.extra.key, nil, localize('poke_crack_ex'), true)
+        poke_evolve(card, card.ability.extra.key, nil, localize('poke_crack_ex'), true, 1)
       else
         return {
             message = localize('poke_shake_ex')

@@ -183,7 +183,7 @@ pattern = "if card.ability.consumeable and not skip_materialize then card:start_
 position = "after"
 payload = '''
 if front and G.GAME.modifiers.poke_force_seal then card:set_seal(G.GAME.modifiers.poke_force_seal) end
-if _type == 'Joker' and G.GAME.modifiers.apply_type then apply_type_sticker(card); energy_increase(card, type_sticker_applied(card)) end
+if _type == 'Joker' and G.GAME.modifiers.apply_type then apply_type_sticker(card); energy_increase(card, get_type(card)) end
 '''
 match_indent = true
 
@@ -245,9 +245,13 @@ position = "at"
 payload = '''
 local replace_card = nil
 if pokermon_config.pokemon_title then
-  replace_card = Card(self.title_top.T.x, self.title_top.T.y, 1.2*G.CARD_W*SC_scale, 1.2*G.CARD_H*SC_scale, G.P_CARDS.empty, G.P_CENTERS.j_poke_unown)
-  replace_card.ability.extra.form = "R"
-  G.P_CENTERS.j_poke_unown:set_sprites(replace_card)
+  local poke_atlas_string = nil
+  if G.ASSET_ATLAS["poke_"..pokermon_config.pokemon_spritesheet_atlas.."TitleCard"] then
+    poke_atlas_string = "poke_"..pokermon_config.pokemon_spritesheet_atlas.."TitleCard"
+  else
+    poke_atlas_string = "poke_AtlasJokersBasicTitleCard"
+  end
+  replace_card = PokeDisplayCard({atlas = poke_atlas_string, pos = {x = 0, y = 0}, soul_pos = {x = 1, y = 0}}, self.title_top.T.x, self.title_top.T.y, 1.2*G.CARD_W*SC_scale, 1.2*G.CARD_H*SC_scale)
 else
   replace_card = Card(self.title_top.T.x, self.title_top.T.y, 1.2*G.CARD_W*SC_scale, 1.2*G.CARD_H*SC_scale, G.P_CARDS.S_A, G.P_CENTERS.c_base)
 end
@@ -809,7 +813,11 @@ if G.PROFILES[G.SETTINGS.profile].joker_usage[v.config.center_key] then
       end
 '''
 position = "after"
-payload = '''set_joker_family_win(v)'''
+payload = '''
+if pokermon_config.previous_evo_stickers then
+  set_joker_family_win(v)
+end
+'''
 match_indent = true
 
 # Unown Swarm Stickers
@@ -821,4 +829,5 @@ pattern = '''order = 40,
 position = "after"
 payload = '''if self.config.center.key == 'j_poke_unown_swarm' then return end'''
 match_indent = true
+
 
