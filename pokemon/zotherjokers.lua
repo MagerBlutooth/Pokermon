@@ -10,7 +10,7 @@ local pokedex={
   cost = 5, 
   stage = "Other",
   atlas = "others",
-  blueprint_compat = true,
+  blueprint_compat = false,
 }
 
 local rotomdex={ 
@@ -22,7 +22,7 @@ local rotomdex={
     type_tooltip(self, info_queue, center)
 		return {vars = {G.GAME.rotom_discount or 0}}
   end,
-  rarity = 1, 
+  rarity = 2, 
   cost = 6, 
   stage = "Other",
   atlas = "others",
@@ -68,12 +68,12 @@ local rotomdex={
 local everstone={ 
   name = "everstone",
   pos = {x = 1, y = 0},
-  config = {extra = {Xmult_multi = 1.75}},
+  config = {extra = {Xmult_multi = 1.75, Xmult_multi2 = 1.5}},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
     info_queue[#info_queue+1] = {set = 'Other', key = 'basic'}
     info_queue[#info_queue+1] = {set = 'Other', key = 'baby'}
-		return {vars = {center.ability.extra.Xmult_multi}}
+		return {vars = {center.ability.extra.Xmult_multi, center.ability.extra.Xmult_multi2}}
   end,
   rarity = 3, 
   cost = 8, 
@@ -82,17 +82,25 @@ local everstone={
   blueprint_compat = true,
   calculate = function(self, card, context)
     if context.other_joker and context.other_joker.config and (context.other_joker.config.center.stage == "Basic" or context.other_joker.config.center.stage == "Baby") then
-        G.E_MANAGER:add_event(Event({
-          func = function()
-              context.other_joker:juice_up(0.5, 0.5)
-              return true
-          end
-        })) 
-        return {
-          message = localize{type = 'variable', key = 'a_xmult', vars = {card.ability.extra.Xmult_multi}}, 
-          colour = G.C.XMULT,
-          Xmult_mod = card.ability.extra.Xmult_multi
-        }
+        local Xmult = 1
+        if context.other_joker.config.center.stage == "Basic" then
+          Xmult = card.ability.extra.Xmult_multi2
+        elseif context.other_joker.config.center.stage == "Baby" then
+          Xmult = card.ability.extra.Xmult_multi
+        end
+        if Xmult > 1 then
+          G.E_MANAGER:add_event(Event({
+            func = function()
+                context.other_joker:juice_up(0.5, 0.5)
+                return true
+            end
+          })) 
+          return {
+            message = localize{type = 'variable', key = 'a_xmult', vars = {Xmult}}, 
+            colour = G.C.XMULT,
+            Xmult_mod = Xmult
+          }
+        end
     end
   end,
 }
@@ -273,7 +281,6 @@ local mystery_egg = {
   config = {extra = {key = nil, rounds = 3}},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
-    info_queue[#info_queue+1] = {set = 'Other', key = 'poke_egg_tip'}
     info_queue[#info_queue+1] = {set = 'Other', key = 'basic'}
     info_queue[#info_queue+1] = {set = 'Other', key = 'baby'}
     info_queue[#info_queue+1] = {set = 'Other', key = 'energize'}
@@ -353,28 +360,26 @@ local rival = {
   name = "rival",
   pos = {x = 3, y = 1},
   artist = "MyDude_YT",
-  config = {extra = {mult = 10, Xmult = 3, form = 0}},
+  config = {extra = {Xmult_mod = 0.2, form = 0, money1 = 15, money2 = 25, money_mod1 = 10, money_mod2 = 20}},
   loc_vars = function(self, info_queue, card)
     type_tooltip(self, info_queue, card)
     local mult = card.ability.extra.mult
-    local money = 5
+    local money = card.ability.extra.money1
+    local money_mod = card.ability.extra.money_mod1
     local alt_key = nil
     if card.ability.extra.form == 1 then
       alt_key = "j_poke_bitter_rival"
-      mult = card.ability.extra.mult * 2
-      money = 10
+      money = card.ability.extra.money2
+      money_mod = card.ability.extra.money_mod2
     elseif card.ability.extra.form > 1 then
       alt_key = "j_poke_champion"
-      mult = card.ability.extra.Xmult
-      money = 25
+      info_queue[#info_queue+1] = {key = 'tag_skip', set = 'Tag', specific_vars = {5, 5 * G.GAME.skips}}
     end
 
-    local percent = (2 ^ card.ability.extra.form) + 1
-
-    return {vars = {mult, money, percent}, key = alt_key}
+    return {vars = {money, money_mod, card.ability.extra.Xmult_mod, 1 + G.GAME.skips * card.ability.extra.Xmult_mod}, key = alt_key}
   end,
   rarity = 1,
-  cost = 6,
+  cost = 5,
   joblacklist = true,
   stage = "Other",
   atlas = "others",
@@ -382,56 +387,63 @@ local rival = {
   blueprint_compat = true,
   eternal_compat = false,
   calculate = function(self, card, context)
+    if context.skip_blind and card.ability.extra.form < 2 and not context.blueprint then
+      if card.ability.extra.form == 1 then
+        card.ability.extra.money2 = card.ability.extra.money2 + card.ability.extra.money_mod2
+      else
+        card.ability.extra.money1 = card.ability.extra.money1 + card.ability.extra.money_mod1
+      end
+      
+      return {
+        message = localize('k_upgrade_ex'),
+        colour = G.C.MONEY
+      }
+    end
+    
     if context.cardarea == G.jokers and context.scoring_hand then
       if context.joker_main then
         if card.ability.extra.form > 1 then
           return {
-            message = localize{type = 'variable', key = 'a_xmult', vars = {card.ability.extra.Xmult}}, 
+            message = localize{type = 'variable', key = 'a_xmult', vars = {1 + G.GAME.skips * card.ability.extra.Xmult_mod}}, 
             colour = G.C.XMULT,
-            Xmult_mod = card.ability.extra.Xmult
-          }
-        else
-          local mult = card.ability.extra.mult * (card.ability.extra.form == 0 and 1 or 2)
-          return {
-            message = localize{type = 'variable', key = 'a_mult', vars = {mult}},
-            colour = G.C.MULT,
-            mult_mod = mult
+            Xmult_mod =  1 + G.GAME.skips * card.ability.extra.Xmult_mod
           }
         end
       end
     end
 
-    if context.end_of_round and not context.individual and not context.repetition and not context.blueprint then
-      local beaten = false
-      if not G.GAME.chips or not G.GAME.blind.chips or not card.ability.extra.form then return end
-      if (SMODS.Mods["Talisman"] or {}).can_load and to_big(G.GAME.chips)/G.GAME.blind.chips >= to_big((2 ^ card.ability.extra.form) + 1) then
-        beaten = true
-      elseif not (SMODS.Mods["Talisman"] or {}).can_load and G.GAME.chips/G.GAME.blind.chips >= (2 ^ card.ability.extra.form) + 1 then
-        beaten = true
+    if (context.end_of_round and G.GAME.blind.boss) and not context.repetition and not context.individual and not context.blueprint then
+      G.GAME.rival_losses = G.GAME.rival_losses + 1
+
+      local money = card.ability.extra.money1
+      if card.ability.extra.form == 1 then
+        money = card.ability.extra.money2
       end
-      if beaten then
-        G.GAME.rival_losses = G.GAME.rival_losses + 1
-
-        local money = 5
-        if card.ability.extra.form == 1 then
-          money = 10
-        elseif card.ability.extra.form > 1 then
-          money = 25
-        end
+      if card.ability.extra.form < 2 then
         ease_poke_dollars(card, 'rival', money)
+      else
+        G.E_MANAGER:add_event(Event({
+          func = (function()
+              add_tag(Tag('tag_skip'))
+              play_sound('generic1', 0.9 + math.random()*0.1, 0.8)
+              play_sound('holo1', 1.2 + math.random()*0.1, 0.4)
+              return true
+          end)
+        }))
+      end
 
-        
+      if card.ability.extra.form < 2 then
         G.E_MANAGER:add_event(Event({
           func = function()
             remove(self, card, context, true)
             return true
           end
         }))
-
-        return {
-            message = localize("poke_smell_ya")
-        }
       end
+
+      return {
+          message = localize("poke_smell_ya")
+      }
     end
   end,
   set_ability = function(self, card, initial, delay_sprites)
@@ -647,7 +659,6 @@ local billion_lions = {
   perishable_compat = true,
   blueprint_compat = true,
   eternal_compat = true,
-  no_collection = true,
   calculate = function(self, card, context)
     if context.setting_blind and not card.getting_sliced then
       local destroyed = 0
@@ -693,7 +704,7 @@ local professor={
   stage = "Other",
   atlas = "others",
   perishable_compat = true,
-  blueprint_compat = true,
+  blueprint_compat = false,
   eternal_compat = false,
   calculate = function(self, card, context)
     if context.selling_self and (card.ability.extra.rounds_current >= card.ability.extra.rounds_total) and not context.blueprint then
@@ -752,6 +763,94 @@ local professor={
   end
 }
 
+local daycare={
+  name = "daycare",
+  pos = {x = 0, y = 0},
+  config = {extra = {}},
+  loc_vars = function(self, info_queue, center)
+    type_tooltip(self, info_queue, center)
+    return {vars = {}}
+  end,
+  rarity = 3,
+  cost = 8,
+  stage = "Other",
+  atlas = "placeholder_joker",
+  perishable_compat = true,
+  blueprint_compat = false,
+  eternal_compat = false,
+  calculate = function(self, card, context)
+    if context.selling_self and not context.blueprint then
+      local adjacent_jokers = poke_get_adjacent_jokers(card)
+      local breedable = 0
+      for i = 1, #adjacent_jokers do
+        local adj_joker = adjacent_jokers[i]
+        if adj_joker.config and adj_joker.config.center.stage then
+          if adj_joker.config.center.stage ~= "Other" and adj_joker.config.center.stage ~= "Baby" then
+            local lowest = get_lowest_evo(adj_joker)
+            local prefix = adj_joker.config.center.poke_custom_prefix or "poke"
+            local lowest_key = "j_"..prefix.."_"..lowest
+            if G.P_CENTERS[lowest_key].stage ~= "Legendary" then
+              breedable = breedable + 1
+            end
+          end
+        end
+      end
+      
+      if breedable >= 2 then
+        local parent = pseudorandom_element(adjacent_jokers, pseudoseed("daycare"))
+        local lowest = get_lowest_evo(parent)
+        if lowest and type(lowest) == "string" then
+          local prefix = parent.config.center.poke_custom_prefix or "poke"
+          local egg_key = "j_"..prefix.."_"..lowest
+          local egg = SMODS.add_card{set = 'Joker', key = 'j_poke_mystery_egg'}
+          egg.ability.extra.key = egg_key
+          egg.ability.extra.rounds = 3
+        end
+      end
+    end
+  end,
+  update = function(self, card, dt)
+    if G.STAGE == G.STAGES.RUN and card.area == G.jokers then
+      local adjacent_jokers = poke_get_adjacent_jokers(card)
+      local breedable = 0
+      for i = 1, #adjacent_jokers do
+        local adj_joker = adjacent_jokers[i]
+        if adj_joker.config and adj_joker.config.center.stage then
+          if adj_joker.config.center.stage ~= "Other" and adj_joker.config.center.stage ~= "Baby" then
+            local lowest = get_lowest_evo(adj_joker)
+            local prefix = adj_joker.config.center.poke_custom_prefix or "poke"
+            local lowest_key = "j_"..prefix.."_"..lowest
+            if G.P_CENTERS[lowest_key].stage ~= "Legendary" then
+              breedable = breedable + 1
+            end
+          end
+        end
+      end
+      card.ability.blueprint_compat = ( breedable >= 2  and 'compatible') or 'incompatible'
+    end
+  end,
+  generate_ui = function(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
+    type_tooltip(self, info_queue, card)
+    local _c = card and card.config.center or card
+    if not full_UI_table.name then
+      full_UI_table.name = localize({ type = "name", set = _c.set, key = _c.key, nodes = full_UI_table.name })
+    end
+    card.ability.blueprint_compat_ui = card.ability.blueprint_compat_ui or ''
+    card.ability.blueprint_compat_check = nil
+    local main_end = (card.area and card.area == G.jokers) and {
+      {n=G.UIT.C, config={align = "bm", minh = 0.4}, nodes={
+        {n=G.UIT.C, config={ref_table = card, align = "m", colour = G.C.JOKER_GREY, r = 0.05, padding = 0.06, func = 'blueprint_compat'}, nodes={
+          {n=G.UIT.T, config={ref_table = card.ability, ref_value = 'blueprint_compat_ui',colour = G.C.UI.TEXT_LIGHT, scale = 0.32*0.8}},
+        }}
+      }}
+    } or nil
+    localize{type = 'descriptions', key = _c.key, set = _c.set, nodes = desc_nodes, vars = {}}
+    desc_nodes[#desc_nodes+1] = main_end
+  end,
+}
+
+local jlist = {pokedex, rotomdex, everstone, tall_grass, jelly_donut, treasure_eatery, mystery_egg, rival, ruins_of_alph, unown_swarm, professor, daycare}
+
 if pokermon_config.pokemon_aprilfools then
   return {name = "Other Jokers",
         list = {pokedex, rotomdex, everstone, tall_grass, jelly_donut, treasure_eatery, mystery_egg, rival, ruins_of_alph, unown_swarm, professor, billion_lions}
@@ -762,3 +861,7 @@ else
 		list = {mystery_egg, ruins_of_alph, unown_swarm}
   }
 end
+
+return {name = "Other Jokers",
+      list = jlist
+}

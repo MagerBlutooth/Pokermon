@@ -283,13 +283,20 @@ SMODS.Atlas({
 SMODS.Atlas({
     key = "smeargle_logo",
     path = "smeargle_logo.png",
-    px = 300,
-    py = 194
+    px = 389,
+    py = 216
 }):register()
 
 SMODS.Atlas({
     key = "poke_logo",
     path = "poke_logo.png",
+    px = 389,
+    py = 216
+}):register()
+
+SMODS.Atlas({
+    key = "poke_logo_alt",
+    path = "poke_logo_alt.png",
     px = 389,
     py = 216
 }):register()
@@ -341,6 +348,9 @@ function loc_colour(_c, _default)
   G.ARGS.LOC_COLOURS["pocket"] = HEX("E8C069")
   return pokecolors(_c, _default)
 end
+
+--called to ensure crashes don't happen
+loc_colour()
 
 --Stake textures for Malverk
 if (SMODS.Mods["malverk"] or {}).can_load then

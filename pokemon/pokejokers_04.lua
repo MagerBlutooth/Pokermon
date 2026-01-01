@@ -522,7 +522,7 @@ local electrode={
     end
     return {vars = {center.ability.extra.Xmult, center.ability.extra.money}}
   end,
-  rarity = 3, 
+  rarity = "poke_safari", 
   cost = 6, 
   stage = "One", 
   ptype = "Lightning",
@@ -983,7 +983,7 @@ local chansey={
     if G.playing_cards then
       local enhance_count = 0
       for k, v in pairs(G.playing_cards) do
-        if SMODS.has_enhancement(v, 'm_lucky') then enhance_count = enhance_count  + 1 end
+        if v.config.center.key == "m_lucky" then enhance_count = enhance_count  + 1 end
       end
       deck_data = '['..tostring(enhance_count)..'/'..tostring(math.ceil(#G.playing_cards/4))..'] '
     end
@@ -1044,7 +1044,7 @@ local tangela={
     local num, dem = SMODS.get_probability_vars(card, card.ability.extra.num, card.ability.extra.dem, 'tangela')
     return {vars = {card.ability.extra.mult, card.ability.extra.chips, card.ability.extra.money_mod, num, dem, wild_left}}
   end,
-  rarity = 2, 
+  rarity = 1, 
   cost = 6,
   enhancement_gate = 'm_wild',
   stage = "Basic",
@@ -1185,7 +1185,7 @@ local horsea={
     type_tooltip(self, info_queue, center)
     return {vars = {center.ability.extra.mult, center.ability.extra.mult_mod}}
   end,
-  rarity = 1, 
+  rarity = 2, 
   cost = 3, 
   stage = "Basic", 
   ptype = "Water",
@@ -1230,7 +1230,7 @@ local seadra={
     type_tooltip(self, info_queue, center)
     return {vars = {center.ability.extra.mult, center.ability.extra.mult_mod}}
   end,
-  rarity = 2, 
+  rarity = "poke_safari", 
   cost = 6, 
   stage = "One", 
   ptype = "Water",

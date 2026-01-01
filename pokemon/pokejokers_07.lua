@@ -629,11 +629,11 @@ local sunflora={
 local yanma={
   name = "yanma",
   pos = {x = 1, y = 4},
-  config = {extra = {mult = 3,chips = 6, mult2 = 6, chips2 = 12, num = 1, dem = 3, scored = 0}, evo_rqmt = 36},
+  config = {extra = {mult_mod = 3,chip_mod = 6, mult_mod2 = 6, chip_mod2 = 12, num = 1, dem = 3, scored = 0}, evo_rqmt = 36},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
     local num, dem = SMODS.get_probability_vars(center, center.ability.extra.num, center.ability.extra.dem, 'yanma')
-    return {vars = {center.ability.extra.mult, center.ability.extra.chips, center.ability.extra.mult2, center.ability.extra.chips2, 
+    return {vars = {center.ability.extra.mult_mod, center.ability.extra.chip_mod, center.ability.extra.mult_mod2, center.ability.extra.chip_mod2, 
                     num, dem, math.max(0, self.config.evo_rqmt - center.ability.extra.scored)}}
   end,
   rarity = 1,
@@ -651,11 +651,11 @@ local yanma={
         if not context.blueprint then
           card.ability.extra.scored = card.ability.extra.scored + 1
         end
-        local Mult = card.ability.extra.mult
-        local Chips = card.ability.extra.chips
+        local Mult = card.ability.extra.mult_mod
+        local Chips = card.ability.extra.chip_mod
         if SMODS.pseudorandom_probability(card, 'yanma', card.ability.extra.num, card.ability.extra.dem, 'yanma') then
-          Mult = card.ability.extra.mult2
-          Chips = card.ability.extra.chips2
+          Mult = card.ability.extra.mult_mod2
+          Chips = card.ability.extra.chip_mod2
         end
         return {
           mult = Mult,
@@ -824,16 +824,9 @@ local umbreon={
         end
       end
     end
-    if context.pre_discard and not context.blueprint and not context.hook then
+    if context.pre_discard and G.GAME.current_round.discards_used <= 0 and not context.blueprint and not context.hook then
       local text = G.FUNCS.get_poker_hand_info(G.hand.highlighted)
-      local can_level = nil
-      if (SMODS.Mods["Talisman"] or {}).can_load then
-        can_level = to_big(G.GAME.hands[card.ability.extra.hand_played].level) > to_big(1)
-      else
-        can_level = G.GAME.hands[card.ability.extra.hand_played].level > 1
-      end
-      if can_level and G.GAME.hands[card.ability.extra.hand_played] == G.GAME.hands[text] then
-        level_up_hand(card, card.ability.extra.hand_played, nil, -1)
+      if G.GAME.hands[card.ability.extra.hand_played] == G.GAME.hands[text] then
         local highest_played = 0
         local highest_hands = {}
         for handname, values in pairs(G.GAME.hands) do
@@ -1554,7 +1547,7 @@ local granbull = {
     type_tooltip(self, info_queue, card)
     return {vars = {card.ability.extra.Xmult_multi, card.ability.extra.Xmult_multi2}}
   end,
-  rarity = 2,
+  rarity = "poke_safari",
   cost = 6,
   stage = "One",
   ptype = "Fairy",

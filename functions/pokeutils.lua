@@ -542,7 +542,7 @@ poke_set_hazards = function(amount)
     end
     if #valid > 0 then
       local card = pseudorandom_element(valid, pseudoseed('hazard'))
-      card:set_ability(G.P_CENTERS.m_poke_hazard, nil, true)
+      card:set_ability(G.P_CENTERS.m_poke_hazard)
     end
   end
 end
@@ -572,12 +572,6 @@ function poke_get_rank(card)
   elseif id == 11 then rank = "Jack"
   else rank = ""..id end
   return rank
-end
-
-function applies_splash()
-  return next(SMODS.find_card('j_poke_magikarp')) or
-  next(SMODS.find_card('j_poke_feebas')) or
-  next(SMODS.find_card('j_poke_luvdisc'))
 end
 
 function poke_is_even(card)
@@ -632,11 +626,11 @@ function poke_suit_check(hand, num)
 end
 
 set_joker_family_win = function(card)
-  local keys = get_family_keys(card.config.center.name, card.config.center.poke_custom_prefix, card)
+  local keys = get_family_keys(card)
   for _, v in pairs(keys) do
     -- Since evo lines and aux_poke / auto-sticker can be tracked separately, this only needs to be the latter
-    if G.P_CENTERS[v] and G.P_CENTERS[v].set == 'Joker' and G.P_CENTERS[v].auto_sticker
-        or card.config.center.aux_poke and card.config.center.stage == G.P_CENTERS[v].stage then
+    if (G.P_CENTERS[v] and G.P_CENTERS[v].set == 'Joker' and G.P_CENTERS[v].auto_sticker)
+        or (card.config.center.aux_poke and (G.P_CENTERS[v] and card.config.center.stage == G.P_CENTERS[v].stage)) then
       -- This is the bit that tracks joker wins
       G.PROFILES[G.SETTINGS.profile].joker_usage[v] = G.PROFILES[G.SETTINGS.profile].joker_usage[v]
           or {count = 1, order = G.P_CENTERS[v]['order'], wins = {}, losses = {}, wins_by_key = {}, losses_by_key = {}}

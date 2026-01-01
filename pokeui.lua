@@ -518,9 +518,11 @@ local function get_sprite_keys_by_artist(artist)
   add_pool_to_keys(G.P_CENTER_POOLS["Booster"])
   add_pool_to_keys(G.P_CENTER_POOLS["Seal"])
   add_pool_to_keys(G.P_CENTER_POOLS["Tag"])
+  add_pool_to_keys(G.P_BLINDS)
 
   if artist == 'Sonfive' then
     keys[#keys+1] = { display_text = "Main Menu Logo", atlas = "poke_logo", pos = { x = 0, y = 0 }, w = G.CARD_H*1.80092593 }
+    keys[#keys+1] = { display_text = "Pokermon Logo", atlas = "poke_logo_alt", pos = { x = 0, y = 0 }, w = G.CARD_H*1.80092593 }
   end
 
   return keys
@@ -643,7 +645,7 @@ local function open_pokedex(target)
     if menu and G.OVERLAY_MENU:get_UIE_by_ID('cycle_shoulders') then poke_joker_page = G.OVERLAY_MENU:get_UIE_by_ID('cycle_shoulders').children[1].children[1].config.ref_table.current_option end
     if menu and target.config.center.poke_multi_item then menu = 'your_collection_consumables' end
     G.FUNCS.overlay_menu {
-      definition = create_UIBox_pokedex_jokers(get_family_keys(target.config.center.name, target.config.center.poke_custom_prefix, target), menu),
+      definition = create_UIBox_pokedex_jokers(get_family_keys(target), menu),
     }
     G.CONTROLLER:update_focus()
   end
@@ -953,4 +955,24 @@ function G.UIDEF.card_h_popup(card)
   end
   
   return ret_val
+end
+
+local cuibbp = create_UIBox_blind_popup
+function create_UIBox_blind_popup(blind, discovered, vars)
+  local ret = cuibbp(blind, discovered, vars)
+  local nodes = {}
+  if blind.artist then
+    nodes[#nodes+1] = poke_artist_credit(blind.artist)
+  end
+  if blind.designer then
+    nodes[#nodes+1] = poke_designer_credit(blind.designer)
+  end
+  if blind.artist or blind.designer then
+    table.insert(ret.nodes,
+      {n=G.UIT.R, config={align = "cm"}, nodes = nodes}
+    )
+  end
+  ret.n = G.UIT.R
+  ret.config.colour = G.C.BLACK
+  return {n=G.UIT.ROOT, config={align = "cm", padding = 0.05, colour = lighten(G.C.JOKER_GREY, 0.5), r = 0.1, emboss = 0.05}, nodes={ret}}
 end

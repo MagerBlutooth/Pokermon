@@ -74,6 +74,7 @@ pokermon.family = {
     {"totodile", "croconaw", "feraligatr"},
     {"tyrogue", "hitmonlee", "hitmonchan", "hitmontop"},
     {"poochyena", "mightyena"},
+    {"wurmple", "silcoon", "beautifly", "cascoon", "dustox"},
     {"numel", "camerupt", "mega_camerupt"},
     {"feebas", "milotic"},
     {"snorunt", "glalie", "froslass"},
@@ -188,6 +189,13 @@ extended_family = {
   rotomm = {{item = true, name = "oven"}, {item = true, name = "washing_machine"}, {item = true, name = "fridge"}, {item = true, name = "fan"}, {item = true, name = "lawn_mower"}},
 }
 
+native_evo_items = {
+  "firestone", "waterstone", "leafstone", "thunderstone",
+  "dawnstone", "shinystone", "moonstone", "duskstone",
+  "sunstone", "icestone", "prismscale", "upgrade", "dubious_disc",
+  "linkcable", "kingsrock", "dragonscale", "hardstone",
+}
+
 type_sticker_applied = function(card)
   if not card then return false end
   if card.ability.grass_sticker then
@@ -234,7 +242,7 @@ find_pokemon_type = function(target_type, exclude_card)
 end
 
 is_type = function(card, target_type)
-  if get_type(card) == target_type or card.ability[string.lower(target_type).."_sticker"] then
+  if card and get_type(card) == target_type or card.ability[string.lower(target_type).."_sticker"] then
     return true
   else
     return false
@@ -409,7 +417,7 @@ poke_backend_evolve = function(card, to_key, energize_amount)
         end
       end
     end
-    if values_to_keep["form"] then
+    if values_to_keep["form"] and type(new_card.set_ability) == 'function' then
       new_card:set_ability(card)
     end
     if card.ability.extra.energy_count or card.ability.extra.c_energy_count then
@@ -642,6 +650,16 @@ HIGHEST_EVO_OVERRIDES = {
   ["cosmoem"] = { "solgaleo", "lunala" },
   ["kubfu"] = { "urshifu_single_strike", "urshifu_rapid_strike"},
 }
+get_lowest_evo = function(card)
+  local name = card.name or card.ability.name or "bulbasaur"
+  local prefix = "j_"..(card.config.center.poke_custom_prefix or "poke").."_"
+  
+  local family = poke_get_family_list(name)
+  
+  --Nice and simple, we just want the lowest value, which should be the first
+  --In the case the family is one joker, just return the name
+  return (type(family[1]) == "table" and family[1].key) or family[1] or name
+end
 
 get_highest_evo = function(card)
   local name = card.name or card.ability.name or "bulbasaur"
@@ -652,14 +670,13 @@ get_highest_evo = function(card)
     local evos = HIGHEST_EVO_OVERRIDES[name]
     return (#evos == 1 and evos[1]) or pseudorandom_element(evos, pseudoseed('highest'))
   end
-  
+  -- if already at highest stage, return early
+  if POKE_STAGES[card.config.center.stage].next == nil then return end
+
   -- find the pokermon's family list
   local family = poke_get_family_list(name)
   -- if pokermon isn't in a family, return false
-  if #family < 2 then return false
-  -- if already at highest stage, return false
-  elseif POKE_STAGES[G.P_CENTERS[prefix..name].stage].next == nil then return false end
-
+  if #family < 2 then return false end
   -- Check for max evo in family list, ignoring megas and aux pokermon
   local max = #family
   local max_evo_name = (type(family[max]) == "table" and family[max].key) or family[max]
@@ -672,14 +689,19 @@ get_highest_evo = function(card)
   end
   max_stage = G.P_CENTERS[prefix..max_evo_name].stage
 
+  -- check if max stage is the same as card's, and check split evo weirdness
+  if max_stage ~= "Legendary" and card.config.center.stage == max_stage then return
+  elseif max_stage ~= "Legendary" and POKE_STAGES[card.config.center.stage].next == max_stage
+    and get_previous_evo_from_center(G.P_CENTERS[prefix..max_evo_name], true) ~= card.config.center_key then return
+  end
+
   -- find pokermon in family list with max stage
   local evos = {max_evo_name}
   for _, v in pairs(family) do
     local curr_name = (type(v) == "table" and v.key) or v
-    if G.P_CENTERS[prefix..curr_name].stage == max_stage
-      and not G.P_CENTERS[prefix..curr_name].stage == "Legendary"
-      and not G.P_CENTERS[prefix..curr_name].aux_poke
-      and curr_name ~= max_evo_name then
+    if G.P_CENTERS[prefix..curr_name].stage == max_stage and curr_name ~= max_evo_name
+      and G.P_CENTERS[prefix..curr_name].stage ~= "Legendary"
+      and G.P_CENTERS[prefix..curr_name].aux_poke ~= true then
         table.insert(evos, curr_name)
     end
   end
@@ -752,12 +774,12 @@ get_previous_evo_from_center = function(center, full_key)
   return full_key and "j_"..prefix.."_"..prev or prev
 end
 
-get_family_keys = function(cardname, custom_prefix, card)
+get_family_keys = function(card)
   local keys = {}
-  local line = poke_get_family_list(cardname)
-  local prefix = custom_prefix or 'poke'
-  local full_prefix = 'j_'..prefix..'_'
-  if card.config.center.poke_multi_item then full_prefix = 'c_'..prefix..'_' end
+  local center = card.config.center
+  local line = poke_get_family_list(center.name)
+  local prefix = center.poke_custom_prefix or 'poke'
+  local full_prefix = (center.poke_multi_item and 'c_' or 'j_')..prefix..'_'
   if #line > 1 then
     for i = 1, #line do
       if type(line[i]) == "table" then
@@ -769,10 +791,10 @@ get_family_keys = function(cardname, custom_prefix, card)
       end
     end
   else
-    table.insert(keys, full_prefix..cardname)
+    table.insert(keys, full_prefix..center.name)
   end
   for k, v in pairs(extended_family) do
-    if k == cardname then
+    if k == center.name then
       for _, y in pairs(v) do
         if type(y) == "table" then
           if y.item then
@@ -787,33 +809,27 @@ get_family_keys = function(cardname, custom_prefix, card)
       end
     end
   end
-  if cardname == "smeargle" then
+  if center.name == "smeargle" then
     if card.ability.extra.copy_joker then
       table.insert(keys, card.ability.extra.copy_joker.config.center_key)
     end
   end
-  if cardname == "ruins_of_alph" then
+  if center.name == "ruins_of_alph" then
     for _, v in pairs(card.ability.extra.forms) do
       local form = {key = "j_poke_unown", form = v}
       table.insert(keys, form)
     end
   end
-  local evo_item_keys = get_evo_item_keys(card, prefix)
+  local evo_item_keys = get_evo_item_keys(card)
   table.append(keys, evo_item_keys)
   return keys
 end
 
-get_evo_item_keys = function(card, prefix)
-  prefix = prefix or card.config.center.poke_custom_prefix
+get_evo_item_keys = function(card)
   local keys = {}
   if card and card.config and card.config.center and card.config.center.item_req then
+    local prefix = card.config.center.poke_custom_prefix
     local item_key, evo_item_prefix
-    local native_evo_items = {
-      "firestone", "waterstone", "leafstone", "thunderstone",
-      "dawnstone", "shinystone", "moonstone", "duskstone",
-      "sunstone", "icestone", "prismscale", "upgrade", "dubious_disc",
-      "linkcable", "kingsrock", "dragonscale", "hardstone",
-    }
     if type(card.config.center.item_req) == "table" then
       for i = 1, #card.config.center.item_req do
         evo_item_prefix = table.contains(native_evo_items, card.config.center.item_req[i]) and 'poke' or prefix
@@ -1169,7 +1185,7 @@ get_poke_target_card_ranks = function(seed, num, default, use_deck)
   if use_deck then
     for i = 1, num do
       for k, v in ipairs(G.playing_cards) do
-        if v.ability.effect ~= 'Stone Card' then
+        if not SMODS.has_no_rank(v) then
             local already_picked = false
             for j = 1, #target_ranks do
               if target_ranks[j].id == v.base.id then already_picked = true; break end
@@ -1206,6 +1222,36 @@ get_poke_target_card_ranks = function(seed, num, default, use_deck)
   local sort_function = function(card1, card2) return card1.id < card2.id end
   table.sort(target_ranks, sort_function)
   return target_ranks
+end
+
+get_poke_target_card_suit = function(seed, use_deck, default, limit_suits)
+  local suit = default or 'Spades'
+  local allowed_suits = limit_suits or SMODS.Suits
+  local valid_cards = {}
+  if not G.playing_cards then
+    return {{suit = suit}}
+  end
+  if use_deck then
+    for k, v in ipairs(G.playing_cards) do
+      if not SMODS.has_no_suit(v) then
+        for x, y in pairs(allowed_suits) do
+          if (y.key and v:is_suit(y.key)) or v:is_suit(y) then
+            valid_cards[#valid_cards+1] = v
+            break
+          end
+        end
+      end
+    end
+    if #valid_cards > 0 then
+      local picked = pseudorandom_element(valid_cards, pseudoseed(seed))
+      return {{suit = picked.base.suit}}
+    else
+      return {{suit = suit}}
+    end
+  else
+    local picked = pseudorandom_element(allowed_suits, pseudoseed(seed))
+    return {{suit = picked.key or picked}}
+  end
 end
 
 add_target_cards_to_vars = function(vars, targets)

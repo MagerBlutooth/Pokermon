@@ -32,41 +32,6 @@ if v.set == 'Joker' and v.stage and pokermon_config and not pokermon_config.haza
 if add and v.set == 'Joker' and v.stage and poke_family_present(v) then add = nil end
 '''
 match_indent = true
-
-# Magikarp functionality
-[[patches]]
-[patches.pattern]
-target = "functions/state_events.lua"
-pattern = "if next(find_joker('Splash')) then"
-position = "at"
-payload = "if next(find_joker('Splash')) or applies_splash() then"
-match_indent = true
-
-# Magikarp functionality better calc
-[[patches]]
-[patches.pattern]
-target = "functions/state_events.lua"
-pattern = "local splashed = SMODS.always_scores(G.play.cards[i]) or next(find_joker('Splash'))"
-position = "at"
-payload = '''
-local splashed = SMODS.always_scores(G.play.cards[i]) or next(find_joker('Splash')) or applies_splash()
-'''
-match_indent = true
-
-# Mimikyu Localization Functionality
-[[patches]]
-[patches.regex]
-target = 'functions/state_events.lua'
-pattern = '''if eval.saved then
-  game_over = false
-end'''
-position = 'after'
-payload = '''
-  if not G.localization.misc.dictionary.ph_mr_bones_numbutils then
-    G.localization.misc.dictionary.ph_mr_bones_numbutils = ""..G.localization.misc.dictionary.ph_mr_bones
-  end
-  G.localization.misc.dictionary.ph_mr_bones = G.localization.misc.dictionary.ph_mr_bones_numbutils:gsub("Mr. Bones", G.localization.descriptions.Joker[G.jokers.cards[i].config.center.key].name)
-  '''
   
 # Extra Booster Functionality
 [[patches]]
@@ -251,7 +216,7 @@ if pokermon_config.pokemon_title then
   else
     poke_atlas_string = "poke_AtlasJokersBasicTitleCard"
   end
-  replace_card = PokeDisplayCard({atlas = poke_atlas_string, pos = {x = 0, y = 0}, soul_pos = {x = 1, y = 0}}, self.title_top.T.x, self.title_top.T.y, 1.2*G.CARD_W*SC_scale, 1.2*G.CARD_H*SC_scale)
+  replace_card = PokeDisplayCard({atlas = poke_atlas_string, pos = {x = 0, y = 0}, soul_pos = {x = 1, y = 0}, suppress_text = true}, self.title_top.T.x, self.title_top.T.y, 1.2*G.CARD_W*SC_scale, 1.2*G.CARD_H*SC_scale)
 else
   replace_card = Card(self.title_top.T.x, self.title_top.T.y, 1.2*G.CARD_W*SC_scale, 1.2*G.CARD_H*SC_scale, G.P_CARDS.S_A, G.P_CENTERS.c_base)
 end
@@ -612,7 +577,7 @@ position = "at"
 payload = '''
 local reserve_and_use = nil
 if (G.STATE == G.STATES.SMODS_BOOSTER_OPENED and SMODS.OPENED_BOOSTER.label:find("Pocket")) or (G.GAME.poke_save_all and not SMODS.OPENED_BOOSTER.label:find("Wish")) 
-or (card.ability.name == 'megastone') then
+or (card.config.center.saveable) then
   base_attach.children.reserve = G.UIDEF.card_focus_button{
     card = card, parent = base_attach, type = 'reserve',
     func = 'can_reserve_card', button = 'Can Reserve', card_width = card_width

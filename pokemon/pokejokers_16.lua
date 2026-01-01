@@ -41,11 +41,12 @@ local mantyke={
       end
     end
     if context.end_of_round and not context.individual and not context.repetition and not card.debuff then
-      local _card = create_card('Tarot', G.consumeables, nil, nil, nil, nil, 'c_devil')
-      local edition = {negative = true}
-      _card:set_edition(edition, true)
-      _card:add_to_deck()
-      G.consumeables:emplace(_card)
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          SMODS.add_card{set = 'Tarot', key = 'c_devil', edition = 'e_negative'}
+          return true
+        end
+      }))
     end
     return level_evo(self, card, context, "j_poke_mantine")
   end
@@ -427,11 +428,11 @@ local togekiss={
 local yanmega={
   name = "yanmega",
   pos = {x = 12, y = 5},
-  config = {extra = {mult = 6,chips = 12, num = 1, dem = 3, retriggers = 1}},
+  config = {extra = {mult_mod = 6,chip_mod = 12, num = 1, dem = 3, retriggers = 1}},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
     local num, dem = SMODS.get_probability_vars(center, center.ability.extra.num, center.ability.extra.dem, 'yanmega')
-    return {vars = {center.ability.extra.mult, center.ability.extra.chips, num, dem}}
+    return {vars = {center.ability.extra.mult_mod, center.ability.extra.chip_mod, num, dem}}
   end,
   rarity = "poke_safari",
   cost = 8,
@@ -446,8 +447,8 @@ local yanmega={
     if context.individual and not context.end_of_round and context.cardarea == G.play then
       if context.other_card:get_id() == 3 or context.other_card:get_id() == 6 then
         return {
-          mult = card.ability.extra.mult,
-          chips = card.ability.extra.chips,
+          mult = card.ability.extra.mult_mod,
+          chips = card.ability.extra.chip_mod,
           card = card
         }
       end
