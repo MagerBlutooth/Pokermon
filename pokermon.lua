@@ -326,6 +326,14 @@ for _, file in ipairs(pseals) do
   end
 end
 
+-- Sets custom skins according to config on load
+G.E_MANAGER:add_event(Event({
+  func = function()
+    G.FUNCS.toggle_pokermon_skins()
+	  return true
+  end
+}))
+
 --Load editions
 local editions = NFS.getDirectoryItems(mod_dir.."editions")
 
@@ -439,8 +447,8 @@ for _, file in ipairs(backs) do
     end
   end
 end
---Load Sleeves
 
+--Load Sleeves
 if (SMODS.Mods["CardSleeves"] or {}).can_load then
   --Load Sleeves
   local sleeves = NFS.getDirectoryItems(mod_dir.."sleeves")
@@ -573,10 +581,12 @@ function get_flush(hand)
 end
 
 function SMODS.current_mod.reset_game_globals(run_start)
-  reset_bulba_rank()
+  local rank_resets = {'bulb1card', 'sneaselcard', 'bramblincard'}
+  for i = 1, #rank_resets do
+    poke_reset_rank(rank_resets[i])
+  end
   reset_espeon_card()
   reset_gligar_suit()
-  reset_sneasel_rank()
 end
 
 --Tutorial WIP

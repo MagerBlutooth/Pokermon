@@ -20,6 +20,7 @@ local joker_pool_toggles = {
 
 local misc_no_restart_toggles = {
   {ref_value = "shiny_playing_cards", label = "poke_settings_shiny_playing_cards", tooltip = {set = 'Other', key = 'shinyplayingcard_tooltip'}},
+  {ref_value = "stake_skins", label = "poke_settings_stake_skins", tooltip = {set = 'Other', key = 'stake_skins_tooltip'}, callback = G.FUNCS.toggle_pokermon_skins},
   {ref_value = "detailed_tooltips", label = "poke_settings_pokemon_detailed_tooltips", tooltip = {set = 'Other', key = 'detailed_tooltips_tooltip'}},
   {ref_value = "previous_evo_stickers", label = "poke_settings_previous_evo_stickers", tooltip = {set = 'Other', key = 'previous_evo_stickers_tooltip'}},
   {ref_value = "order_jokers", label = "poke_settings_order_jokers", tooltip = {set = 'Other', key = 'order_jokers_tooltip'}},
@@ -49,6 +50,7 @@ local create_menu_toggles = function (parent, toggles)
           label = localize(v.label),
           ref_table = pokermon_config,
           ref_value = v.ref_value,
+          callback = v.callback,
     })
     if v.tooltip then
       parent.nodes[#parent.nodes].config.detailed_tooltip = v.tooltip
@@ -644,6 +646,7 @@ local function open_pokedex(target)
     local menu = G.SETTINGS.paused and 'pokedex_back' or nil
     if menu and G.OVERLAY_MENU:get_UIE_by_ID('cycle_shoulders') then poke_joker_page = G.OVERLAY_MENU:get_UIE_by_ID('cycle_shoulders').children[1].children[1].config.ref_table.current_option end
     if menu and target.config.center.poke_multi_item then menu = 'your_collection_consumables' end
+    G.SETTINGS.paused = true
     G.FUNCS.overlay_menu {
       definition = create_UIBox_pokedex_jokers(get_family_keys(target), menu),
     }
@@ -960,19 +963,23 @@ end
 local cuibbp = create_UIBox_blind_popup
 function create_UIBox_blind_popup(blind, discovered, vars)
   local ret = cuibbp(blind, discovered, vars)
-  local nodes = {}
-  if blind.artist then
-    nodes[#nodes+1] = poke_artist_credit(blind.artist)
-  end
-  if blind.designer then
-    nodes[#nodes+1] = poke_designer_credit(blind.designer)
-  end
   if blind.artist or blind.designer then
+    local nodes = {}
+    if blind.artist then
+      nodes[#nodes+1] = poke_artist_credit(blind.artist)
+    end
+    if blind.designer then
+      nodes[#nodes+1] = poke_designer_credit(blind.designer)
+    end
     table.insert(ret.nodes,
-      {n=G.UIT.R, config={align = "cm"}, nodes = nodes}
+      {n=G.UIT.R, config = {align = "cm"}, nodes = {
+        {n=G.UIT.R, config = {align = "cm", r = 1, colour = adjust_alpha(darken(G.C.BLACK, 0.1), 0.8), padding = 0.05}, nodes = {
+          {n=G.UIT.C, config = {minw = 0.2}},
+          {n=G.UIT.C, nodes = nodes},
+          {n=G.UIT.C, config = {minw = 0.2}},
+        }}
+      }}
     )
   end
-  ret.n = G.UIT.R
-  ret.config.colour = G.C.BLACK
-  return {n=G.UIT.ROOT, config={align = "cm", padding = 0.05, colour = lighten(G.C.JOKER_GREY, 0.5), r = 0.1, emboss = 0.05}, nodes={ret}}
+  return ret
 end
