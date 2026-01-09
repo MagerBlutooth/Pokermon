@@ -152,7 +152,7 @@ PokemonSprites = {
     AtlasJokersSeriesA = {artist = 'Maelmc', anim_atlas = "AtlasJokersSeriesAVoltorb"},
     AtlasJokersSeriesB = {artist = 'MyDude_YT'}
 }},
-{name = "hisuian_voltorb", base = {pos = {x = 2, y = 6}},gen_atlas = 1},
+{name = "hisuian_voltorb", base = {pos = {x = 2, y = 6}},gen_atlas = 1, alts = {AtlasJokersSeriesA = {artist = 'PigeonPie'}}},
 {name = "electrode", base = {pos = {x = 20, y = 6}},alts = {AtlasJokersSeriesA = {artist = 'Maelmc',anim_atlas = "AtlasJokersSeriesAElectrode"}}},
 {name = "hisuian_electrode", base = {pos = {x = 4, y = 6}},gen_atlas = 1},
 {name = "exeggcute", base = {pos = {x = 22, y = 6}},},
@@ -287,7 +287,7 @@ PokemonSprites = {
 {name = "slowking", base = {pos = {x = 6, y = 13}},},
 {name = "galarian_slowking", base = {pos = {x = 6, y = 4}},gen_atlas = 2},
 {name = "misdreavus", base = {pos = {x = 8, y = 13}},},
-{name = "unown", base = {pos = {x = 0, y = 0}, soul_pos = {x = 1, y = 0}}, alts = {AtlasJokersSeriesA = {artist = {{name = 'Catzzadilla', layer = 'center'}, {name = 'LocalThunk', layer = 'center'}},}},gen_atlas = 2},
+{name = "unown", base = {pos = {x = 0, y = 0}, soul_pos = {x = 1, y = 0}}, alts = {AtlasJokersSeriesA = {artist = {name = 'Catzzadilla', layer = 'center'}, {name = 'LocalThunk', layer = 'center'}}},gen_atlas = 2},
 {name = "wobbuffet", base = {pos = {x = 12, y = 13}},},
 {name = "girafarig", base = {pos = {x = 14, y = 13}},},
 {name = "pineco", base = {pos = {x = 16, y = 13}},},
@@ -570,7 +570,7 @@ PokemonSprites = {
 {name = "mimejr", base = {pos = {x = 6, y = 29}},alts = {AtlasJokersSeriesA = {artist = 'RedHaering'}}},
 {name = "happiny", base = {pos = {x = 8, y = 29}},},
 {name = "chatot", base = {pos = {x = 10, y = 29}},alts = {AtlasJokersSeriesA = {artist = 'RedHaering'}}},
-{name = "spiritomb", base = {pos = {x = 12, y = 29}},alts = {AtlasJokersSeriesA = {artist = 'Maelmc'}}},
+{name = "spiritomb", base = {pos = {x = 12, y = 29}},alts = {AtlasJokersSeriesA = {artist = 'Maelmc', soul_pos = {x = 13, y = 29}}}},
 {name = "gible", base = {pos = {x = 14, y = 29}},},
 {name = "gabite", base = {pos = {x = 16, y = 29}},},
 {name = "garchomp", base = {pos = {x = 18, y = 29}},},
@@ -583,7 +583,7 @@ PokemonSprites = {
 {name = "hippowdon", base = {pos = {x = 28, y = 29}},},
 {name = "skorupi", base = {pos = {x = 0, y = 30}},},
 {name = "drapion", base = {pos = {x = 2, y = 30}},},
-{name = "croagunk", base = {pos = {x = 4, y = 30}},},
+{name = "croagunk", base = {pos = {x = 4, y = 30}}, alts = {AtlasJokersSeriesA = {artist = 'Sonfive'}}},
 {name = "toxicroak", base = {pos = {x = 6, y = 30}},},
 {name = "carnivine", base = {pos = {x = 8, y = 30}},},
 {name = "finneon", base = {pos = {x = 10, y = 30}},},
@@ -1306,6 +1306,10 @@ local poke_artist_info = {
   {url = 'https://x.com/MyDude81058128'},
   {url = 'https://steamcommunity.com/profiles/76561198905899441',site = 'Steam', account = 'MyDude'},
   {url = 'https://pacmanforever.itch.io/', account = 'My Dude Studios', site = 'Itch.io', colour = HEX("FA5C5C")}
+  }},
+  PigeonPie = {display_name = 'PigeonPie', artist_colour = HEX("FFED24"), highlight_colour = HEX("DE26FF"), links = {
+    {url = 'https://www.instagram.com/pigeonpie08'},
+    {url = 'https://www.tiktok.com/@pigeon_pie', account = 'pigeon_pie'}
   }},
   PrincessRoxie = {display_name = 'PrincessRoxie', artist_colour = HEX("FF88FF")},
   RedHaering = {display_name = 'RedHaering', artist_colour = HEX("D44540"), links = {

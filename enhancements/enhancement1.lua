@@ -5,7 +5,7 @@ local hazard = {
    artist = "PrincessRoxie",
    atlas = "AtlasEnhancementsBasic",
    pos = { x = 0, y = 0 },
-   config = {num = 1, dem = 6},
+   config = {num = 1, dem = 3},
    loc_vars = function(self, info_queue, center)
      local num, dem = SMODS.get_probability_vars(center, self.config.num, self.config.dem, 'hazard')
      return {vars = {num, dem}}
@@ -75,9 +75,9 @@ local flower = {
    atlas = "AtlasEnhancementsBasic",
    artist = {name = {"Currently a placeholder!", "Want your art here?", "Join the Discord!"}},
    pos = { x = 6, y = 0 },
-   config = {Xmult = 3},
+   config = {Xmult_flower = 3},
    loc_vars = function(self, info_queue, center)
-     return {vars = {center.ability.Xmult}}
+     return {vars = {center.ability.Xmult_flower}}
    end,
    weight = 0,
    in_pool = function(self, args) return false end,
@@ -87,7 +87,7 @@ local flower = {
         if poke_suit_check(context.scoring_hand, suit_number) then
           return
           {
-            x_mult = card.ability.Xmult
+            x_mult = card.ability.Xmult_flower
           }
         end
      end
