@@ -99,14 +99,14 @@ local clamperl={
   ptype = "Water",
   atlas = "Pokedex3",
   perishable_compat = true,
-  blueprint_compat = true,
+  blueprint_compat = false,
   eternal_compat = true,
   calculate = function(self, card, context)
-    if context.open_booster then
+    if context.open_booster and not context.blueprint then
       card.ability.extra.increased_handsize = true
       G.hand:change_size(card.ability.extra.h_size)
     end
-    if context.ending_booster and card.ability.extra.increased_handsize then
+    if context.ending_booster and card.ability.extra.increased_handsize and not context.blueprint then
       card.ability.extra.increased_handsize = nil
       G.hand:change_size(-card.ability.extra.h_size)
     end
@@ -160,11 +160,11 @@ local huntail ={
   blueprint_compat = true,
   eternal_compat = true,
   calculate = function(self, card, context)
-    if context.open_booster then
+    if context.open_booster and not context.blueprint then
       G.hand:change_size(card.ability.extra.h_size)
       card.ability.extra.increased_handsize = true
     end
-    if context.ending_booster and card.ability.extra.increased_handsize then
+    if context.ending_booster and card.ability.extra.increased_handsize and not context.blueprint then
       card.ability.extra.increased_handsize = nil
       G.hand:change_size(-card.ability.extra.h_size)
     end
@@ -217,11 +217,11 @@ local gorebyss ={
   blueprint_compat = true,
   eternal_compat = true,
   calculate = function(self, card, context)
-    if context.open_booster then
+    if context.open_booster and not context.blueprint then
       G.hand:change_size(card.ability.extra.h_size)
       card.ability.extra.increased_handsize = true
     end
-    if context.ending_booster and card.ability.extra.increased_handsize then
+    if context.ending_booster and card.ability.extra.increased_handsize and not context.blueprint then
       card.ability.extra.increased_handsize = nil
       G.hand:change_size(-card.ability.extra.h_size)
     end

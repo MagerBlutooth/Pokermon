@@ -302,10 +302,12 @@ local mystery_egg = {
         if is_egg_helper(adjacent_jokers[i]) then adjacent = adjacent + 1 end
       end
       card.ability.extra.rounds = card.ability.extra.rounds - 1
-      if (adjacent + #SMODS.find_card('c_poke_fire_energy')) > 0 and pseudorandom('egg') < (adjacent + #SMODS.find_card('c_poke_fire_energy'))/4 then
-        card.ability.extra.rounds = card.ability.extra.rounds - 1
+      if next(SMODS.find_card('j_poke_oologist')) then
+        if (adjacent + #SMODS.find_card('c_poke_fire_energy')) > 0 and pseudorandom('egg') < (adjacent + #SMODS.find_card('c_poke_fire_energy'))/4 then
+          card.ability.extra.rounds = card.ability.extra.rounds - 1
+        end
+        card.ability.extra.rounds = card.ability.extra.rounds - adjacent/4
       end
-      card.ability.extra.rounds = card.ability.extra.rounds - adjacent/4
       if card.ability.extra.rounds <= 1 then
         local eval = function(card) return card.ability.extra.rounds and card.ability.extra.rounds <= 1 end
         juice_card_until(card, eval, true)
@@ -646,7 +648,8 @@ local billion_lions = {
   rarity = 4,
   cost = 6,
   stage = "Legendary",
-  atlas = "Pokedex9",
+  atlas = "others",
+  artist = "Catzzadilla",
   gen = 9,
   perishable_compat = true,
   blueprint_compat = true,
@@ -695,6 +698,7 @@ local professor={
   cost = 6,
   stage = "Other",
   atlas = "others",
+  artist = "MyDude_YT",
   perishable_compat = true,
   blueprint_compat = false,
   eternal_compat = false,
@@ -724,35 +728,60 @@ local professor={
     end
   end,
   in_pool = function(self)
-    local grass_starters = {}
-    local fire_starters = {}
-    local water_starters = {}
-    local pseudo_starters = {}
-    local pika_eevee = {}
-    local pack_key = nil
-    for k, v in ipairs(G.P_CENTER_POOLS["Joker"]) do
+    local grass_found, fire_found, water_found, pseudo_found, letsgo_found
+    for _, v in ipairs(G.P_CENTER_POOLS["Joker"]) do
       if not poke_family_present(v) then
-        if v.starter and v.ptype == "Grass" then
-          grass_starters[#grass_starters + 1] = v.key
-        end
-        if v.starter and v.ptype == "Fire" then
-          fire_starters[#fire_starters + 1] = v.key
-        end
-        if v.starter and v.ptype == "Water" then
-          water_starters[#water_starters + 1] = v.key
-        end
-        if v.pseudol then
-          pseudo_starters[#pseudo_starters + 1] = v.key
-        end
-        if v.name == "pikachu" or v.name == "eevee" then
-          pika_eevee[#pika_eevee + 1] = v.key
+        if v.starter and v.ptype == "Grass" then grass_found = true end
+        if v.starter and v.ptype == "Fire" then fire_found = true end
+        if v.starter and v.ptype == "Water" then water_found = true end
+        if v.pseudol then pseudo_found = true end
+        if v.name == "pikachu" or v.name == "eevee" then letsgo_found = true end
+
+        if grass_found and fire_found and water_found and pseudo_found and letsgo_found then
+          return true
         end
       end
     end
-    if #grass_starters == 0 or #fire_starters == 0 or #water_starters == 0 or #pseudo_starters == 0 or #pika_eevee == 0 then
-      return false
-    end
+    return false
   end
+}
+
+
+local oologist={
+  name = "oologist",
+  pos = {x = 0, y = 0},
+  artist = "MyDude_YT",
+  config = {extra = {num = 1, dem = 20, activated = false}},
+  loc_vars = function(self, info_queue, center)
+    type_tooltip(self, info_queue, center)
+    if pokermon_config.detailed_tooltips then
+      if not center.edition or (center.edition and not center.edition.negative) then
+        info_queue[#info_queue+1] = G.P_CENTERS.e_negative
+      end
+    end
+    local num, dem = SMODS.get_probability_vars(center, center.ability.extra.num, center.ability.extra.dem, 'oologist')
+    return {vars = {num, dem, not center.ability.extra.activated and "("..localize('k_active_ex')..")" or ''}}
+  end,
+  rarity = 3,
+  cost = 8,
+  stage = "Other",
+  atlas = "others",
+  perishable_compat = true,
+  blueprint_compat = false,
+  eternal_compat = false,
+  calculate = function(self, card, context)
+    if context.reroll_shop and not context.blueprint and not card.ability.extra.activated then
+      if SMODS.pseudorandom_probability(card, 'oologist', card.ability.extra.num, card.ability.extra.dem, 'oologist') then
+        card.ability.extra.activated = true
+        local temp_card = {set = "Joker", area = G.shop_jokers, key = "j_poke_mystery_egg", edition = "e_negative"}
+        local add_card = SMODS.create_card(temp_card)
+        poke_add_shop_card(add_card, card)
+      end
+    end
+    if context.ending_shop and not context.blueprint then
+      card.ability.extra.activated = false
+    end
+  end,
 }
 
 local daycare={
@@ -842,7 +871,7 @@ local daycare={
   end,
 }
 
-local jlist = {pokedex, rotomdex, everstone, tall_grass, jelly_donut, treasure_eatery, mystery_egg, rival, ruins_of_alph, unown_swarm, professor, daycare}
+local jlist = {pokedex, rotomdex, everstone, tall_grass, jelly_donut, treasure_eatery, mystery_egg, rival, ruins_of_alph, unown_swarm, professor, daycare, oologist}
 
 if pokermon_config.pokemon_aprilfools then
   return {name = "Other Jokers",

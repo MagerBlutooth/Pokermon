@@ -1261,9 +1261,14 @@ PokemonSprites = {
 {name = "jelly_donut", base = {pos = {x = 6, y = 0}}, others_atlas = true,},
 {name = "treasure_eatery", base = {pos = {x = 6, y = 2}}, others_atlas = true,},
 {name = "mystery_egg", base = {pos = {x = 0, y = 1}}, others_atlas = true,},
-{name = "rival", base = {pos = {x = 0, y = 2}}, others_atlas = true,},
+{name = "rival", base = {artist = 'MyDude_YT', pos = {x = 0, y = 2}, display_text = {key = 'j_poke_rival'}}, others_atlas = true,},
+-- These sprites are set dynamically elsewhere, so these entries are just for the credits screen
+{name = "bitter_rival", base = {artist = 'MyDude_YT', pos = {x = 2, y = 2}, display_text = {key = 'j_poke_bitter_rival'}}, others_atlas = true,},
+{name = "champion", base = {artist = 'MyDude_YT', pos = {x = 4, y = 2}, display_text = {key = 'j_poke_champion'}}, others_atlas = true,},
+
 {name = "ruins_of_alph", base = {pos = {x = 0, y = 3}}, others_atlas = true,},
 {name = "professor", base = {pos = {x = 4, y = 1}}, others_atlas = true,},
+{name = "oologist", base = {pos = {x = 4, y = 4}}, others_atlas = true,},
 {name = "daycare", base = {pos = {x = 2,y = 4}}, others_atlas = true,},
 {name = "billion_lions", base = {pos = {x = 4, y = 3}, soul_pos = {x = 5, y = 3}}, others_atlas = true,},
   }
@@ -1299,6 +1304,7 @@ local poke_artist_info = {
 {url = 'https://bsky.app/profile/justsmolchild.bsky.social', site = 'Bluesky', account = 'justsmolchild'}
   }},
   InertSteak = {display_name = 'InertSteak', artist_colour = HEX('77A5BC'), highlight_colour = HEX('C1C3C2')},
+  KatRoman = {display_name = 'KatRoman', artist_colour = HEX('0455FE')},
   Maelmc = {display_name = 'Maelmc', artist_colour = HEX("EA6F22")},
   MyDude_YT = {display_name = 'MyDude YT', artist_colour = HEX("FFFFFF"), highlight_colour = HEX("4428BC"), links = {
   {url = 'https://www.youtube.com/@mydudestudios6244', account = 'MyDude Studios'},
@@ -1391,6 +1397,8 @@ poke_load_atlas = function(item)
         item.atlas = sprite_info.alts[atlas_prefix].anim_atlas
         item.pos = {x = 0, y = 0}
       end
+    elseif atlas_prefix == "AtlasJokersBasic" and sprite_info.base.artist then
+      item.artist = sprite_info.base.artist
     end
     if not item.animated then
       item.atlas = poke_get_atlas_string(atlas_prefix, sprite_info.gen_atlas, sprite_info.others_atlas)
@@ -1401,8 +1409,12 @@ poke_load_atlas = function(item)
   end
 end
 
-poke_get_artist_info = function(name)
-  return poke_artist_info[name]
+local artistname = function(record)
+  return type(record) == 'table' and record.name or record
+end
+
+poke_get_artist_info = function(name_or_record)
+  return poke_artist_info[artistname(name_or_record)]
 end
 
 poke_get_artist_list = function()
@@ -1420,7 +1432,7 @@ function poke_get_artist_layer(obj, by_artist)
       or { obj.artist }
 
   for _, _artist in ipairs(artists) do
-    local artist_name = type(_artist) == 'table' and _artist.name or _artist
+    local artist_name = artistname(_artist)
     if by_artist == artist_name then
       return _artist.layer or 'both'
     end
@@ -1430,27 +1442,71 @@ end
 poke_get_artist_sprites = function(artist)
   local sprites = {}
 
-  for _, sprite in ipairs(PokemonSprites.list) do
+  local add_sprite_to_list = function(sprite, layer, atlas_prefix, alt)
+    local anim_atlas = alt and alt.anim_atlas
+    if not alt then anim_atlas = sprite.base.anim_atlas end -- prevent base anim_atlas to be used as a fallback
 
+    local display_text = alt and alt.display_text or sprite.base.display_text or sprite.display_text
+
+    if type(display_text) == 'table' then
+      -- Default to Joker name text localization for keys, pass `false` to either type or set to disable at will
+      if display_text.key and display_text.type == nil and display_text.set == nil then
+        display_text.type = 'name_text'
+        display_text.set = 'Joker'
+      end
+      -- Support simple localizations for ex. dictionary entries, just providing a string instead of `{ _localize = 'text' }` will make it render as is
+      if display_text._localize then
+        display_text = display_text._localize
+      end
+      display_text = localize(display_text)
+    end
+
+    table.insert(sprites, {
+      name = sprite.name,
+      pos = sprite.base.pos,
+      soul_pos = alt and alt.soul_pos or sprite.base.soul_pos,
+      atlas_prefix = atlas_prefix,
+      display_text = display_text,
+      gen_atlas = sprite.gen_atlas,
+      others_atlas = sprite.others_atlas,
+      anim_atlas = anim_atlas,
+      layer = layer
+    })
+  end
+
+  for _, sprite in ipairs(PokemonSprites.list) do
+    if sprite.base and sprite.base.artist then
+      local layer = poke_get_artist_layer(sprite.base, artist)
+      if layer then
+        add_sprite_to_list(sprite, layer, "AtlasJokersBasic")
+      end
+    end
     if sprite.alts then
       for atlas_prefix, alt in pairs(sprite.alts) do
         local layer = poke_get_artist_layer(alt, artist)
 
         if layer then
-          table.insert(sprites, {
-            name = sprite.name,
-            pos = sprite.base.pos,
-            soul_pos = alt.soul_pos or sprite.base.soul_pos,
-            atlas_prefix = atlas_prefix,
-            gen_atlas = sprite.gen_atlas,
-            others_atlas = sprite.others_atlas,
-            anim_atlas = alt.anim_atlas,
-            layer = layer
-          })
+          add_sprite_to_list(sprite, layer, atlas_prefix, alt)
         end
       end
     end
   end
 
   return sprites
+end
+
+poke_get_sprite_artists = function(name)
+  local sprite_info = PokemonSprites[name]
+  local artists = {}
+  if sprite_info then
+    if sprite_info.base.artist then
+      artists[#artists+1] = sprite_info.base.artist
+    end
+    for _, alt in pairs(sprite_info.alts or {}) do
+      if alt.artist then
+        artists[#artists+1] = alt.artist
+      end
+    end
+  end
+  return artists
 end

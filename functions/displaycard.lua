@@ -376,6 +376,8 @@ function PokeDisplayCard:init_from_existing(key, args, x, y, w, h)
     new_args.shader = 'voucher'
   end
 
+  new_args.layer = args.layer
+
   self:init(new_args, x, y, w, h)
 end
 
@@ -549,7 +551,7 @@ end)
 -- Controller support
 local is_node_focusable_ref = G.CONTROLLER.is_node_focusable
 function G.CONTROLLER:is_node_focusable(node)
-  if not self.screen_keyboard and node:is(PokeDisplayCard) then
+  if not self.screen_keyboard and node:is(PokeDisplayCard) and node.area ~= G.title_top then
     return true
   end
   return is_node_focusable_ref(self, node)

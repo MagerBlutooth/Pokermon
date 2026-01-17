@@ -109,6 +109,16 @@ return {
                     "{C:attention,T:tag_vremade_double}#1#",
                 } 
             },
+            b_poke_diceydeck = {
+                name = "Debris Deck",
+                text = {
+                    "{C:hazard}+#1#{} hazard layer and limit, {C:attention}+#1#{} hand size",
+                    "At end of each round:",
+                    "Earn {C:money}$#4#{} for each {C:attention}Hazard{}",
+                    "card in your {C:attention}full deck",
+                    "Earn no {C:attention}Interest"
+                } 
+            },
         },
         Blind = {
             bl_poke_cgoose = {
@@ -1580,6 +1590,7 @@ return {
                 name = 'Grimer',      
                 text = {
                     "{C:mult}+#1#{} Mult if deck size > {C:attention}#3#{}",
+                    "{br:4}ERROR - CONTACT STEAK",
                     "Add a random playing card",
                     "to deck at end of round",
                     "{C:inactive,s:0.8}(Evolves after {C:attention,s:0.8}#2#{C:inactive,s:0.8} rounds)",
@@ -2974,7 +2985,7 @@ return {
             j_poke_skarmory = {
                 name = 'Skarmory',
                 text = {
-                    "{C:hazard}+#1#{} hazard layer, {C:hazard}+#4#{} hazard layer limit",
+                    "{C:hazard}+#1#{} hazard layer and limit",
                     "{X:mult,C:white}X#2#{} Mult for each",
                     "{C:attention}Hazard{} or {C:attention}Steel{} card",
                     "{C:attention}held{} in hand",
@@ -5230,6 +5241,15 @@ return {
                     "{C:inactive}(Currently {C:attention}#2#{C:inactive}/#1#){}"
                 }
             },
+            j_poke_oologist = {
+                name = "Oologist",
+                text = {
+                    "Rerolls have a {C:green}#1# in #2#{}",
+                    "chance to add a {C:dark_edition}Negative",
+                    "{C:attention}Mystery Egg{} to shop",
+                    "Once per shop {C:inactive}#3#"
+                }
+            },
             j_poke_mystery_egg = {
                 name = "Mystery Egg",
                 text = {
@@ -5432,6 +5452,16 @@ return {
                     "Gain a {C:attention,T:tag_vremade_double}#1#",
                     "after defeating every",
                     "{C:attention}Boss Blind{} instead"
+                } 
+            },
+            sleeve_poke_diceysleeve = {
+                name = "Debris Sleeve",
+                text = {
+                    "{C:hazard}+#1#{} hazard layer and limit, {C:attention}+#1#{} hand size",
+                    "At end of each round:",
+                    "Earn {C:money}$#4#{} for each {C:attention}Hazard{}",
+                    "card in your {C:attention}full deck",
+                    "Earn no {C:attention}Interest"
                 } 
             },
         },
@@ -5865,6 +5895,16 @@ return {
                   "{C:attention}Hazard{} cards to hand",
                   "equal to your {C:attention}Hazard Layer",
                   "{C:inactive}(Current Hazard Layer {C:attention}#1#{C:inactive}/#2#){}"
+              }
+            },
+            hazard_level_extra = {
+              name = "Hazard Layer",
+              text = {
+                  "When {C:attention}first{} hand is drawn, add",
+                  "{C:attention}Hazard{} cards to hand",
+                  "equal to your {C:attention}Hazard Layer",
+                  "{C:inactive}(Current Hazard Layer {C:attention}#1#{C:inactive}/#2#){}",
+                  "{C:inactive}(Extra hazard layers raise the limit){}"
               }
             },
             merge = {
@@ -6600,6 +6640,7 @@ return {
             poke_settings_pokemon_spritesheet = "Default Sprite Sheet (Resets Individual)",
             poke_settings_pokemon_sprites_right_click_to_change = "Right Click to Change",
             poke_settings_pokemon_spritesheet_classic = "Classic",
+            poke_settings_pokemon_spritesheet_basicseries = "Basic Series",
             poke_settings_pokemon_spritesheet_seriesa = "Series A",
             poke_settings_pokemon_spritesheet_seriesb = "Series B",
             
@@ -6657,6 +6698,8 @@ return {
             poke_reroll_singular = "Reroll",
             poke_suit = "suit",
             poke_saved_by = "Saved by",
+            poke_and = "and", -- for displaying lists
+            poke_hazards_in_deck = "Hazards in Deck",
 
             --Some infoqueue/variable stuff
             farfetchd_infoqueue = "Farfetch\'d",

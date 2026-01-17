@@ -534,7 +534,9 @@ local victreebel={
          context.other_card:get_id() == 6 or 
          context.other_card:get_id() == 8 or 
          context.other_card:get_id() == 10 then
+          if not context.blueprint then
            card.ability.extra.round_retriggers = card.ability.extra.round_retriggers + 1
+          end
           return {
             message = localize('k_again_ex'),
             repetitions = card.ability.extra.retriggers,
@@ -1261,7 +1263,7 @@ local grimer={
 local muk={
   name = "muk", 
   pos = {x = 10, y = 6}, 
-  config = {extra = {mult_mod = 3}},
+  config = {extra = {mult_mod = 2}},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
     return {vars = {center.ability.extra.mult_mod, G.GAME.starting_deck_size, 
