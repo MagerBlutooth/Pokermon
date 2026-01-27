@@ -472,7 +472,7 @@ local kingler={
 local voltorb={
   name = "voltorb", 
   pos = {x = 8, y = 7}, 
-  config = {extra = {Xmult = 2, rounds = 4, volatile = 'right'}},
+  config = {extra = {Xmult = 1.75, rounds = 4, volatile = 'right'}},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
     if pokermon_config.detailed_tooltips then
@@ -514,7 +514,7 @@ local voltorb={
 local electrode={
   name = "electrode", 
   pos = {x = 9, y = 7}, 
-  config = {extra = {Xmult = 2.5, money = 3, volatile = 'right'}},
+  config = {extra = {Xmult = 2.25, money = 3, volatile = 'right'}},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
     if pokermon_config.detailed_tooltips then
@@ -847,7 +847,7 @@ local koffing={
   atlas = "Pokedex1",
   gen = 1,
   blueprint_compat = true,
-  eternal_compat = true,
+  eternal_compat = false,
   calculate = function(self, card, context)
     if context.cardarea == G.jokers and context.scoring_hand then
       if context.joker_main and volatile_active(self, card, card.ability.extra.volatile) then
@@ -887,7 +887,7 @@ local weezing={
   atlas = "Pokedex1",
   gen = 1,
   blueprint_compat = true,
-  eternal_compat = true,
+  eternal_compat = false,
   calculate = function(self, card, context)
     if context.cardarea == G.jokers and context.scoring_hand then
       if context.joker_main and volatile_active(self, card, card.ability.extra.volatile) then
