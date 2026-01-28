@@ -1136,9 +1136,10 @@ return {
             j_poke_zubat = {
                 name = "Zubat",
                 text = {
-                    "If played hand is exactly {C:attention}1{}",
-                    "{C:attention}Enhanced{} card, gain {C:mult}+#2#{} Mult",
-                    "and remove card {C:attention}Enhancement",
+                    "Gains {C:mult}+#2#{} Mult if played hand",
+                    "contains a scoring {C:attention}Enhanced{} card,",
+                    "removes card {C:attention}Enhancement{} from",
+                    "first scoring {C:attention}Enhanced{} card",
                     "{C:inactive}(Evolves at {C:mult}+#1#{C:inactive} / +#3# Mult)",
                 }
             },
@@ -2345,7 +2346,7 @@ return {
             j_poke_hoothoot = {
                 name = 'Hoothoot',
                 text = {
-                    "{C:purple}+#1# Foresight ",
+                    "{C:purple}+#1# Foresight",
                     "Each {C:attention}Foreseen{} card",
                     "gives their total Chips",
                     "{C:inactive,s:0.8}(Evolves after {C:attention,s:0.8}#2#{C:inactive,s:0.8} rounds)",
@@ -5549,6 +5550,12 @@ return {
                     "Earn no {C:attention}Interest"
                 } 
             },
+            sleeve_poke_diceysleeve_alt = {
+                name = "Debris Sleeve",
+                text = {
+                    "All {C:attention}Hazards{} give {C:attention}+1{} hand size",
+                } 
+            },
         },
         Spectral = {
             c_poke_ultraball = {
@@ -6984,7 +6991,7 @@ return {
            ch_c_poke_add_joker_slots = {"{C:attention}+1{} Joker Slot when Boss Blind defeated {C:inactive}(up to 5)"},
            ch_c_poke_nuzlocke = {"First shop of each Ante contains a {C:attention}Buffoon Pack"},
            ch_c_apply_randomizer = {"Pokemon Jokers evolve into random Pokemon Jokers"},
-           ch_c_no_energy = {"Energy no longer appears in the {C:attention}shop"},
+           ch_c_no_energy = {"Energy cards no longer appear in the {C:attention}shop"},
         },
     }
 }
