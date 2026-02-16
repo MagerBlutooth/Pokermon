@@ -22,20 +22,19 @@ local qwilfish = {
   blueprint_compat = true,
   perishable_compat = false,
   calculate = function(self, card, context)
-    if context.cardarea == G.jokers and context.scoring_hand then
-      if context.joker_main then
-        return {
-          message = localize{type = 'variable', key = 'a_chips', vars = {card.ability.extra.chips}}, 
-          colour = G.C.CHIPS,
-          chip_mod = card.ability.extra.chips
-        }
-      end
+    if context.joker_main then
+      return {
+        chips = card.ability.extra.chips
+      }
     end
     if context.remove_playing_cards and not context.blueprint then
       for _, removed_card in ipairs(context.removed) do
         if removed_card.config.center ~= G.P_CENTERS.c_base then
-          card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_mod
-          card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("k_upgrade_ex"), colour = G.C.CHIPS})
+          SMODS.scale_card(card, {
+            ref_value = 'chips',
+            scalar_value = 'chip_mod',
+            message_colour = G.C.CHIPS
+          })
         end
       end
     end
@@ -89,57 +88,82 @@ local scizor={
       juice_card_until(card, eval, true)
     end
     if context.setting_blind and not card.getting_sliced and not context.blueprint then
+      card.ability.extra.selected = true
       local my_pos = nil
       for i = 1, #G.jokers.cards do
-          if G.jokers.cards[i] == card then my_pos = i; break end
+        if G.jokers.cards[i] == card then my_pos = i; break end
       end
       if my_pos and G.jokers.cards[my_pos+1] and not card.getting_sliced and not G.jokers.cards[my_pos+1].ability.eternal and not G.jokers.cards[my_pos+1].getting_sliced then 
-          local sliced_card = G.jokers.cards[my_pos+1]
-          sliced_card.getting_sliced = true
-          if (sliced_card.config.center.rarity ~= 1 and sliced_card.config.center.rarity ~=2) then
-            if card.edition then
-              if card.edition.chips then
-                card.ability.extra.scizor_chips = card.ability.extra.scizor_chips + card.edition.chips
-              end
-              if card.edition.mult then
-                card.ability.extra.mult = card.ability.extra.mult + card.edition.mult
-              end
-              if card.edition.x_mult then
-                card.ability.extra.scizor_Xmult = card.ability.extra.scizor_Xmult * card.edition.x_mult
-              end
+        local sliced_card = G.jokers.cards[my_pos + 1]
+        sliced_card.getting_sliced = true
+        if (sliced_card.config.center.rarity ~= 1 and sliced_card.config.center.rarity ~= 2) then
+          if card.edition then
+            if card.edition.chips then
+              SMODS.scale_card(card, {
+                ref_value = 'scizor_chips',
+                scalar_table = card.edition,
+                scalar_value = 'chips',
+                no_message = true,
+              })
             end
-            local edition = nil
-            if sliced_card.edition and (sliced_card.edition.foil or sliced_card.edition.holo or sliced_card.edition.polychrome) then
-              edition = sliced_card.edition
-            else
-              edition = poll_edition('wheel_of_fortune', nil, true, true)
+            if card.edition.mult then
+              SMODS.scale_card(card, {
+                ref_value = 'mult',
+                scalar_table = card.edition,
+                scalar_value = 'mult',
+                no_message = true,
+              })
             end
-            card:set_edition(edition, true)
+            if card.edition.x_mult then
+              SMODS.scale_card(card, {
+                ref_value = 'scizor_Xmult',
+                scalar_table = card.edition,
+                scalar_value = 'x_mult',
+                operation = 'X',
+                no_message = true,
+              })
+            end
           end
-          
-          card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
-          
-          G.GAME.joker_buffer = G.GAME.joker_buffer - 1
-          G.E_MANAGER:add_event(Event({func = function()
-              G.GAME.joker_buffer = 0
-              card:juice_up(0.8, 0.8)
-              sliced_card:start_dissolve({HEX("57ecab")}, nil, 1.6)
-              play_sound('slice1', 0.96+math.random()*0.08)
-          return true end }))
-          card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("k_upgrade_ex"), colour = G.C.RED, no_juice = true})
-      end
-      card.ability.extra.selected = true
-    end
-    if context.cardarea == G.jokers and context.scoring_hand then
-      if context.joker_main then
+          local edition = nil
+          if sliced_card.edition and (sliced_card.edition.foil or sliced_card.edition.holo or sliced_card.edition.polychrome) then
+            edition = sliced_card.edition
+          else
+            edition = poll_edition('wheel_of_fortune', nil, true, true)
+          end
+          card:set_edition(edition, true)
+        end
+
+        G.GAME.joker_buffer = G.GAME.joker_buffer - 1
+        G.E_MANAGER:add_event(Event({
+          func = function()
+            G.GAME.joker_buffer = 0
+            SMODS.scale_card(card, {
+              ref_value = 'mult',
+              scalar_value = 'mult_mod',
+              no_message = true,
+            })
+            card:juice_up(0.8, 0.8)
+            sliced_card:start_dissolve({ HEX("57ecab") }, nil, 1.6)
+            play_sound('slice1', 0.96 + math.random() * 0.08)
+            return true
+          end
+        }))
+
         return {
-          message = localize("poke_x_scissor_ex"),
-          colour = G.ARGS.LOC_COLOURS.metal,
-          mult_mod = card.ability.extra.mult,
-          chip_mod = card.ability.extra.scizor_chips,
-          Xmult_mod = card.ability.extra.scizor_Xmult
+          message = localize("k_upgrade_ex"),
+          colour = G.C.RED,
+          no_juice = true
         }
       end
+    end
+    if context.joker_main and (card.ability.extra.mult > 0 or card.ability.extra.scizor_chips > 0 or card.ability.extra.scizor_Xmult > 1) then
+      return {
+        message = localize("poke_x_scissor_ex"),
+        colour = G.ARGS.LOC_COLOURS.metal,
+        mult_mod = card.ability.extra.mult,
+        chip_mod = card.ability.extra.scizor_chips,
+        Xmult_mod = card.ability.extra.scizor_Xmult
+      }
     end
   end,
   megas = { "mega_scizor" },
@@ -375,18 +399,16 @@ local teddiursa={
   eternal_compat = true,
   calculate = function(self, card, context)
     if context.skipping_booster and not context.blueprint then
-      card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
-      card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("k_upgrade_ex"), colour = G.C.MULT})
+      SMODS.scale_card(card, {
+        ref_value = 'mult',
+        scalar_value = 'mult_mod',
+        message_colour = G.C.MULT
+      })
     end
-    if context.cardarea == G.jokers and context.scoring_hand then
-      if context.joker_main and card.ability.extra.mult > 0 then
-        return {
-          message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.mult}}, 
-          colour = G.C.MULT,
-          mult_mod = card.ability.extra.mult, 
-          card = card
-        }
-      end
+    if context.joker_main then
+      return {
+        mult = card.ability.extra.mult,
+      }
     end
     return scaling_evo(self, card, context, "j_poke_ursaring", card.ability.extra.mult, self.config.evo_rqmt)
   end,
@@ -416,24 +438,24 @@ local ursaring={
   calculate = function(self, card, context)
     if context.skipping_booster then
       if not context.blueprint then
-        card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
+        SMODS.scale_card(card, {
+          ref_value = 'mult',
+          scalar_value = 'mult_mod',
+          no_message = true,
+        })
       end
-      card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("k_upgrade_ex"), colour = G.C.MULT})
+
+      SMODS.calculate_effect({ message = localize('k_upgrade_ex'), colour = G.C.MULT },
+        context.blueprint_card or card)
+
       if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
-        local _card = create_card('Item', G.consumeables, nil, nil, nil, nil, nil)
-        _card:add_to_deck()
-        G.consumeables:emplace(_card)
+        SMODS.add_card({ set = 'Item', key_append = 'ursa' })
       end
     end
-    if context.cardarea == G.jokers and context.scoring_hand then
-      if context.joker_main and card.ability.extra.mult > 0 then
-        return {
-          message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.mult}}, 
-          colour = G.C.MULT,
-          mult_mod = card.ability.extra.mult, 
-          card = card
-        }
-      end
+    if context.joker_main then
+      return {
+        mult = card.ability.extra.mult,
+      }
     end
     return item_evo(self, card, context, "j_poke_ursaluna")
   end,
@@ -458,34 +480,36 @@ local slugma={
   eternal_compat = true,
   calculate = function(self, card, context)
     if context.first_hand_drawn and card.ability.extra.hands == 1 then
-      local eval = function(card) return card.ability.extra.hands <= 1 and not G.RESET_JIGGLES end
+      local eval = function(_card) return _card.ability.extra.hands <= 1 and not G.RESET_JIGGLES end
       juice_card_until(card, eval, true)
     end
-    if context.cardarea == G.jokers and context.scoring_hand then
-      if context.before and not context.blueprint then
-        card.ability.extra.hands = card.ability.extra.hands - 1
-        if card.ability.extra.hands == 1 then
-          local eval = function(card) return card.ability.extra.hands <= 1 and not G.RESET_JIGGLES end
-          juice_card_until(card, eval, true)
-        end
-        if card.ability.extra.hands == 0 then
-          if G.hand and G.hand.cards and G.hand.cards[1] then
-            card.ability.extra.remove = true
-          end
-          card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_mod
-          card.ability.extra.hands = card.ability.extra.hand_reset
-        end
+    if context.before and not context.blueprint then
+      card.ability.extra.hands = card.ability.extra.hands - 1
+      if card.ability.extra.hands == 1 then
+        local eval = function(_card) return _card.ability.extra.hands <= 1 and not G.RESET_JIGGLES end
+        juice_card_until(card, eval, true)
       end
-      if context.after and card.ability.extra.remove and not context.blueprint then
-        card.ability.extra.remove = false
-        poke_remove_card(G.hand.cards[1], card)
+      if card.ability.extra.hands == 0 then
+        card.ability.extra.hands = card.ability.extra.hand_reset
+
+        if G.hand.cards[1] then
+          card.ability.extra.remove = true
+        end
+
+        SMODS.scale_card(card, {
+          ref_value = 'chips',
+          scalar_value = 'chip_mod',
+          no_message = true,
+        })
       end
     end
+    if context.after and card.ability.extra.remove and not context.blueprint then
+      card.ability.extra.remove = false
+      poke_remove_card(G.hand.cards[1], card)
+    end
     if context.joker_main then
-      return{
-        message = localize{type = 'variable', key = 'a_chips', vars = {card.ability.extra.chips}}, 
-        colour = G.C.CHIPS,
-        chip_mod = card.ability.extra.chips
+      return {
+        chips = card.ability.extra.chips
       }
     end
     return scaling_evo(self, card, context, "j_poke_magcargo", card.ability.extra.chips, self.config.evo_rqmt)
@@ -511,34 +535,36 @@ local magcargo={
   eternal_compat = true,
   calculate = function(self, card, context)
     if context.first_hand_drawn and card.ability.extra.hands == 1 then
-      local eval = function(card) return card.ability.extra.hands <= 1 and not G.RESET_JIGGLES end
+      local eval = function(_card) return _card.ability.extra.hands <= 1 and not G.RESET_JIGGLES end
       juice_card_until(card, eval, true)
     end
-    if context.cardarea == G.jokers and context.scoring_hand then
-      if context.before and not context.blueprint then
-        card.ability.extra.hands = card.ability.extra.hands - 1
-        if card.ability.extra.hands == 1 then
-          local eval = function(card) return card.ability.extra.hands <= 1 and not G.RESET_JIGGLES end
-          juice_card_until(card, eval, true)
-        end
-        if card.ability.extra.hands == 0 then
-          if G.hand and G.hand.cards and G.hand.cards[1] then
-            card.ability.extra.remove = true
-          end
-          card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_mod
-          card.ability.extra.hands = card.ability.extra.hand_reset
-        end
+    if context.before and not context.blueprint then
+      card.ability.extra.hands = card.ability.extra.hands - 1
+      if card.ability.extra.hands == 1 then
+        local eval = function(_card) return _card.ability.extra.hands <= 1 and not G.RESET_JIGGLES end
+        juice_card_until(card, eval, true)
       end
-      if context.after and card.ability.extra.remove and not context.blueprint then
-        card.ability.extra.remove = false
-        poke_remove_card(G.hand.cards[1], card)
+      if card.ability.extra.hands == 0 then
+        card.ability.extra.hands = card.ability.extra.hand_reset
+
+        if G.hand.cards[1] then
+          card.ability.extra.remove = true
+        end
+
+        SMODS.scale_card(card, {
+          ref_value = 'chips',
+          scalar_value = 'chip_mod',
+          no_message = true,
+        })
       end
     end
+    if context.after and card.ability.extra.remove and not context.blueprint then
+      card.ability.extra.remove = false
+      poke_remove_card(G.hand.cards[1], card)
+    end
     if context.joker_main then
-      return{
-        message = localize{type = 'variable', key = 'a_chips', vars = {card.ability.extra.chips}}, 
-        colour = G.C.CHIPS,
-        chip_mod = card.ability.extra.chips
+      return {
+        chips = card.ability.extra.chips
       }
     end
   end,
@@ -640,13 +666,13 @@ local piloswine={
 local corsola={
   name = "corsola", 
   pos = {x = 0, y = 7},
-  config = {extra = {mult_mod = 3, corsola_tally = 0}},
+  config = {extra = {mult = 0, mult_mod = 1}},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
     if pokermon_config.detailed_tooltips then
       info_queue[#info_queue+1] = {set = 'Other', key = 'basic'}
     end
-    return {vars = {center.ability.extra.mult_mod, center.ability.extra.mult_mod*center.ability.extra.corsola_tally}}
+    return {vars = {center.ability.extra.mult_mod, center.ability.extra.mult}}
   end,
   rarity = 3, 
   cost = 7, 
@@ -655,47 +681,41 @@ local corsola={
   atlas = "Pokedex2",
   gen = 2,
   blueprint_compat = true,
-  update = function(self, card, dt)
-    if G.STAGE == G.STAGES.RUN then
-      card.ability.extra.corsola_tally = 0
-      for k, v in pairs(G.playing_cards) do
-        if v.config.center ~= G.P_CENTERS.c_base then card.ability.extra.corsola_tally = card.ability.extra.corsola_tally+1 end
+  calculate = function(self, card, context)
+    if context.setting_blind then
+      if not context.blueprint then
+        SMODS.scale_card(card, {
+          ref_value = 'mult',
+          scalar_value = 'mult_mod',
+          operation = function(ref_table, ref_value, initial, change)
+            ref_table[ref_value] = initial + change * #find_pokemon_type("Water")
+          end,
+          message_colour = G.C.MULT
+        })
+      end
+      if (#G.jokers.cards + G.GAME.joker_buffer) < G.jokers.config.card_limit then
+        G.GAME.joker_buffer = G.GAME.joker_buffer + 1
+        G.E_MANAGER:add_event(Event({
+          trigger = 'after',
+          delay = 0.2,
+          func = function()
+            G.GAME.joker_buffer = 0
+            play_sound('timpani')
+            SMODS.add_card({ set = 'Joker', key = get_random_poke_key('corsola', "Basic", nil, nil, "Water") })
+            return true
+          end
+        }))
+
+        return {
+          message = localize('k_plus_joker'),
+          colour = G.C.BLUE,
+        }
       end
     end
-  end,
-  calculate = function(self, card, context)
-    if context.cardarea == G.jokers and context.scoring_hand then
-      if context.joker_main then
-        local enhanced = 0
-        for k, v in pairs(context.scoring_hand) do
-          if v.config.center ~= G.P_CENTERS.c_base then
-           enhanced = enhanced + 1
-          end
-        end
-        
-        if enhanced == 5 then
-          if (#G.jokers.cards + G.GAME.joker_buffer) < G.jokers.config.card_limit then
-            G.GAME.joker_buffer = G.GAME.joker_buffer + 1
-            G.E_MANAGER:add_event(Event({
-              trigger = 'after',
-              delay = 0.2,
-              func = function() 
-                G.GAME.joker_buffer = 0
-                play_sound('timpani')
-                local _card = create_random_poke_joker('corsola', "Basic", nil, nil, "Water")
-                _card:add_to_deck()
-                G.jokers:emplace(_card)
-            return true end }))
-          end
-        end
-        if card.ability.extra.corsola_tally > 0 then
-          return {
-            message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.mult_mod * card.ability.extra.corsola_tally}}, 
-            colour = G.C.MULT,
-            mult_mod = card.ability.extra.mult_mod * card.ability.extra.corsola_tally 
-          }
-        end
-      end
+    if context.joker_main then
+      return {
+        mult = card.ability.extra.mult
+      }
     end
   end
 }
@@ -861,31 +881,18 @@ local mantine={
   blueprint_compat = true,
   eternal_compat = true,
   calculate = function(self, card, context)
-    if context.cardarea == G.jokers and context.scoring_hand then
-      if context.joker_main then
-        return {
-          message = localize{type = 'variable', key = 'a_chips', vars = {card.ability.extra.chips}}, 
-          colour = G.C.CHIPS,
-          chip_mod = card.ability.extra.chips
-        }
-      end
+    if context.joker_main then
+      return {
+        chips = card.ability.extra.chips
+      }
     end
     if context.individual and not context.end_of_round and (context.cardarea == G.play or context.cardarea == G.hand) then
-      if SMODS.has_enhancement(context.other_card, 'm_gold') then 
-        card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_mod
-        if context.cardarea == G.play then
-          return {
-            card = card,
-            colour = G.C.CHIPS,
-            message = localize('k_upgrade_ex'),
-          }
-        else
-          return {
-              message = localize("k_upgrade_ex"),
-              colour = G.C.CHIPS,
-              card = card
-          }
-        end
+      if SMODS.has_enhancement(context.other_card, 'm_gold') then
+        SMODS.scale_card(card, {
+          ref_value = 'chips',
+          scalar_value = 'chip_mod',
+          message_colour = G.C.CHIPS,
+        })
       end
     end
   end
@@ -1100,7 +1107,7 @@ local mega_houndoom={
   name = "mega_houndoom",
   pos = {x = 8, y = 2},
   soul_pos = {x = 9, y = 2},
-  config = {extra = {Xmult = 1, Xmult_mod = 2, oXmult = 1}},
+  config = {extra = {Xmult = 1, Xmult_mod = 2, Xmult1 = 1}},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
     return {vars = {center.ability.extra.Xmult, center.ability.extra.Xmult_mod}}
@@ -1115,21 +1122,17 @@ local mega_houndoom={
   blueprint_compat = true,
   eternal_compat = true,
   calculate = function(self, card, context)
-    if context.cardarea == G.jokers and context.scoring_hand then
-      if context.joker_main then
-        return {
-          message = localize{type = 'variable', key = 'a_xmult', vars = {card.ability.extra.Xmult}}, 
-          colour = G.C.XMULT,
-          Xmult_mod = card.ability.extra.Xmult
-        }
-      end
+    if context.joker_main then
+      return {
+        Xmult = card.ability.extra.Xmult
+      }
     end
     if context.pre_discard and not context.hook and not context.blueprint then
-      card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.Xmult_mod
-        return {
-          message = localize('k_upgrade_ex'),
-          colour = G.C.XMULT
-        }
+      SMODS.scale_card(card, {
+        ref_value = 'Xmult',
+        scalar_value = 'Xmult_mod',
+        message_colour = G.C.XMULT,
+      })
     end
     if context.post_discard and not context.recursive and not context.blueprint then
       G.E_MANAGER:add_event(Event({func = function()
@@ -1161,11 +1164,8 @@ local mega_houndoom={
         end
       return true end }))
     end
-    if context.first_hand_drawn then
-      card.ability.extra.oXmult = card.ability.extra.Xmult
-    end
     if not context.repetition and not context.individual and context.end_of_round and not context.blueprint then
-      card.ability.extra.Xmult = card.ability.extra.oXmult
+      card.ability.extra.Xmult = card.ability.extra.Xmult1
       return {
         message = localize('k_reset'),
         colour = G.C.RED
@@ -1191,29 +1191,31 @@ local kingdra={
   perishable_compat = false,
   blueprint_compat = true,
   calculate = function(self, card, context)
-    if context.individual and context.cardarea == G.play and not context.other_card.debuff and not context.blueprint then
-      if context.other_card:get_id() == 6 then
-        local has_king = false
-        for i = 1, #G.hand.cards do 
-          if G.hand.cards[i]:get_id() == 13 then has_king = true; break end
-        end
-        if has_king then
-          card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.Xmult_mod
-        else
-          card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
-        end
-        card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("k_upgrade_ex")})
+    if context.individual and context.cardarea == G.play and not context.other_card.debuff and not context.blueprint
+        and context.other_card:get_id() == 6 then
+      local has_king = false
+      for i = 1, #G.hand.cards do
+        if G.hand.cards[i]:get_id() == 13 then has_king = true; break end
+      end
+      if has_king then
+        SMODS.scale_card(card, {
+          ref_value = 'Xmult',
+          scalar_value = 'Xmult_mod',
+        })
+      else
+        SMODS.scale_card(card, {
+          ref_value = 'mult',
+          scalar_value = 'mult_mod',
+        })
       end
     end
-    if context.cardarea == G.jokers and context.scoring_hand then
-      if context.joker_main then
-        return {
-          message = localize("poke_twister_ex"),
-          colour = G.C.XMULT,
-          mult_mod = card.ability.extra.mult,
-          Xmult_mod = card.ability.extra.Xmult
-        }
-      end
+    if context.joker_main and (card.ability.extra.mult > 0 or card.ability.extra.Xmult > 1) then
+      return {
+        message = localize("poke_twister_ex"),
+        colour = G.C.XMULT,
+        mult_mod = card.ability.extra.mult,
+        Xmult_mod = card.ability.extra.Xmult
+      }
     end
   end,
 }
@@ -1236,30 +1238,25 @@ local phanpy={
   blueprint_compat = true,
   eternal_compat = true,
   calculate = function(self, card, context)
-    if context.cardarea == G.jokers and context.scoring_hand then
-      if context.before and not context.blueprint then
-        if #context.scoring_hand >= 5 then
-          card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.Xmult_mod
-          return {
-            message = localize('k_upgrade_ex'),
-            colour = G.C.RED,
-            card = card
-          }
-        else
-          card.ability.extra.Xmult = card.ability.extra.Xmult2
-          return {
-            message = localize('k_reset'),
-            colour = G.C.RED
-          }
-        end
-      end
-      if context.joker_main and card.ability.extra.Xmult > 1 then
+    if context.before and not context.blueprint then
+      if #context.scoring_hand >= 5 then
+        SMODS.scale_card(card, {
+          ref_value = 'Xmult',
+          scalar_value = 'Xmult_mod',
+          message_colour = G.C.RED,
+        })
+      else
+        card.ability.extra.Xmult = card.ability.extra.Xmult2
         return {
-          message = localize{type = 'variable', key = 'a_xmult', vars = {card.ability.extra.Xmult}}, 
-          colour = G.C.XMULT,
-          Xmult_mod = card.ability.extra.Xmult
+          message = localize('k_reset'),
+          colour = G.C.RED
         }
       end
+    end
+    if context.joker_main then
+      return {
+        Xmult = card.ability.extra.Xmult
+      }
     end
     return level_evo(self, card, context, "j_poke_donphan")
   end
@@ -1283,30 +1280,25 @@ local donphan={
   blueprint_compat = true,
   eternal_compat = true,
   calculate = function(self, card, context)
-    if context.cardarea == G.jokers and context.scoring_hand then
-      if context.before and not context.blueprint then
-        if #context.scoring_hand >= 5 then
-          card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.Xmult_mod
-          return {
-            message = localize('k_upgrade_ex'),
-            colour = G.C.RED,
-            card = card
-          }
-        else
-          card.ability.extra.Xmult = card.ability.extra.Xmult2
-          return {
-            message = localize('k_reset'),
-            colour = G.C.RED
-          }
-        end
-      end
-      if context.joker_main and card.ability.extra.Xmult > 1 then
+    if context.before and not context.blueprint then
+      if #context.scoring_hand >= 5 then
+        SMODS.scale_card(card, {
+          ref_value = 'Xmult',
+          scalar_value = 'Xmult_mod',
+          message_colour = G.C.RED,
+        })
+      else
+        card.ability.extra.Xmult = card.ability.extra.Xmult2
         return {
-          message = localize{type = 'variable', key = 'a_xmult', vars = {card.ability.extra.Xmult}}, 
-          colour = G.C.XMULT,
-          Xmult_mod = card.ability.extra.Xmult
+          message = localize('k_reset'),
+          colour = G.C.RED
         }
       end
+    end
+    if context.joker_main then
+      return {
+        Xmult = card.ability.extra.Xmult
+      }
     end
   end
 }
@@ -1626,18 +1618,16 @@ local hitmontop={
   blueprint_compat = true,
   perishable_compat = false,
   calculate = function(self, card, context)
-    if context.cardarea == G.jokers and context.scoring_hand then
-      if context.joker_main then
-        return {
-          message = localize{type = 'variable', key = 'a_xmult', vars = {card.ability.extra.Xmult}}, 
-          colour = G.C.XMULT,
-          Xmult_mod = card.ability.extra.Xmult
-        }
-      end
+    if context.joker_main then
+      return {
+        Xmult = card.ability.extra.Xmult
+      }
     end
     if context.setting_blind and #G.playing_cards == G.GAME.starting_deck_size and not context.blueprint then
-      card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.Xmult_mod
-      card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("k_upgrade_ex")})
+      SMODS.scale_card(card, {
+        ref_value = 'Xmult',
+        scalar_value = 'Xmult_mod',
+      })
     end
   end
 }

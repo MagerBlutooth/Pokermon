@@ -24,25 +24,18 @@ local mew ={
     if context.ending_shop then
       if pseudorandom('mew') < card.ability.extra.percent/100 then
         --create random joker
-        local _card = create_card('Joker', G.consumeables, nil, nil, nil, nil, nil)
-        local edition = {negative = true}
-        _card:set_edition(edition, true)
-        _card:add_to_deck()
-        G.jokers:emplace(_card)
-        card_eval_status_text(_card, 'extra', nil, nil, nil, {message = localize('k_plus_joker'), colour = G.C.BLUE})
+        local joker = SMODS.add_card{set = 'Joker', edition = 'e_negative', key_append = 'mew'}
+        SMODS.calculate_effect({ message = localize('k_plus_joker'), colour = G.C.BLUE }, joker)
       else
         --create random consumable and apply negative
         local sets = {{set = "Tarot", message = localize('k_plus_tarot'), colour = G.C.PURPLE}, {set = "Spectral", message = localize('k_plus_spectral'), colour = G.C.SECONDARY_SET.Spectral}, 
                       {set = "Item", message = localize('poke_plus_pokeitem'), colour = G.ARGS.LOC_COLOURS.pink}}
         local creation = pseudorandom_element(sets, pseudoseed('mewcreate'))
         
-        local _card = create_card(creation.set, G.consumeables, nil, nil, nil, nil, nil)
-        local edition = {negative = true}
-        _card:set_edition(edition, true)
-        _card:add_to_deck()
-        G.consumeables:emplace(_card)
-        card_eval_status_text(_card, 'extra', nil, nil, nil, {message = creation.message, colour = creation.colour})
+        local consum = SMODS.add_card{set = creation.set, edition = 'e_negative', key_append = 'mew'}
+        SMODS.calculate_effect({ message = creation.message, colour = creation.colour }, consum)
       end
+      card:juice_up()
     end
   end,
 }
@@ -474,30 +467,26 @@ local sentret={
 		return {vars = {center.ability.extra.mult, center.ability.extra.mult_mod, G.GAME.last_hand_played and localize(G.GAME.last_hand_played, 'poker_hands') or localize("poke_none")}}
   end,
   calculate = function(self, card, context)
-    if context.cardarea == G.jokers and context.scoring_hand then
-      if context.before and not context.blueprint and card.ability.extra.last_hand ~= context.scoring_name then
+    if context.before and not context.blueprint then
+      if card.ability.extra.last_hand ~= context.scoring_name then
         card.ability.extra.last_hand = G.GAME.last_hand_played
-        card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
-        return {
-          message = localize('k_upgrade_ex'),
-          colour = G.C.MULT
-        }
-      elseif context.before and not context.blueprint and card.ability.extra.last_hand == context.scoring_name then
+
+        SMODS.scale_card(card, {
+          ref_value = 'mult',
+          scalar_value = 'mult_mod',
+          message_colour = G.C.MULT,
+        })
+      else
         card.ability.extra.mult = 0
         return {
           message = localize('k_reset'),
-          card = card
         }
       end
-      if context.joker_main then
-        if card.ability.extra.mult > 0 then
-          return {
-            message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.mult}}, 
-            colour = G.C.MULT,
-            mult_mod = card.ability.extra.mult
-          }
-        end
-      end
+    end
+    if context.joker_main then
+      return {
+        mult = card.ability.extra.mult
+      }
     end
     return scaling_evo(self, card, context, "j_poke_furret", card.ability.extra.mult, self.config.evo_rqmt)
   end,
@@ -523,24 +512,19 @@ local furret={
 		return {vars = {center.ability.extra.mult, center.ability.extra.mult_mod, G.GAME.last_hand_played and localize(G.GAME.last_hand_played, 'poker_hands') or localize("poke_none")}}
   end,
   calculate = function(self, card, context)
-    if context.cardarea == G.jokers and context.scoring_hand then
-      if context.before and not context.blueprint and card.ability.extra.last_hand ~= context.scoring_name then
-        card.ability.extra.last_hand = G.GAME.last_hand_played
-        card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
-        return {
-          message = localize('k_upgrade_ex'),
-          colour = G.C.MULT
-        }
-      end
-      if context.joker_main then
-        if card.ability.extra.mult > 0 then
-          return {
-            message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.mult}}, 
-            colour = G.C.MULT,
-            mult_mod = card.ability.extra.mult
-          }
-        end
-      end
+    if context.before and not context.blueprint and card.ability.extra.last_hand ~= context.scoring_name then
+      card.ability.extra.last_hand = G.GAME.last_hand_played
+
+      SMODS.scale_card(card, {
+        ref_value = 'mult',
+        scalar_value = 'mult_mod',
+        message_colour = G.C.MULT,
+      })
+    end
+    if context.joker_main then
+      return {
+        mult = card.ability.extra.mult
+      }
     end
   end,
   add_to_deck = function(self, card, from_debuff)
@@ -776,70 +760,70 @@ local crobat={
   gen = 2,
   blueprint_compat = true,
   perishable_compat = false,
-calculate = function(self, card, context)
+  calculate = function(self, card, context)
     if context.cardarea == G.jokers and context.before and not context.blueprint then
-      local m_count = 0 
-      local c_count = 0 
-      local x_count = 0 
+      local m_count = 0
+      local c_count = 0
+      local x_count = 0
       local d_count = 0
-      local enhanced = {}
       for k, v in ipairs(context.scoring_hand) do
-          if v.config.center ~= G.P_CENTERS.c_base and not v.debuff and not v.vampired then 
-              enhanced[#enhanced+1] = v
-              v.vampired = true
-              
-              if SMODS.has_enhancement(v, 'm_bonus') or SMODS.has_enhancement(v, 'm_stone') then
-                c_count = c_count + 1
-              end
-              if SMODS.has_enhancement(v, 'm_steel') or SMODS.has_enhancement(v, 'm_glass') or SMODS.has_enhancement(v, 'm_poke_flower') then
-                x_count = x_count + 1
-              end
-              if SMODS.has_enhancement(v, 'm_gold') then
-                d_count = d_count + 1
-              end
-              
-              if not SMODS.has_enhancement(v, 'm_bonus') and not SMODS.has_enhancement(v, 'm_stone') and not SMODS.has_enhancement(v, 'm_steel')
-              and not SMODS.has_enhancement(v, 'm_glass') and not SMODS.has_enhancement(v, 'm_poke_flower') and not SMODS.has_enhancement(v, 'm_gold') 
-              or (SMODS.has_enhancement(v, 'm_mult') or SMODS.has_enhancement(v, 'm_wild')) then
-                m_count = m_count + 1
-              end
-              
-              v:set_ability(G.P_CENTERS.c_base, nil, true)
-              G.E_MANAGER:add_event(Event({
-                  func = function()
-                      v:juice_up()
-                      v.vampired = nil
-                      return true
-                  end
-              })) 
+        if v.config.center ~= G.P_CENTERS.c_base and not v.debuff and not v.vampired then
+          v.vampired = true
+
+          local enh = v.config.center.key
+          if enh == 'm_bonus' or enh == 'm_stone' then
+            c_count = c_count + 1
+          elseif enh == 'm_steel' or enh == 'm_glass' or enh == 'm_poke_flower' then
+            x_count = x_count + 1
+          elseif enh == 'm_gold' then
+            d_count = d_count + 1
+          else
+            m_count = m_count + 1
           end
+
+          v:set_ability(G.P_CENTERS.c_base, nil, true)
+          G.E_MANAGER:add_event(Event({
+            func = function()
+              v:juice_up()
+              v.vampired = nil
+              return true
+            end
+          }))
+        end
       end
 
-      if #enhanced > 0 then 
-          if m_count > 0 then
-            card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod * m_count
-          end
-          if c_count > 0 then
-            card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_mod * c_count
-          end
-          if x_count > 0 then
-            card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.Xmult_mod * x_count
-          end
-          if d_count > 0 then
-            card.ability.extra.money = card.ability.extra.money + card.ability.extra.money_mod * d_count
-          end
+      local scale_crobat = function(base, mod, count)
+        SMODS.scale_card(card, {
+          ref_value = base,
+          scalar_value = mod,
+          operation = function(ref_table, ref_value, initial, change)
+            ref_table[ref_value] = initial + change * count
+          end,
+          no_message = true,
+        })
+      end
+
+      if m_count > 0 then
+        scale_crobat('mult', 'mult_mod', m_count)
+      end
+      if c_count > 0 then
+        scale_crobat('chips', 'chip_mod', c_count)
+      end
+      if x_count > 0 then
+        scale_crobat('Xmult', 'Xmult_mod', x_count)
+      end
+      if d_count > 0 then
+        scale_crobat('money', 'money_mod', d_count)
       end
     end
-    if context.cardarea == G.jokers and context.scoring_hand then
-      if context.joker_main then
-        return {
-          message = localize("poke_screech_ex"),
-          colour = G.C.BLACK,
-          mult_mod = card.ability.extra.mult,
-          chip_mod = card.ability.extra.chips,
-          Xmult_mod = card.ability.extra.Xmult
-        }
-      end
+    if context.joker_main then
+      return {
+        message = localize("poke_screech_ex"),
+        colour = G.C.BLACK,
+        mult_mod = card.ability.extra.mult,
+        chip_mod = card.ability.extra.chips,
+        Xmult_mod = card.ability.extra.Xmult
+      }
     end
   end,
   calc_dollar_bonus = function(self, card)
@@ -1265,22 +1249,24 @@ local mareep={
   blueprint_compat = true,
   eternal_compat = true,
   calculate = function(self, card, context)
-    if context.cardarea == G.jokers and context.scoring_hand then
-      if context.joker_main and card.ability.extra.Xmult > 0 and card.ability.extra.Xmult ~= 1 then
-        return {
-          message = localize{type = 'variable', key = 'a_xmult', vars = {card.ability.extra.Xmult}}, 
-          colour = G.C.XMULT,
-          Xmult_mod = card.ability.extra.Xmult
-        }
-      end
+    if context.joker_main and card.ability.extra.Xmult >= 0.01 then
+      return {
+        Xmult = card.ability.extra.Xmult
+      }
     end
     if context.playing_card_added and not context.blueprint then
-      card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.Xmult_mod
-      card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("k_upgrade_ex")})
+      SMODS.scale_card(card, {
+        ref_value = 'Xmult',
+        scalar_value = 'Xmult_mod',
+      })
     end
     if context.remove_playing_cards and not context.blueprint then
-      card.ability.extra.Xmult = card.ability.extra.Xmult - card.ability.extra.Xmult_minus
-      card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize{type='variable',key='a_xmult_minus',vars={card.ability.extra.Xmult_minus}}})
+      SMODS.scale_card(card, {
+        ref_value = 'Xmult',
+        scalar_value = 'Xmult_minus',
+        operation = '-',
+        message_key = 'a_xmult_minus'
+      })
     end
     return scaling_evo(self, card, context, "j_poke_flaaffy", card.ability.extra.Xmult, self.config.evo_rqmt)
   end,
@@ -1304,22 +1290,24 @@ local flaaffy={
   blueprint_compat = true,
   eternal_compat = true,
   calculate = function(self, card, context)
-    if context.cardarea == G.jokers and context.scoring_hand then
-      if context.joker_main and card.ability.extra.Xmult > 0 and card.ability.extra.Xmult ~= 1  then
-        return {
-          message = localize{type = 'variable', key = 'a_xmult', vars = {card.ability.extra.Xmult}}, 
-          colour = G.C.XMULT,
-          Xmult_mod = card.ability.extra.Xmult
-        }
-      end
+    if context.joker_main and card.ability.extra.Xmult >= 0.01 then
+      return {
+        Xmult = card.ability.extra.Xmult
+      }
     end
     if context.playing_card_added and not context.blueprint then
-      card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.Xmult_mod
-      card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("k_upgrade_ex")})
+      SMODS.scale_card(card, {
+        ref_value = 'Xmult',
+        scalar_value = 'Xmult_mod',
+      })
     end
     if context.remove_playing_cards and not context.blueprint then
-      card.ability.extra.Xmult = card.ability.extra.Xmult - card.ability.extra.Xmult_minus
-      card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize{type='variable',key='a_xmult_minus',vars={card.ability.extra.Xmult_minus}}})
+      SMODS.scale_card(card, {
+        ref_value = 'Xmult',
+        scalar_value = 'Xmult_minus',
+        operation = '-',
+        message_key = 'a_xmult_minus'
+      })
     end
     return scaling_evo(self, card, context, "j_poke_ampharos", card.ability.extra.Xmult, self.config.evo_rqmt)
   end,

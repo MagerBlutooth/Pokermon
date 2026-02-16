@@ -30,26 +30,24 @@ local ursaluna={
   calculate = function(self, card, context)
     if context.skipping_booster then
       if not context.blueprint then
-        card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_mod
+        SMODS.scale_card(card, {
+          ref_value = 'mult',
+          scalar_value = 'mult_mod',
+          no_message = true,
+        })
       end
-      card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("k_upgrade_ex"), colour = G.C.MULT})
+
+      SMODS.calculate_effect({ message = localize('k_upgrade_ex'), colour = G.C.MULT },
+        context.blueprint_card or card)
+
       if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
-        local _card = create_card('Item', G.consumeables, nil, nil, nil, nil, nil)
-        local edition = poll_edition('aura', nil, true, true)
-        _card:set_edition(edition, true)
-        _card:add_to_deck()
-        G.consumeables:emplace(_card)
+        SMODS.add_card({ set = 'Item', key_append = 'luna', edition = poll_edition('aura', nil, true, true) })
       end
     end
-    if context.cardarea == G.jokers and context.scoring_hand then
-      if context.joker_main and card.ability.extra.mult > 0 then
-        return {
-          message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.mult}}, 
-          colour = G.C.MULT,
-          mult_mod = card.ability.extra.mult, 
-          card = card
-        }
-      end
+    if context.joker_main then
+      return {
+        mult = card.ability.extra.mult,
+      }
     end
   end,
 }
@@ -304,32 +302,25 @@ local fidough={
   blueprint_compat = true,
   eternal_compat = true,
   calculate = function(self, card, context)
-    if context.cardarea == G.jokers and context.scoring_hand then
-      if context.before then
-        local contains = false
-        for i=1, #context.scoring_hand do
-          if context.scoring_hand[i]:get_id() == card.ability.extra.id then
-            contains = true
-            break
-          end
-        end
-        if contains then
-          card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_mod
-          card.ability.extra.id, card.ability.extra.rank = poke_next_highest_rank(card.ability.extra.id, card.ability.extra.rank)
-          return {
-            message = localize('k_upgrade_ex'),
-            colour = G.C.CHIPS,
-            card = card
-          }
-        end
+    if context.before then
+      local contains = false
+      for i = 1, #context.scoring_hand do
+        if context.scoring_hand[i]:get_id() == card.ability.extra.id then contains = true; break end
       end
-      if context.joker_main then
-        return {
-          message = localize{type = 'variable', key = 'a_chips', vars = {card.ability.extra.chips}}, 
-          colour = G.C.CHIPS,
-          chip_mod = card.ability.extra.chips
-        }
+      if contains then
+        card.ability.extra.id, card.ability.extra.rank = poke_next_highest_rank(card.ability.extra.id, card.ability.extra.rank)
+
+        SMODS.scale_card(card, {
+          ref_value = 'chips',
+          scalar_value = 'chip_mod',
+          message_colour = G.C.CHIPS
+        })
       end
+    end
+    if context.joker_main then
+      return {
+        chips = card.ability.extra.chips
+      }
     end
     return scaling_evo(self, card, context, "j_poke_dachsbun", #find_pokemon_type("Fire"), 1)
   end,
@@ -358,32 +349,28 @@ local dachsbun={
   blueprint_compat = true,
   eternal_compat = true,
   calculate = function(self, card, context)
-    if context.cardarea == G.jokers and context.scoring_hand then
-      if context.before then
-        local contains = false
-        for i=1, #context.scoring_hand do
-          if context.scoring_hand[i]:get_id() == card.ability.extra.id then
-            contains = true
-            break
-          end
-        end
-        if contains then
-          card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_mod + (#find_pokemon_type("Fire") * 2)
-          card.ability.extra.id, card.ability.extra.rank = poke_next_highest_rank(card.ability.extra.id, card.ability.extra.rank)
-          return {
-            message = localize('k_upgrade_ex'),
-            colour = G.C.CHIPS,
-            card = card
-          }
-        end
+    if context.before then
+      local contains = false
+      for i = 1, #context.scoring_hand do
+        if context.scoring_hand[i]:get_id() == card.ability.extra.id then contains = true; break end
       end
-      if context.joker_main then
-        return {
-          message = localize{type = 'variable', key = 'a_chips', vars = {card.ability.extra.chips}}, 
-          colour = G.C.CHIPS,
-          chip_mod = card.ability.extra.chips
-        }
+      if contains then
+        card.ability.extra.id, card.ability.extra.rank = poke_next_highest_rank(card.ability.extra.id, card.ability.extra.rank)
+
+        SMODS.scale_card(card, {
+          ref_value = 'chips',
+          scalar_value = 'chip_mod',
+          operation = function (ref_table, ref_value, initial, modifier)
+            ref_table[ref_value] = initial + modifier + #find_pokemon_type("Fire") * 2
+          end,
+          message_colour = G.C.CHIPS
+        })
       end
+    end
+    if context.joker_main then
+      return {
+        chips = card.ability.extra.chips
+      }
     end
   end,
   set_ability = function(self, card, initial, delay_sprites)

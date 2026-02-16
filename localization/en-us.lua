@@ -2943,11 +2943,9 @@ return {
             j_poke_corsola = {
               name = 'Corsola',
               text = {
-                "{C:mult}+#1#{} Mult for each {C:attention}Enhanced{}",
-                "card in your {C:attention}full deck",
-                "{br:2}ERROR - CONTACT STEAK",
-                "Create a {C:attention}Basic{} {X:water,C:white}Water{} Joker if poker",
-                "hand contains {C:attention}5 Enhanced{} cards",
+                "When {C:attention}Blind{} is selected, gain {C:mult}+#1#{} Mult",
+                "for each {X:water,C:white}Water{} Joker you have,",
+                "then create a {C:attention}Basic{} {X:water,C:white}Water{} Joker",
                 "{C:inactive,s:0.8}(Must have room)",
                 "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)",
               }
@@ -3457,6 +3455,22 @@ return {
                   "{C:inactive}(Excludes Shedinjas){}"
                 }
             },
+            j_poke_makuhita = {
+                name = "Makuhita",
+                text = {
+                  "When {C:attention}Blind{} is selected,",
+                  "gain {C:chips}+#1#{} hand",
+                  "{C:inactive}(Evolves after {C:attention}#2#{C:inactive} rounds)",
+                }
+            },
+            j_poke_hariyama = {
+                name = "Hariyama",
+                text = {
+                  "When {C:attention}Blind{} is selected,",
+                  "gain {C:chips}+#1#{} hand for each",
+                  "{X:fighting,C:white}Fighting{} Joker you have",
+                }
+            },
             j_poke_azurill = {
                 name = 'Azurill',
                 text = {
@@ -3474,6 +3488,26 @@ return {
                     "gives {X:mult,C:white} X#1# {} Mult when scored",
                     "{C:inactive,s:0.8}(Evolves with a {C:attention,s:0.8}Thunder Stone{C:inactive,s:0.8})"
                 } 
+            },
+            j_poke_skitty = {
+                name = "Skitty",
+                text = {
+                  "Copies ability of",
+                  "{B:1,V:2}#1#{} Joker",
+                  "to the right",
+                  "{C:inactive,s:0.8}(Type changes every round){}",
+                  "{C:inactive,s:0.8}(Evolves with a {C:attention,s:0.8}Moon Stone{C:inactive,s:0.8})",
+                }
+            },
+            j_poke_delcatty = {
+                name = "Delcatty",
+                text = {
+                  "Copies ability of",
+                  "{B:1,V:2}#1#{} Joker",
+                  "to the right",
+                  "with {C:pink}+#2#{} Energy",
+                  "{C:inactive,s:0.8}(Type changes every round){}",
+                }
             },
             j_poke_aron = {
                 name = 'Aron',
@@ -3501,6 +3535,26 @@ return {
                     "{C:attention}poker hand{}, then destroy them",
                     "{C:inactive}(Currently {X:mult,C:white}X#1#{C:inactive} Mult)"
                 }
+            },
+            j_poke_volbeat = {
+              name = "Volbeat",
+              text = {
+                "Gains {C:chips}+#2#{} Chips when",
+                "you use a {C:planet}Planet{} card",
+                "{br:2}ERROR - CONTACT STEAK",
+                "If you have another {X:grass,C:white}Grass{}",
+                "Joker, gains {X:mult,C:white} X#4# {} Mult as well",
+                "{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips, {X:mult,C:white} X#3# {C:inactive} Mult)"
+              }
+            },
+            j_poke_illumise = {
+              name = "Illumise",
+              text = {
+                "When {C:attention}Blind{} is selected,",
+                "create a {C:planet}Planet{} card for",
+                "each {X:grass,C:white}Grass{} Joker you have",
+                "{C:inactive}(Must have room){}",
+              }
             },
             j_poke_roselia = {
                 name = "Roselia",
@@ -4360,6 +4414,30 @@ return {
                     "Leftmost unenhanced card with the",
                     "lowest base Chips in played hand",
                     "becomes a {C:attention}Bonus{} card",
+                }
+            },
+            j_poke_munna = {
+                name = "Munna",
+                text = {
+                  "{C:purple}+#2# Foresight",
+                  "Played cards that share",
+                  "a {C:attention}rank{} or {C:attention}suit{} with",
+                  "{C:attention}Foreseen{} cards give",
+                  "{C:mult}+#1#{} Mult {C:attention}when scored",
+                  "{C:inactive,s:0.8}(Evolves with a {C:attention,s:0.8}Moon Stone{C:inactive,s:0.8})",
+                }
+            },
+            j_poke_musharna = {
+                name = "Musharna",
+                text = {
+                  "When {C:attention}Blind{} is selected, gain",
+                  "{C:purple}+#2# Foresight{} this round for",
+                  "each {X:psychic,C:white}Psychic{} type you have",
+                  "{br:3}ERROR - CONTACT STEAK",
+                  "Played cards that share",
+                  "a {C:attention}rank{} or {C:attention}suit{} with",
+                  "{C:attention}Foreseen{} cards give",
+                  "{X:mult,C:white} X#1# {} Mult {C:attention}when scored",
                 }
             },
             j_poke_roggenrola = {

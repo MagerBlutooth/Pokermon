@@ -69,6 +69,7 @@ SMODS.Rarity{
 }
 
 --Load helper function files
+assert(SMODS.load_file("functions/pokeconstants.lua"))()
 assert(SMODS.load_file("functions/pokeutils.lua"))()
 assert(SMODS.load_file("functions/pokefamily.lua"))()
 assert(SMODS.load_file("functions/pokefunctions.lua"))()
@@ -208,15 +209,6 @@ G.P_CENTERS.e_polychrome.get_weight = function(self)
   return math.max(G.P_CENTERS.e_polychrome.weight, previous_poly_get_weight(self) - ((G.GAME.negative_edition_rate or 1) - 1) * G.P_CENTERS.e_negative.weight)
 end
 
---To remove the booster slot from shinies
-local removed = Card.remove
-function Card:remove()
-  if self.edition and self.edition.poke_shiny and not self.debuff and self.area and (self.area == G.jokers or self.area == G.hand or self.area == G.play) then
-    SMODS.change_booster_limit(-1)
-  end
-  return removed(self)
-end
-
 --To support Debris sleeve combo
 local card_set_ability_old = Card.set_ability
 function Card:set_ability(center, initial, delay_sprites)
@@ -245,6 +237,8 @@ function SMODS.current_mod.reset_game_globals(run_start)
   end
   reset_espeon_card()
   reset_gligar_suit()
+  
+  poke_reset_type('cattype', {'skitty', 'delcatty'})
 end
 
 --Tutorial WIP
