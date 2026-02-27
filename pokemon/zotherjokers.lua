@@ -171,7 +171,7 @@ local jelly_donut={
         G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
         G.E_MANAGER:add_event(Event({
             func = function()
-              SMODS.add_card{set = "energy", key = "c_poke_colorless_energy"}
+              SMODS.add_card{set = "Energy", key = "c_poke_colorless_energy"}
               G.GAME.consumeable_buffer = 0
               return true
             end
@@ -181,13 +181,8 @@ local jelly_donut={
         card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = "No Room!", colour = G.C.MULT})
       end
 
-      if card.ability.extra.rounds <= 0 then 
-        G.E_MANAGER:add_event(Event({
-            func = function()
-                remove(self, card, context)
-                return true
-            end
-        })) 
+      if card.ability.extra.rounds <= 0 then
+        SMODS.destroy_cards(card, nil, nil, true)
         return {
             message = localize('k_eaten_ex'),
             colour = G.C.RED
@@ -225,13 +220,8 @@ local treasure_eatery={
         end
       end
 
-      if card.ability.extra.rounds <= 0 then 
-        G.E_MANAGER:add_event(Event({
-            func = function()
-                remove(self, card, context)
-                return true
-            end
-        })) 
+      if card.ability.extra.rounds <= 0 then
+        SMODS.destroy_cards(card, nil, nil, true)
         return {
             message = localize('poke_closed_ex'),
             colour = G.C.RED

@@ -327,12 +327,12 @@ local weird_tree={
 local politoed={
   name = "politoed", 
   pos = {x = 4, y = 3}, 
-  config = {extra = {mult = 7, suits = {"Spades", "Hearts", "Clubs", "Diamonds"}, indice = 1,}},
+  config = {extra = {retriggers = 1, suits = {"Spades", "Hearts", "Clubs", "Diamonds"}, indice = 1,}},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
-    return {vars = {center.ability.extra.mult, localize(G.GAME.poke_poli_suit or "Spades",'suits_singular'),  
+    return {vars = {center.ability.extra.retriggers, localize(G.GAME.poke_poli_suit or "Spades",'suits_singular'),  
                     colours = {G.C.SUITS[G.GAME.poke_poli_suit or "Spades"]}, localize("Spades", 'suits_plural'), localize("Hearts", 'suits_plural'), 
-                    localize("Clubs", 'suits_plural'), localize("Diamonds", 'suits_plural'), #find_pokemon_type("Water")}}
+                    localize("Clubs", 'suits_plural'), localize("Diamonds", 'suits_plural'), center.ability.extra.retriggers + #find_pokemon_type("Water")}}
   end,
   rarity = "poke_safari", 
   cost = 10, 
@@ -342,51 +342,20 @@ local politoed={
   gen = 2,
   blueprint_compat = true,
   calculate = function(self, card, context)
-    if context.cardarea == G.jokers and context.scoring_hand then
-      if context.joker_main then
-        if not context.blueprint then
-          poke_change_poli_suit()
-          G.GAME.poke_poli_suit_change_triggered = true
+    if context.repetition and context.cardarea == G.play then
+      local scoring_suit = G.GAME.poke_poli_suit or "Spades"
+      local first_suit = nil
+      for i = 1, #context.scoring_hand do
+        if context.scoring_hand[i]:is_suit(scoring_suit) then
+          first_suit = context.scoring_hand[i]
+          break
         end
       end
-      if context.after and G.GAME.poke_poli_suit_change_triggered then
-        G.GAME.poke_poli_suit_change_triggered = false
-      end
-    end
-    if context.individual and not context.end_of_round and context.cardarea == G.play and not context.other_card.debuff then
-      local scoring_suit = G.GAME.poke_poli_suit or "Spades"
-      if context.other_card:is_suit(scoring_suit) then
+      if first_suit and first_suit == context.other_card then
+        local poli_retriggers = card.ability.extra.retriggers + #find_pokemon_type("Water")
         return {
-          colour = G.C.MULT,
-          mult = card.ability.extra.mult,
-          card = card
+          repetitions = poli_retriggers
         }
-      end
-    end
-    if context.repetition and not context.end_of_round and context.cardarea == G.play then
-      local scoring_suit = G.GAME.poke_poli_suit or "Spades"
-      if context.other_card:is_suit(scoring_suit) then
-        local total = #find_pokemon_type("Water")
-        local cards = #context.scoring_hand
-        local pos = 0
-        local remainder = 0
-        local retriggers = 0
-        for i=1, #context.scoring_hand do
-          if context.scoring_hand[i] == context.other_card then
-            pos = i
-            break
-          end
-        end
-        retriggers = math.floor(total/cards)
-        remainder = total % cards
-        if pos <= remainder then retriggers = retriggers + 1 end
-        if retriggers > 0 then
-          return {
-            message = localize('k_again_ex'),
-            repetitions = retriggers,
-            card = card
-          }
-        end
       end
     end
   end,
@@ -1043,22 +1012,14 @@ local unown={
         end
       end
       if context.after and card.ability.extra.triggered and next(SMODS.find_card("j_poke_ruins_of_alph")) and not context.blueprint then
-        G.E_MANAGER:add_event(Event({
-          func = function()
-            remove(self, card, context)
-            return true
-          end
-        }))
+        SMODS.destroy_cards(card, nil, nil, true)
       end
     end
     if context.end_of_round and not context.individual and not context.repetition then
-      G.E_MANAGER:add_event(Event({
-        func = function()
-          remove(self, card, context)
-          return true
-        end
-      }))
-      card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("poke_flees_ex")})
+      SMODS.destroy_cards(card, nil, nil, true)
+      return {
+        message = localize("poke_flees_ex")
+      }
     end
   end,
   set_ability = function(self, card, initial, delay_sprites)

@@ -1308,9 +1308,9 @@ return {
             j_poke_poliwag = {
                 name = "Poliwag",
                 text = {
-                    "Played {V:1}#3#{} cards give {C:mult}+#1#{} Mult",
-                    "when scored",
-                    "Suit changes in order after scoring",
+                    "Played {V:1}#3#{} cards give",
+                    "{C:mult}+#1#{} Mult when scored,",
+                    "suit{} cycles after scoring",
                     "{C:inactive,s:0.8}(#4#, #5#, #6#, #7#){}",
                     "{C:inactive,s:0.8}(Evolves after {C:attention,s:0.8}#2#{C:inactive,s:0.8} rounds)",
                 } 
@@ -1318,9 +1318,9 @@ return {
             j_poke_poliwhirl = {
                 name = "Poliwhirl",
                 text = {
-                    "Played {V:1}#2#{} cards give {C:mult}+#1#{} Mult",
-                    "when scored",
-                    "Suit changes in order after scoring",
+                    "Played {V:1}#2#{} cards give",
+                    "{C:mult}+#1#{} Mult when scored",
+                    "suit cycles after scoring",
                     "{C:inactive,s:0.8}(#3#, #4#, #5#, #6#){}",
                     "{C:inactive,s:0.8}(Evolves with a {C:attention,s:0.8}Water Stone{C:inactive,s:0.8} or {C:attention,s:0.8}King's Rock{C:inactive,s:0.8})"
                 } 
@@ -1329,8 +1329,8 @@ return {
                 name = "Poliwrath",
                 text = {
                     "Played {V:1}#2#{} cards give {C:mult}+#7#{} Mult",
-                    "and {X:mult,C:white}X#1#{} Mult when scored",
-                    "Suit changes in order after scoring",
+                    "and {X:mult,C:white}X#1#{} Mult when scored,",
+                    "suit cycles after scoring",
                     "{C:inactive,s:0.8}(#3#, #4#, #5#, #6#)"
                 } 
             },
@@ -2395,12 +2395,12 @@ return {
             j_poke_crobat = {
                 name = 'Crobat',
                 text = {
-                    "{C:attention}Leech List",  
                     "For each scoring {C:attention}Enhancement{} gain",
                     "{C:mult}+#2#{} Mult, {C:chips}+#4#{} Chips, {X:mult,C:white}X#6#{} Mult, or",
-                    "{C:money}$#8#{} payout at end of round,",
+                    "increase payout by {C:money}$#8#{},",
                     "removes card {C:attention}Enhancement",
-                    "{C:inactive,s:0.9}(Currently {C:chips,s:0.9}+#3#{}, {C:mult,s:0.9}+#1#{}, {X:mult,C:white,s:0.9}X#5#{}, {C:money,s:0.9}$#7#{C:inactive,s:0.9} at end of round)"
+                    "{C:inactive,s:0.9}(Value based on Enhancement type){}",
+                    "{C:inactive,s:0.9}(Currently {C:chips,s:0.9}+#3#{C:inactive,s:0.9}, {C:mult,s:0.9}+#1#{C:inactive,s:0.9}, {X:mult,C:white,s:0.9}X#5#{C:inactive,s:0.9}, {C:money,s:0.9}$#7#{C:inactive,s:0.9} at end of round)"
                 } 
             },
             j_poke_chinchou = {
@@ -2475,7 +2475,9 @@ return {
                 name = 'Xatu',
                 text = {
                     "{C:planet}Planet{} cards give an extra level",
-                    "{C:planet}Celestial Packs{} contain every {C:planet}Planet{} card",
+                    "{br:2}ERROR - CONTACT STEAK",
+                    "{C:planet}Celestial Packs{} contain every",
+                    "{C:attention}available{} {C:planet}Planet{} card"
                 }
             },
             j_poke_mareep = {
@@ -2567,12 +2569,11 @@ return {
             j_poke_politoed = {
                 name = 'Politoed',
                 text = {
-                    "Played {V:1}#2#{} cards give {C:mult}+#1#{} Mult when scored",
-                    "{br:5}ERROR - CONTACT STEAK",
-                    "Retrigger {V:1}#2#{} cards based on",
-                    "how many {X:water,C:white}Water{} Jokers you have",
-                    "{C:inactive,s:0.8}({C:attention,s:0.8}#7#{C:inactive,s:0.8} Retrigger(s) divided evenly between scoring cards){}",
-                    "{s:0.8}Suit cycles after scoring {C:inactive,s:0.8}(#3#, #4#, #5#, #6#)",
+                    "Retrigger first scoring {V:1}#2#{}",
+                    "then retrigger it again for",
+                    "each {X:water,C:white}Water{} Joker you have,",
+                    "suit cycles after scoring",
+                    "{C:inactive,s:0.8}(#3#, #4#, #5#, #6#)"
                 } 
             },
             j_poke_hoppip = {
@@ -3896,6 +3897,43 @@ return {
                     "{C:attention}destroy{} it",
                 }
             },
+            j_poke_deoxys = {
+                name = "Deoxys",
+                text = {
+                  "If {C:attention}first discard{} of",
+                  "round has only {C:attention}1{} card,",
+                  "add a {C:attention}DNA{} seal to it",
+                  "{C:inactive,s:0.8}(Transforms with a {C:planet,s:0.8}Meteorite{C:inactive,s:0.8} card){}"
+                }
+            },
+            j_poke_deoxys_attack = {
+                name = "Deoxys (Attack)",
+                text = {
+                  "{C:attention}DNA{} seals give an extra",
+                  "permanent {X:mult,C:white}X#1#{} Mult",
+                  "to copied cards",
+                  "{C:inactive,s:0.8}(Transforms with a {C:planet,s:0.8}Meteorite{C:inactive,s:0.8} card){}"
+                }
+            },
+            j_poke_deoxys_speed = {
+                name = "Deoxys (Speed)",
+                text = {
+                  "{C:attention}DNA{} seals give an extra",
+                  "permanent {C:attention}retrigger",
+                  "to copied cards",
+                  "{C:inactive,s:0.8}(Transforms with a {C:planet,s:0.8}Meteorite{C:inactive,s:0.8} card){}"
+                }
+            },
+            j_poke_deoxys_defense = {
+                name = "Deoxys (Defense)",
+                text = {
+                  "{C:attention}DNA{} seals give an extra",
+                  "permanent {C:money}$#2#{} payout",
+                  "at end of round",
+                  "to copied cards",
+                  "{C:inactive,s:0.8}(Transforms with a {C:planet,s:0.8}Meteorite{C:inactive,s:0.8} card){}"
+                }
+            },
             j_poke_bidoof = {
                 name = "Bidoof",
                 text = {
@@ -4419,11 +4457,12 @@ return {
             j_poke_munna = {
                 name = "Munna",
                 text = {
-                  "{C:purple}+#2# Foresight",
-                  "Played cards that share",
-                  "a {C:attention}rank{} or {C:attention}suit{} with",
-                  "{C:attention}Foreseen{} cards give",
-                  "{C:mult}+#1#{} Mult {C:attention}when scored",
+                  "{C:purple}+#3# Foresight",
+                  "When hand is played, gain",
+                  "{X:mult,C:white} X#2# {} Mult for each",
+                  "{C:attention}Enhanced Foreseen{} card,",
+                  "removes card {C:attention}Enhancement",
+                  "{C:inactive}(Currently {X:mult,C:white} X#1# {C:inactive} Mult){}",
                   "{C:inactive,s:0.8}(Evolves with a {C:attention,s:0.8}Moon Stone{C:inactive,s:0.8})",
                 }
             },
@@ -4434,10 +4473,9 @@ return {
                   "{C:purple}+#2# Foresight{} this round for",
                   "each {X:psychic,C:white}Psychic{} type you have",
                   "{br:3}ERROR - CONTACT STEAK",
-                  "Played cards that share",
-                  "a {C:attention}rank{} or {C:attention}suit{} with",
-                  "{C:attention}Foreseen{} cards give",
-                  "{X:mult,C:white} X#1# {} Mult {C:attention}when scored",
+                  "Each {C:attention}Enhanced Foreseen{}",
+                  "card gives {X:mult,C:white} X#1# {} Mult",
+                  "{C:inactive,s:0.8}({X:mult,C:white,s:0.8} X {C:inactive,s:0.8} Mult inherited from {C:attention,s:0.8}Munna{C:inactive,s:0.8}){}",
                 }
             },
             j_poke_roggenrola = {
@@ -4658,10 +4696,11 @@ return {
             j_poke_lampent = {
               name = "Lampent",
               text = {
-                "Adds this Joker's sell value to Mult",
-                "{br:3.5}ERROR - CONTACT STEAK",
                 "{C:attention}Drain {C:money}$#1#{} from all other",
                 "Jokers at end of round",
+                "{br:3.5}ERROR - CONTACT STEAK",
+                "Adds this Joker's",
+                "sell value to Mult",
                 "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}",
                 "{C:inactive,s:0.8}(Evolves with a {C:attention,s:0.8}Dusk Stone{C:inactive,s:0.8})"
               }
@@ -4669,10 +4708,11 @@ return {
             j_poke_chandelure = {
                 name = "Chandelure",
                 text = {
-                    "Adds this Joker's sell value to Mult",
-                    "{br:3.5}ERROR - CONTACT STEAK",
                     "Each Joker with {C:money}$1{} sell",
                     "value gives {X:mult,C:white} X#1# {} Mult",
+                    "{br:3.5}ERROR - CONTACT STEAK",
+                    "Adds this Joker's",
+                    "sell value to Mult",
                     "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}",
                 }
             },
@@ -5702,6 +5742,22 @@ return {
                     "{C:inactive}(Max of {C:attention}#1#{C:inactive} increases per Joker)",
                 },
             },
+            c_poke_meteorite = {
+                name = "Meteorite",
+                text = {
+                  "{C:attention}Reusable{}",
+                  "{br:2}ERROR - CONTACT STEAK",
+                  "Destroys {C:attention}#1#{} random cards",
+                  "remaining in {C:attention}deck{} and",
+                  "level up {C:attention}last played{} hand",
+                  "{C:inactive}(Last hand: {C:attention}#2#{C:inactive})",
+                  "{br:3}ERROR - CONTACT STEAK",
+                  "Transforms leftmost or selected",
+                  "{C:attention}Deoxys{} into {C:attention}#3# Forme",
+                  "{C:inactive,s:0.8}({C:attention,s:0.8}Forme{C:inactive,s:0.8} changes on {C:green,s:0.8}Reroll{C:inactive,s:0.8}){}",
+                }
+            },
+            
             c_poke_fake_banker = {
                 name = 'Money Wish',
                 text = {
@@ -6151,7 +6207,7 @@ return {
                 }
             },
             bat_leech = {
-                name = "Leech List",
+                name = "Conversion List",
                 text = {
                     "{C:attention}Bonus{} / {C:attention}Stone{} - {C:chips}Chips",
                     "{C:attention}Steel{} / {C:attention}Glass{} / {C:attention}Flower{} - {X:mult,C:white}X{} Mult",
@@ -6580,6 +6636,17 @@ return {
                   "in hand when cards are scored"
                 }
             },
+                        
+            --back to cursed            
+            poke_dna_seal_seal = {
+              name = "DNA Seal",
+              text = {
+                "If played hand is",
+                "exactly {C:attention}1{} card, creates",
+                "a {C:attention}Sealess{} copy",
+              }
+            },
+            
             --[[
             grass_sticker = {
                 name = "Type",
@@ -6985,6 +7052,11 @@ return {
             poke_head_smash_ex = "Head Smash!",
             poke_teeter_dance = "Teeter Dance!",
             
+            poke_attack_forme = "Attack",
+            poke_defense_forme = "Defense",
+            poke_speed_forme = "Speed",
+            poke_normal_forme = "Normal",
+            
             poke_grass_badge = "Grass",
             poke_fire_badge = "Fire",
             poke_water_badge = "Water",
@@ -7015,6 +7087,7 @@ return {
         labels = {
             poke_pink_seal_seal = "Pink Seal",
             poke_silver_seal = "Silver Seal",
+            poke_dna_seal_seal = "DNA Seal",
 
             poke_shiny = "Shiny",
 
