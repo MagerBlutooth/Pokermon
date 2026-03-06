@@ -1917,7 +1917,7 @@ return {
             j_poke_scyther = {
                 name = 'Scyther',      
                 text = {
-                    "When {C:attention}Blind{} is selected, destroy Joker",
+                    "When Blind is selected, destroy Joker",
                     "to the right and gain {C:mult}+#2#{} Mult",
                     "Gain {C:dark_edition}Foil{}, {C:dark_edition}Holographic{}, or {C:dark_edition}Polychrome{}",
                     "if it was {C:rare}Rare{} or higher",
@@ -2080,8 +2080,9 @@ return {
                     "{C:attention}Ancient #1#s{}",
                     "{X:attention,C:white}1+{} : Create a {C:tarot}Tarot{} card",
                     "{X:attention,C:white}2+{} : Earn {C:money}$#2#{}",
-                    "{X:attention,C:white}3+{} : Create a {C:item}Item{} card {C:inactive,s:0.7}(Trigger {C:attention,s:0.7}#3#{C:inactive,s:0.7} times to evolve)",
+                    "{X:attention,C:white}3+{} : Create a {C:item}Item{} card",
                     "{C:inactive,s:0.8}(Must have room)",
+                    "{C:inactive,s:0.8}(Trigger {X:attention,C:white,s:0.8}3+{C:inactive,s:0.8} ability {C:attention,s:0.8}#3#{C:inactive,s:0.8} times to evolve)"
                 } 
             },
             j_poke_omastar = {
@@ -2101,7 +2102,8 @@ return {
                     "{C:attention}Ancient #1#s{}",
                     "{X:attention,C:white}1+{} : {C:chips}+#2#{} Chips",
                     "{X:attention,C:white}2+{} : {}Scoring {C:attention}#1#s{} permanently gain {C:chips}+#3#{} Chips",
-                    "{X:attention,C:white}3+{} : {C:chips}+#4#{} Chips {C:inactive,s:0.8}(Trigger {C:attention,s:0.8}#5#{C:inactive,s:0.8} times to evolve)",
+                    "{X:attention,C:white}3+{} : {C:chips}+#4#{} Chips",
+                    "{C:inactive,s:0.8}(Trigger {X:attention,C:white,s:0.8}3+{C:inactive,s:0.8} ability {C:attention,s:0.8}#5#{C:inactive,s:0.8} times to evolve)"
                 } 
             },
             j_poke_kabutops = {
@@ -3405,6 +3407,26 @@ return {
                   "are {C:attention}Nature{} cards"
                 }
             },
+            j_poke_wingull = {
+              name = "Wingull",
+              text = {
+                "Earn {C:money}$#1#{} for each",
+                "discarded {C:attention}#3#{}, rank",
+                "changes every round",
+                "{C:inactive}(Evolves after {C:attention}#2#{C:inactive} rounds)",
+              }
+            }, 
+            j_poke_pelipper = {
+              name = "Pelipper",
+              text = {
+                "Earn {C:money}$#1#{} for each",
+                "discarded {C:attention}#3#{}, rank",
+                "changes every round",
+                "{br:2}ERROR - CONTACT STEAK",
+                "Earn {C:money}$#2#{} extra for each",
+                "{X:water,C:white}Water{} Joker you have"
+              }
+            }, 
             j_poke_shroomish = {
                 name = "Shroomish",
                 text = {
@@ -3565,29 +3587,6 @@ return {
                   "it {C:attention}#1#{} times, otherwise it",
                   "becomes a {C:attention}Seed{} card",
                   "{C:inactive,s:0.8}(Evolves with a {C:attention,s:0.8}Shiny Stone{C:inactive,s:0.8})"
-                }
-            },
-            j_poke_carvanha = {
-              name = "Carvanha",
-              text = {
-                "When {C:attention}Blind{} is selected, destroy",
-                "Joker to the right",
-                "{br:2}ERROR - CONTACT STEAK",
-                "{X:red,C:white}X#1#{} Mult if played {C:attention}poker hand{} has",
-                "already been played this round",
-                "{C:inactive,s:0.8}(Evolves after {C:attention,s:0.8}#2#{C:inactive,s:0.8} Jokers destroyed)",
-              }
-            },
-            j_poke_sharpedo = {
-                name = "Sharpedo",
-                text = {
-                  "When {C:attention}Blind{} is selected, destroy",
-                  "Joker to the right to",
-                  "create a {C:spectral}Spectral{} card",
-                  "{C:inactive}(Must have room)",
-                  "{br:2}ERROR - CONTACT STEAK",
-                  "{X:red,C:white}X#1#{} Mult if played {C:attention}poker hand{} has",
-                  "already been played this round",
                 }
             },
             j_poke_numel = {
@@ -3825,6 +3824,42 @@ return {
               text = {
                 "{C:attention}Holding {C:hearts}Heart Scale",
                 "Applies {C:attention}Splash",
+              }
+            },
+            j_poke_bagon = {
+              name = "Bagon",
+              text = {
+                "{C:attention}-#2#{} hand size",
+                "Gives {C:mult}+#1#{} Mult for each",
+                "{C:attention}Straight{} played this run",
+                "{C:inactive}(Currently {C:mult}+#4#{C:inactive} Mult){}",
+                "{C:inactive,s:0.8}(Evolves after playing {C:attention,s:0.8}#3#{C:inactive,s:0.8} Straights){}"
+              }
+            },
+            j_poke_shelgon = {
+              name = "Shelgon",
+              text = {
+                "{C:attention}-#2#{} hand size",
+                "Gives {C:mult}+#1#{} Mult for each",
+                "{C:attention}Straight{} played this run",
+                "{C:inactive}(Currently {C:mult}+#4#{C:inactive} Mult){}",
+                "{br:2}ERROR - CONTACT STEAK",
+                "If played hand is a {C:attention}Straight{}",
+                "reduce {C:attention}rounds{} to {C:attention}Evolve{} by {C:attention}1",
+                "{C:inactive,s:0.8}(Evolves after {C:attention,s:0.8}#3#{C:inactive,s:0.8} rounds)"
+              }
+            },
+            j_poke_salamence = {
+              name = "Salamence",
+              text = {
+                "{C:attention}+#2#{} hand size",
+                "When {C:attention}Blind{} is selected, gain {C:attention}+#3#",
+                "hand size this round for every",
+                "{C:attention}#4# Straights{} played this run",
+                "{br:2}ERROR - CONTACT STEAK",
+                "Gives {C:mult}+#1#{} Mult for each",
+                "{C:attention}Straight{} played this run",
+                "{C:inactive}(Currently {C:mult}+#5#{C:inactive} Mult){}",
               }
             },
             j_poke_beldum = {
@@ -6869,6 +6904,7 @@ return {
             c_poke_randomizer = "Randomizer",
             c_poke_delibird_delimma = "Delibird Dilemma",
             c_poke_safety_first = "Safety First",
+            c_poke_mystery_dungeon = "Mystery Dungeon",
         },
         dictionary = {
             k_energy = "Energy",
@@ -7166,6 +7202,9 @@ return {
            ch_c_poke_nuzlocke = {"First shop of each Ante contains a {C:attention}Buffoon Pack"},
            ch_c_apply_randomizer = {"Pokemon Jokers evolve into random Pokemon Jokers"},
            ch_c_no_energy = {"Energy cards no longer appear in the {C:attention}shop"},
+           ch_c_poke_mystery_dungeon = {"Start with an Eternal Joker"},
+           ch_c_poke_mystery_dungeon2 = {"Applies a random Pokermon Deck effect"},
+           ch_c_poke_mystery_dungeon3 = {"Resets at {C:attention}"..tostring(os.date("%I:%M %p", 0)).."{} every day"},
         },
     }
 }
