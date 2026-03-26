@@ -54,7 +54,7 @@ local pelipper={
   rarity = "poke_safari",
   cost = 6,
   gen = 3,
-  stage = "Basic",
+  stage = "One",
   ptype = "Water",
   atlas = "Pokedex3",
   perishable_compat = true,
@@ -239,7 +239,7 @@ local gardevoir={
   blueprint_compat = true,
   eternal_compat = true,
   calculate = function(self, card, context)
-    if context.joker_main and next(context.poker_hands['Pair']) then
+    if context.joker_main then
       local energized = 0
       for k, v in ipairs(G.jokers.cards) do
         if get_total_energy(v) > 0 then
@@ -798,7 +798,7 @@ local nosepass={
 local skitty={
   name = "skitty",
   pos = {x = 0, y = 0},
-  config = {extra = {mult_mod = 6,}},
+  config = {extra = {}},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
     local highlight_colour = center.ability.extra.change_to_type ~= "Lightning" and G.C.WHITE or G.C.BLACK

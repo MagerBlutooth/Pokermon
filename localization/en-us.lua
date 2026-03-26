@@ -1013,9 +1013,6 @@ return {
                 text = {
                     "{C:chips}+#2#{} Chips for each {C:attention}Glass{} card",
                     "in your {C:attention}full deck",
-                    "{br:3}ERROR - CONTACT STEAK",
-                    "{V:1}Add a copy of the first {C:attention,V:1}Glass{V:1} card",
-                    "{V:1}shattered each round to hand",
                     "{C:inactive}(Currently {C:chips}+#3#{C:inactive} Chips)",
                     "{C:inactive,s:0.8}(Evolves after {C:attention,s:0.8}#1#{C:inactive,s:0.8} rounds)"
                 } 
@@ -1023,11 +1020,12 @@ return {
             j_poke_sandslash = {
                 name = "Sandslash",
                 text = {
+                    "{C:green}#3# in #4#{} chance for each",
+                    "discarded {C:attention}Enhanced{} card",
+                    "to become a {C:attention}Glass{} card",
+                    "{br:3}ERROR - CONTACT STEAK",
                     "{C:chips}+#1#{} Chips for each {C:attention}Glass{} card",
                     "in your {C:attention}full deck",
-                    "{br:3}ERROR - CONTACT STEAK",
-                    "{V:1}Add a copy of the first {C:attention,V:1}#3#{} {C:inactive}[#4#]{} {C:attention,V:1}Glass{V:1} cards",
-                    "{V:1}shattered each round to hand",
                     "{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)",
                 } 
             },
@@ -3840,6 +3838,16 @@ return {
                 "{C:inactive}(Evolves with a {C:attention}Linking Cord{C:inactive})",
               }
             },
+            j_poke_chimecho = {
+              name = "Chimecho",
+              text = { 
+                "{C:attention}Vouchers{} in the shop are {C:attention}free",
+                "{br:3}ERROR - CONTACT STEAK",
+                "{V:1}Add a copy of the first",
+                "{C:attention,V:1}#1#{} {C:inactive}[#2#]{} {C:attention,V:1}Glass{V:1} cards destroyed",
+                "{V:1}each round to hand",
+              }
+            },
             j_poke_absol = {
                 name = "Absol",
                 text = {
@@ -4225,6 +4233,15 @@ return {
                 name = "Honchkrow",
                 text = {
                   "Each {X:dark,C:white}Dark{} Joker gives {X:mult,C:white}X#1#{} Mult",
+                }
+            },
+            j_poke_chingling = {
+                name = 'Chingling',
+                text = {
+                    "{C:attention}Baby{}, {X:mult,C:white} X#1# {} Mult",
+                    "Creates a {C:dark_edition}Negative{} copy of",
+                    "{C:tarot}Justice{} at end of round",
+                    "{C:inactive,s:0.8}(Evolves after {C:attention,s:0.8}#2#{C:inactive,s:0.8} rounds)",
                 }
             },
             j_poke_bonsly = {
@@ -4647,7 +4664,7 @@ return {
                 text = {
                   "When {C:attention}Blind{} is selected, gain",
                   "{C:purple}+#2# Foresight{} this round for",
-                  "each {X:psychic,C:white}Psychic{} type you have",
+                  "each {X:psychic,C:white}Psychic{} Joker you have",
                   "{br:3}ERROR - CONTACT STEAK",
                   "Each {C:attention}Enhanced Foreseen{}",
                   "card gives {X:mult,C:white} X#1# {} Mult",
@@ -7227,7 +7244,7 @@ return {
             poke_bug_buzz_ex = "Bug Buzz!",
             poke_sticky_web_ex = "Sticky Web!",
             poke_head_smash_ex = "Head Smash!",
-            poke_teeter_dance = "Teeter Dance!",
+            poke_teeter_dance_ex = "Teeter Dance!",
             
             poke_attack_forme = "Attack",
             poke_defense_forme = "Defense",
