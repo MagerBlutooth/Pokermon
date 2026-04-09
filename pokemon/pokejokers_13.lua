@@ -484,12 +484,6 @@ local salamence={
       }
     end
   end,
-  add_to_deck = function(self, card, from_debuff)
-    G.hand:change_size(card.ability.extra.h_size)
-  end,
-  remove_from_deck = function(self, card, from_debuff)
-    G.hand:change_size(-card.ability.extra.h_size)
-  end
 }
 -- Beldum 374
 local beldum={
@@ -745,7 +739,7 @@ local jirachi_invis = {
         G.jokers:emplace(copy)
         copy:start_materialize()
 
-        SMODS.destroy_cards(card, nil, nil, true)
+        SMODS.destroy_cards(card, true, nil, true)
       end
     end
   end,
