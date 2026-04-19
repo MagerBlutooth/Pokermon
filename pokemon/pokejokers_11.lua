@@ -94,6 +94,7 @@ local delcatty={
         colours = {type_colour, highlight_colour}}}
     desc_nodes[#desc_nodes+1] = main_end
   end,
+  attributes = {"copying", "types", "energy_count"},
 }
 -- Sableye 302
 -- Mawile 303
@@ -148,7 +149,8 @@ local aron = {
       return true
     end
     return scaling_evo(self, card, context, "j_poke_lairon", card.ability.extra.Xmult, self.config.evo_rqmt)
-  end
+  end,
+  attributes = {"xmult", "enhancements", "destroy_card", "scaling", "scaling_evo"},
 }
 -- Lairon 305
 local lairon = {
@@ -202,7 +204,8 @@ local lairon = {
       return true
     end
     return scaling_evo(self, card, context, "j_poke_aggron", card.ability.extra.Xmult, self.config.evo_rqmt)
-  end
+  end,
+  attributes = {"xmult", "enhancements", "destroy_card", "scaling", "scaling_evo"},
 }
 -- Aggron 306
 local aggron = {
@@ -257,7 +260,8 @@ local aggron = {
           or SMODS.has_enhancement(context.destroying_card, 'm_gold')) then
       return true
     end
-  end
+  end,
+  attributes = {"xmult", "enhancements", "destroy_card", "scaling"},
 }
 -- Meditite 307
 local meditite={
@@ -290,6 +294,7 @@ local meditite={
     end
     return level_evo(self, card, context, "j_poke_medicham")
   end,
+  attributes = {"mult", "discard", "round_evo"},
 }
 -- Medicham 308
 local medicham={
@@ -344,6 +349,7 @@ local medicham={
         end
       end
   end,
+  attributes = {"mult", "discard", "applies"},
 }
 -- Electrike 309
 -- Manectric 310
@@ -360,7 +366,7 @@ local volbeat={
   end,
   rarity = 2,
   cost = 5,
-  gen = 1,
+  gen = 3,
   stage = "Basic",
   ptype = "Grass",
   atlas = "Pokedex3",
@@ -391,6 +397,7 @@ local volbeat={
       end
     end
   end,
+  attributes = {"chips", "planet", "types", "joker", "xmult"},
 }
 -- Illumise 314
 local illumise={
@@ -427,6 +434,7 @@ local illumise={
       end
     end
   end,
+  attributes = {"planet", "types", "joker"},
 }
 -- Roselia 315
 local roselia={
@@ -469,6 +477,7 @@ local roselia={
     end
     return item_evo(self, card, context, "j_poke_roserade")
   end,
+  attributes = {"rank", "ace", "three", "five", "seven", "nine", "retrigger", "enhancements", "item_evo"},
 }
 -- Gulpin 316
 -- Swalot 317
@@ -528,6 +537,7 @@ local carvanha={
     end
     return scaling_evo(self, card, context, "j_poke_sharpedo", card.ability.extra.eaten, self.config.evo_rqmt)
   end,
+  attributes = {"destroy_card", "xmult", "hand_type", "condition_evo"},
 }
 -- Sharpedo 319
 local sharpedo={
@@ -586,6 +596,7 @@ local sharpedo={
       }
     end
   end,
+  attributes = {"destroy_card", "xmult", "hand_type", "generation", "spectral"},
 }
 -- Wailmer 320
 -- Wailord 321
@@ -632,6 +643,7 @@ local numel={
     end
     return level_evo(self, card, context, "j_poke_camerupt")
   end,
+  attributes = {"xmult", "round_evo"},
 }
 -- Camerupt 323
 local camerupt={
@@ -682,6 +694,7 @@ local camerupt={
     end
   end,
   megas = { "mega_camerupt" },
+  attributes = {"xmult", "enhancements"},
 }
 -- Mega Camerupt 323-1
 local mega_camerupt={
@@ -728,8 +741,40 @@ local mega_camerupt={
       }
     end
   end,
+  attributes = {"xmult", "enhancements", "scaling", "reset"},
 }
 -- Torkoal 324
+local torkoal={
+  name = "torkoal",
+  pos = {x = 0, y = 0},
+  config = {extra = {}},
+  loc_vars = function(self, info_queue, center)
+    type_tooltip(self, info_queue, center)
+    if pokermon_config.detailed_tooltips then
+      info_queue[#info_queue+1] = G.P_CENTERS.m_mult
+    end
+    return {vars = {}}
+  end,
+  rarity = 3,
+  cost = 7,
+  gen = 3,
+  enhancement_gate = "m_mult",
+  stage = "Basic",
+  ptype = "Fire",
+  atlas = "Pokedex3",
+  perishable_compat = true,
+  blueprint_compat = true,
+  eternal_compat = true,
+  calculate = function(self, card, context)
+    if context.repetition and not context.end_of_round and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, 'm_mult') then
+      if G.GAME.current_round.discards_left > 0 then
+        return {
+          repetitions = G.GAME.current_round.discards_left
+        }
+      end
+    end
+  end,
+}
 -- Spoink 325
 -- Grumpig 326
 -- Spinda 327
@@ -797,11 +842,12 @@ local spinda={
       SMODS.add_card{set = 'Tarot', key = 'c_wheel_of_fortune'}
     end
   end,
+  attributes = {"holding", "modify_card", "nature", "rank", "enhancements"},
 }
 -- Trapinch 328
 -- Vibrava 329
 -- Flygon 330
 return {
   name = "Pokemon Jokers 301-330",
-  list = {delcatty, aron, lairon, aggron, meditite, medicham, volbeat, illumise, roselia, carvanha, sharpedo, numel, camerupt, mega_camerupt, spinda},
+  list = {delcatty, aron, lairon, aggron, meditite, medicham, volbeat, illumise, roselia, carvanha, sharpedo, numel, camerupt, mega_camerupt, torkoal, spinda},
 }

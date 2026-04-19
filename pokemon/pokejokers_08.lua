@@ -44,7 +44,8 @@ local qwilfish = {
   end,
   remove_from_deck = function(self, card, from_debuff)
     poke_change_hazard_level(-card.ability.extra.hazard_level)
-  end
+  end,
+  attributes = {"hazards", "chips", "scaling", "enhancements"},
 }
 -- Scizor 212
 local scizor={
@@ -167,6 +168,7 @@ local scizor={
     end
   end,
   megas = { "mega_scizor" },
+  attributes = {"destroy_card", "mult", "editions", "scaling", "chips", "xmult"},
 }
 
 local mega_scizor={
@@ -212,6 +214,7 @@ local mega_scizor={
       end
     end
   end,
+  attributes = {"destroy_card", "joker", "xmult"},
 }
 -- Shuckle 213
 local shuckle={
@@ -251,6 +254,7 @@ local shuckle={
       end
     end
   end,
+  attributes = {"destroy_card", "generation", "item"},
 }
 -- Heracross 214
 local heracross = {
@@ -289,6 +293,7 @@ local heracross = {
     end
   end,
   megas = { "mega_heracross" },
+  attributes = {"rank", "xmult"},
 }
 local mega_heracross={
   name = "mega_heracross",
@@ -343,6 +348,7 @@ local mega_heracross={
         })) 
     end
   end,
+  attributes = {"retrigger"},
 }
 -- Sneasel 215
 local sneasel = {
@@ -377,7 +383,8 @@ local sneasel = {
       }
     end
     return item_evo(self, card, context, "j_poke_weavile")
-  end
+  end,
+  attributes = {"rank", "destroy_card", "economy", "item_evo"},
 }
 -- Teddiursa 216
 local teddiursa={
@@ -412,6 +419,7 @@ local teddiursa={
     end
     return scaling_evo(self, card, context, "j_poke_ursaring", card.ability.extra.mult, self.config.evo_rqmt)
   end,
+  attributes = {"mult", "scaling", "scaling_evo"},
 }
 -- Ursaring 217
 local ursaring={
@@ -459,6 +467,7 @@ local ursaring={
     end
     return item_evo(self, card, context, "j_poke_ursaluna")
   end,
+  attributes = {"mult", "scaling", "item", "generation", "item_evo"},
 }
 -- Slugma 218
 local slugma={
@@ -514,6 +523,7 @@ local slugma={
     end
     return scaling_evo(self, card, context, "j_poke_magcargo", card.ability.extra.chips, self.config.evo_rqmt)
   end,
+  attributes = {"chips", "scaling", "destroy_card", "hands", "scaling_evo"},
 }
 -- Magcargo 219
 local magcargo={
@@ -568,6 +578,7 @@ local magcargo={
       }
     end
   end,
+  attributes = {"chips", "scaling", "destroy_card", "hands"},
 }
 -- Swinub 220
 local swinub={
@@ -613,6 +624,7 @@ local swinub={
       return ease_poke_dollars(card, "2swinub", card.ability.extra.money, true)
     end
   end,
+  attributes = {"mult", "enhancements", "chance", "economy", "round_evo"},
 }
 -- Piloswine 221
 local piloswine={
@@ -661,6 +673,7 @@ local piloswine={
       return ease_poke_dollars(card, "2piloswine", card.ability.extra.money, true)
     end
   end,
+  attributes = {"mult", "enhancements", "chance", "economy", "trigger_evo"},
 }
 -- Corsola 222
 local corsola={
@@ -717,7 +730,8 @@ local corsola={
         mult = card.ability.extra.mult
       }
     end
-  end
+  end,
+  attributes = {"mult", "scaling", "types", "joker", "generation"},
 }
 -- Remoraid 223
 local remoraid={
@@ -750,7 +764,8 @@ local remoraid={
       }
     end
     return level_evo(self, card, context, "j_poke_octillery")
-  end
+  end,
+  attributes = {"retrigger", "hands", "round_evo"},
 }
 -- Octillery 224
 local octillery={
@@ -797,7 +812,8 @@ local octillery={
         end
       end
     end
-  end
+  end,
+  attributes = {"retrigger", "rank", "eight"},
 }
 -- Delibird 225
 local delibird={
@@ -858,7 +874,8 @@ local delibird={
       end
     end
     card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('poke_gift_ex'), colour = G.C.GREEN})
-  end
+  end,
+  attributes = {"economy", "generation", "item", "joker", "tag"},
 }
 -- Mantine 226
 local mantine={
@@ -895,7 +912,8 @@ local mantine={
         })
       end
     end
-  end
+  end,
+  attributes = {"chips", "scaling", "enhancements"},
 }
 -- Skarmory 227
 local skarmory = {
@@ -959,16 +977,17 @@ local skarmory = {
   remove_from_deck = function(self, card, from_debuff)
     poke_change_hazard_max(-card.ability.extra.hazard_max)
     poke_change_hazard_level(-card.ability.extra.hazard_level)
-  end
+  end,
+  attributes = {"hazards", "xmult", "enhancements"},
 }
 -- Houndour 228
 local houndour={
   name = "houndour",
   pos = {x = 6, y = 7},
-  config = {extra = {mult_mod = 1,rounds = 4, discards = 2, active = false}},
+  config = {extra = {mult_mod = 2,rounds = 4, limit = 1}},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
-    return {vars = {center.ability.extra.mult_mod, center.ability.extra.rounds, center.ability.extra.discards}}
+    return {vars = {center.ability.extra.mult_mod, center.ability.extra.rounds, center.ability.extra.limit}}
   end,
   rarity = 2,
   cost = 4,
@@ -980,64 +999,31 @@ local houndour={
   blueprint_compat = true,
   eternal_compat = true,
   calculate = function(self, card, context)
-    if context.pre_discard and context.full_hand and #context.full_hand > 0 and not context.hook and not context.blueprint then
-      if card.ability.extra.active then
-        card.ability.extra.active = false
-      elseif #context.full_hand > 4 then
-        card.ability.extra.active = true
-      end
-    end
     if context.discard and context.other_card then
       context.other_card.ability.perma_mult = (context.other_card.ability.perma_mult or 0) + card.ability.extra.mult_mod
       card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("k_upgrade_ex"), colour = G.C.RED})
     end
-    if context.post_discard and card.ability.extra.active and not context.recursive and not context.blueprint then
-      G.E_MANAGER:add_event(Event({func = function()
-        card.ability.extra.active = false
-        local targets = {}
-        local selected = nil
-        for i=1, #G.hand.cards do
-          if G.hand.cards[i] and not G.hand.cards[i].ability.discarded then
-            table.insert(targets, G.hand.cards[i])
-          end
-        end
-        pseudoshuffle(targets, pseudoseed('houndour'))
-        if #targets > 0 then
-          for i = 1, math.min(#targets, card.ability.extra.discards) do
-              G.hand:add_to_highlighted(targets[i], true)
-              selected = true
-              play_sound('card1', 1)
-          end
-          if selected then 
-            delay(0.2)
-            G.FUNCS.discard_cards_from_highlighted(nil, true)
-          end
-          for i = 1, math.min(#targets, card.ability.extra.discards) do
-              G.hand:remove_from_highlighted(targets[i], true)
-              targets[i]:highlight(true)
-          end  
-        end
-      return true end }))
-    end
-    if context.end_of_round and not context.individual and not context.repetition then
-      card.ability.extra.active = false
-    end
     return level_evo(self, card, context, "j_poke_houndoom")
   end,
+  add_to_deck = function(self, card, from_debuff)
+		SMODS.change_discard_limit(card.ability.extra.limit)
+  end,
+  remove_from_deck = function(self, card, from_debuff)
+		SMODS.change_discard_limit(-card.ability.extra.limit)
+		if not G.GAME.before_play_buffer then
+			G.hand:unhighlight_all()
+		end
+  end,
+  attributes = {"passive", "discard", "modify_card", "perma_bonus", "mult", "round_evo"},
 }
 -- Houndoom 229
 local houndoom={
   name = "houndoom",
   pos = {x = 7, y = 7},
-  config = {extra = {mult_mod = 2,rounds = 5, active = false}},
+  config = {extra = {mult_mod = 2, limit = 3}},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
-    if pokermon_config.detailed_tooltips then
-      info_queue[#info_queue+1] = {set = 'Other', key = 'holding', vars = {"Medium"}}
-      info_queue[#info_queue+1] = { set = 'Spectral', key = 'c_medium'}
-      info_queue[#info_queue+1] = {key = 'purple_seal', set = 'Other'}
-    end
-    return {vars = {center.ability.extra.mult_mod}}
+    return {vars = {center.ability.extra.mult_mod, center.ability.extra.limit}}
   end,
   rarity = "poke_safari",
   cost = 7,
@@ -1049,68 +1035,32 @@ local houndoom={
   blueprint_compat = true,
   eternal_compat = true,
   calculate = function(self, card, context)
-    if context.pre_discard and context.full_hand and #context.full_hand > 0 and not context.hook and not context.blueprint then
-      if card.ability.extra.active then
-        card.ability.extra.active = false
-      elseif #context.full_hand > 4 then
-        card.ability.extra.active = true
-      end
-    end
     if context.discard and context.other_card then
       context.other_card.ability.perma_mult = (context.other_card.ability.perma_mult or 0) + card.ability.extra.mult_mod
       card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize("k_upgrade_ex"), colour = G.C.RED})
     end
-    if context.post_discard and card.ability.extra.active and not context.recursive and not context.blueprint then
-      G.E_MANAGER:add_event(Event({func = function()
-        card.ability.extra.active = false
-        local targets = {}
-        local selected = nil
-        for i=1, #G.hand.cards do
-          if G.hand.cards[i] and not G.hand.cards[i].ability.discarded then
-            table.insert(targets, G.hand.cards[i])
-          end
-        end
-        if #targets > 0 then
-          local old_limit = G.hand.config.highlighted_limit
-          G.hand.config.highlighted_limit = #targets
-          for i = 1, #targets do
-              G.hand:add_to_highlighted(targets[i], true)
-              selected = true
-              play_sound('card1', 1)
-          end
-          if selected then 
-            delay(0.2)
-            G.FUNCS.discard_cards_from_highlighted(nil, true)
-          end
-          for i = 1, #targets do
-              G.hand:remove_from_highlighted(targets[i], true)
-              targets[i]:highlight(true)
-          end 
-          G.hand.config.highlighted_limit = old_limit
-        end
-      return true end }))
-    end
-    if context.end_of_round and not context.individual and not context.repetition then
-      card.ability.extra.active = false
-    end
   end,
   add_to_deck = function(self, card, from_debuff)
-    if not from_debuff then
-      local _card = SMODS.add_card{set = 'Spectral', key = 'c_medium'}
-      card_eval_status_text(_card, 'extra', nil, nil, nil, {message = localize('k_plus_spectral'), colour = G.C.SECONDARY_SET.Spectral})
-    end
+		SMODS.change_discard_limit(card.ability.extra.limit)
+  end,
+  remove_from_deck = function(self, card, from_debuff)
+		SMODS.change_discard_limit(-card.ability.extra.limit)
+		if not G.GAME.before_play_buffer then
+			G.hand:unhighlight_all()
+		end
   end,
   megas = { "mega_houndoom" },
+  attributes = {"passive", "discard", "modify_card", "perma_bonus", "mult"},
 }
 
 local mega_houndoom={
   name = "mega_houndoom",
   pos = {x = 8, y = 2},
   soul_pos = {x = 9, y = 2},
-  config = {extra = {Xmult = 1, Xmult_mod = 2, Xmult1 = 1}},
+  config = {extra = {Xmult = 1, Xmult_mod = 2, Xmult1 = 1, limit = 3}},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
-    return {vars = {center.ability.extra.Xmult, center.ability.extra.Xmult_mod}}
+    return {vars = {center.ability.extra.Xmult, center.ability.extra.Xmult_mod, center.ability.extra.limit}}
   end,
   rarity = "poke_mega",
   cost = 12,
@@ -1134,36 +1084,6 @@ local mega_houndoom={
         message_colour = G.C.XMULT,
       })
     end
-    if context.post_discard and not context.recursive and not context.blueprint then
-      G.E_MANAGER:add_event(Event({func = function()
-        card.ability.extra.active = false
-        local targets = {}
-        local selected = nil
-        for i=1, #G.hand.cards do
-          if G.hand.cards[i] and not G.hand.cards[i].ability.discarded then
-            table.insert(targets, G.hand.cards[i])
-          end
-        end
-        if #targets > 0 then
-          local old_limit = G.hand.config.highlighted_limit
-          G.hand.config.highlighted_limit = #targets
-          for i = 1, #targets do
-              G.hand:add_to_highlighted(targets[i], true)
-              selected = true
-              play_sound('card1', 1)
-          end
-          if selected then 
-            delay(0.2)
-            G.FUNCS.discard_cards_from_highlighted(nil, true)
-          end
-          for i = 1, #targets do
-              G.hand:remove_from_highlighted(targets[i], true)
-              targets[i]:highlight(true)
-          end 
-          G.hand.config.highlighted_limit = old_limit
-        end
-      return true end }))
-    end
     if not context.repetition and not context.individual and context.end_of_round and not context.blueprint then
       card.ability.extra.Xmult = card.ability.extra.Xmult1
       return {
@@ -1172,6 +1092,16 @@ local mega_houndoom={
       }
     end
   end,
+  add_to_deck = function(self, card, from_debuff)
+		SMODS.change_discard_limit(card.ability.extra.limit)
+  end,
+  remove_from_deck = function(self, card, from_debuff)
+		SMODS.change_discard_limit(-card.ability.extra.limit)
+		if not G.GAME.before_play_buffer then
+			G.hand:unhighlight_all()
+		end
+  end,
+  attributes = {"discard", "xmult", "scaling", "reset"},
 }
 -- Kingdra 230
 local kingdra={
@@ -1218,6 +1148,7 @@ local kingdra={
       }
     end
   end,
+  attributes = {"mult", "xmult", "rank", "six", "king", "scaling"},
 }
 -- Phanpy 231
 local phanpy={
@@ -1259,7 +1190,8 @@ local phanpy={
       }
     end
     return level_evo(self, card, context, "j_poke_donphan")
-  end
+  end,
+  attributes = {"xmult", "scaling", "reset", "round_evo"},
 }
 -- Donphan 232
 local donphan={
@@ -1300,7 +1232,8 @@ local donphan={
         Xmult = card.ability.extra.Xmult
       }
     end
-  end
+  end,
+  attributes = {"xmult", "scaling", "reset"},
 }
 -- Porygon2 233
 local porygon2={
@@ -1358,7 +1291,8 @@ local porygon2={
     else
       G.GAME.energy_plus = G.GAME.energy_plus - 2
     end
-  end
+  end,
+  attributes = {"energy_limit", "generation", "energy", "types", "item_evo"},
 }
 -- Stantler 234
 local stantler={
@@ -1413,6 +1347,7 @@ local stantler={
   remove_from_deck = function(self, card, from_debuff)
     G.GAME.scry_amount = math.max(0,(G.GAME.scry_amount or 0) - card.ability.extra.scry)
   end,
+  attributes = {"foresight", "mult", "trigger_evo"},
 }
 -- Smeargle 235
 local smeargle={
@@ -1515,6 +1450,7 @@ local smeargle={
           or 'incompatible'
     end
   end,
+  attributes = {"copying", "applies", "suit", "diamonds", "hearts", "clubs", "spades"},
 }
 -- Tyrogue 236
 local tyrogue={
@@ -1598,7 +1534,8 @@ local tyrogue={
       forced_key = "j_poke_hitmontop"
     end
     return level_evo(self, card, context, forced_key)
-  end
+  end,
+  attributes = {"baby", "hands", "discard", "generation", "destroy_card", "round_evo"},
 }
 -- Hitmontop 237
 local hitmontop={
@@ -1629,7 +1566,8 @@ local hitmontop={
         scalar_value = 'Xmult_mod',
       })
     end
-  end
+  end,
+  attributes = {"xmult", "scaling", "full_deck"},
 }
 -- Smoochum 238
 local smoochum ={
@@ -1677,6 +1615,7 @@ local smoochum ={
     end
     return evo
   end,
+  attributes = {"baby", "tag", "generation", "round_evo"},
 }
 -- Elekid 239
 local elekid ={
@@ -1724,6 +1663,7 @@ local elekid ={
     end
     return evo
   end,
+  attributes = {"baby", "tag", "generation", "round_evo"},
 }
 -- Magby 240
 local magby={
@@ -1766,7 +1706,8 @@ local magby={
   remove_from_deck = function(self, card, from_debuff)
     G.GAME.round_resets.discards = G.GAME.round_resets.discards - card.ability.extra.d_size
     ease_discard(-card.ability.extra.d_size)
-  end
+  end,
+  attributes = {"baby", "discard", "round_evo"},
 }
 
 return {name = "Pokemon Jokers 211-240",

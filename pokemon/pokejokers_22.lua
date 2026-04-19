@@ -20,20 +20,19 @@ local deino={
   blueprint_compat = true,
   eternal_compat = true,
   calculate = function(self, card, context)
-    if context.cardarea == G.jokers and context.scoring_hand and context.scoring_name == "Three of a Kind" then
+    if context.scoring_name == "Three of a Kind" then
+      if context.before and not context.blueprint then
+        card.ability.extra.hand_played = card.ability.extra.hand_played + 1
+      end
       if context.joker_main then
-        if not context.blueprint then
-          card.ability.extra.hand_played = card.ability.extra.hand_played + 1
-        end
         return {
-          message = localize{type = 'variable', key = 'a_xmult', vars = {card.ability.extra.Xmult}}, 
-          colour = G.C.mult,
-          Xmult_mod = card.ability.extra.Xmult
+          Xmult = card.ability.extra.Xmult
         }
       end
     end
     return scaling_evo(self, card, context, "j_poke_zweilous", card.ability.extra.hand_played, self.config.evo_rqmt)
-  end
+  end,
+  attributes = {"xmult", "hand_type", "trigger_evo"},
 }
 -- Zweilous 634
 local zweilous={
@@ -54,20 +53,19 @@ local zweilous={
   blueprint_compat = true,
   eternal_compat = true,
   calculate = function(self, card, context)
-    if context.cardarea == G.jokers and context.scoring_hand and context.scoring_name == "Three of a Kind" then
+    if context.scoring_name == "Three of a Kind" then
+      if context.before and not context.blueprint then
+        card.ability.extra.hand_played = card.ability.extra.hand_played + 1
+      end
       if context.joker_main then
-        if not context.blueprint then
-          card.ability.extra.hand_played = card.ability.extra.hand_played + 1
-        end
         return {
-          message = localize{type = 'variable', key = 'a_xmult', vars = {card.ability.extra.Xmult}}, 
-          colour = G.C.mult,
-          Xmult_mod = card.ability.extra.Xmult
+          Xmult = card.ability.extra.Xmult
         }
       end
     end
     return scaling_evo(self, card, context, "j_poke_hydreigon", card.ability.extra.hand_played, self.config.evo_rqmt)
-  end
+  end,
+  attributes = {"xmult", "hand_type", "trigger_evo"},
 }
 -- Hydreigon 635
 local hydreigon={
@@ -93,11 +91,12 @@ local hydreigon={
         Xmult = card.ability.extra.Xmult
       }
     end
-    if context.destroy_card and context.scoring_name == "Three of a Kind" and not context.blueprint
-        and context.cardarea == 'unscored' then
-      return {
-        remove = true
-      }
+    if context.after and context.scoring_name == "Three of a Kind" and not context.blueprint then
+      for k, v in pairs(context.full_hand) do
+        if not SMODS.in_scoring(v, context.scoring_hand) then
+          poke_remove_card(v, card)
+        end
+      end
     end
     if context.remove_playing_cards and not context.blueprint then
       for _, removed_card in ipairs(context.removed) do
@@ -107,7 +106,8 @@ local hydreigon={
         })
       end
     end
-  end
+  end,
+  attributes = {"xmult", "hand_type", "destroy_card", "scaling"},
 }
 -- Larvesta 636
 -- Volcarona 637
