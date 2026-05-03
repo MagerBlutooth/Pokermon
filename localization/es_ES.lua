@@ -2997,12 +2997,9 @@ return {
             j_poke_smeargle = {
                 name = "Smeargle",
                 text = {
-                  "{C:attention}Esquematiza{} la habilidad",
-				  "del {C:attention}comodín{} de la derecha",
+                  "{C:attention}Esquematiza{} la habilidad del",
+                  "{C:attention}comodín{} de la derecha",
 				  "cuando la ciega es seleccionada",
-				  "{br:2}ERROR - CONTACT STEAK",
-				  "Aplica la habilidad del",
-				  "{C:attention}Comodín borroso{}",
                 }
             },
             j_poke_tyrogue = {
@@ -3754,22 +3751,20 @@ return {
             j_poke_swablu = {
               name = "Swablu",
               text = {
-                "Cuando sacas un {C:attention}9",
-                "durante la {C:attention}ciega{}, obtiene",
-                "{C:chips}+#2#{} fichas y ganas {C:money}#3# ${}",
-                "{C:inactive}(Evoluciona cuando tiene","{C:chips}+#1#{C:inactive} / +#4# fichas)",
+                "Obtiene {C:chips}+#2#{} fichas cuando",
+				"sacas un {C:attention}9{} durante una {C:attention}ciega",
+                "{C:inactive}(Evoluciona cuando tiene","{C:chips}+#1#{C:inactive} / +#3# fichas)",
               }
             },
             j_poke_altaria = {
               name = "Altaria",
               text = {
-                "Cuando sacas un {C:attention}9",
-                "durante la {C:attention}ciega{}, obtiene",
-                "{C:chips}+#2#{} fichas y ganas {C:money}#3# ${}",
+                "Obtiene {C:chips}+#2#{} fichas y tienes",
+				"{C:green}#4# en #5#{} probabilidades de ganar {C:money}#3# ${}",
+				"cuando sacas un {C:attention}9{} durante una {C:attention}ciega",
                 "{br:2}ERROR - CONTACT STEAK",
-                "Obtiene {C:chips}+#4#{} fichas más y",
-                "ganas {C:money}#5# ${} más si tienes",
-                "otro comodín tipo {X:dragon,C:white}Dragón{}",
+                "Garantizado si tienes otro",
+                "comodín tipo {X:dragon,C:white}Dragón{}",
                 "{C:inactive}(Actual {C:chips}+#1#{C:inactive} fichas)",
               }
             },
@@ -3779,8 +3774,8 @@ return {
                     "{C:attention}Naturaleza: {C:inactive}({C:attention}#4#, #5#, #6#{C:inactive}){}",
                     "{br:2}ERROR - CONTACT STEAK",
                     "Obtiene {C:mult}+#2#{} multi si",
-                    "la mano jugada contiene",
-                    "una carta de {C:attention}naturaleza{} que no anota",
+                    "la mano jugada contiene una",
+                    "carta de {C:attention}naturaleza{} que no anota",
                     "{C:inactive}(Evoluciona cuando tiene","{C:mult}+#1#{C:inactive} / +#3# multi)",
                 } 
             },
@@ -6599,11 +6594,9 @@ return {
             sketch = {
               name = "Esquema",
               text = {
-                "{s:0.9}Copia a un comodín hasta que es vendido,",
-				"{s:0.9}destruido o copias otra habilidad",
-				"{s:0.9}La copia aparece en una ventana adicional",
-				"{s:0.9}y cuando haces clic derecho en Smeargle",
-				"{s:0.9}Se restablece cuando copias uno nuevo"
+                "Copia una habilidad hasta",
+                "que el comodín copiado es",
+                "destruido o copias otra habilidad"
               }
             },
             unlimited_energy_tooltip = {
