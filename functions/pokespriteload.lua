@@ -1261,13 +1261,13 @@ PokemonSprites = {
 {name = "jelly_donut", base = {pos = {x = 6, y = 0}}, others_atlas = true,},
 {name = "treasure_eatery", base = {pos = {x = 6, y = 2}}, others_atlas = true,},
 {name = "mystery_egg", base = {pos = {x = 0, y = 1}}, others_atlas = true,},
-{name = "rival", base = {artist = 'MyDude_YT', pos = {x = 0, y = 2}, display_text = {key = 'j_poke_rival'}}, others_atlas = true,},
--- These sprites are set dynamically elsewhere, so these entries are just for the credits screen
-{name = "bitter_rival", base = {artist = 'MyDude_YT', pos = {x = 2, y = 2}, display_text = {key = 'j_poke_bitter_rival'}}, others_atlas = true,},
-{name = "champion", base = {artist = 'MyDude_YT', pos = {x = 4, y = 2}, display_text = {key = 'j_poke_champion'}}, others_atlas = true,},
+{name = "rival", base = {pos = {x = 0, y = 2}}, others_atlas = true,},
+{name = "bitter_rival", base = {pos = {x = 2, y = 2}}, others_atlas = true,},
+{name = "champion", base = {pos = {x = 4, y = 2}}, others_atlas = true,},
 
 {name = "ruins_of_alph", base = {pos = {x = 0, y = 3}}, others_atlas = true,},
 {name = "professor", base = {pos = {x = 4, y = 1}}, others_atlas = true,},
+{name = "imposter_professor", base = {pos = {x = 6, y = 1}}, others_atlas = true,},
 {name = "oologist", base = {pos = {x = 4, y = 4}}, others_atlas = true,},
 {name = "daycare", base = {pos = {x = 2,y = 4}}, others_atlas = true,},
 {name = "billion_lions", base = {pos = {x = 4, y = 3}, soul_pos = {x = 5, y = 3}}, others_atlas = true,},

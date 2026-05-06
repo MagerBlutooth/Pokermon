@@ -442,6 +442,7 @@ local bellsprout={
   ptype = "Grass",
   atlas = "Pokedex1",
   gen = 1,
+  knockoff_starter = true,
   blueprint_compat = true,
   calculate = function(self, card, context)
     if context.individual and context.cardarea == G.play and not context.other_card.debuff then
@@ -717,6 +718,7 @@ local ponyta={
   ptype = "Fire",
   atlas = "Pokedex1",
   gen = 1, 
+  knockoff_starter = true,
   perishable_compat = false,
   blueprint_compat = true,
   calculate = function(self, card, context)
@@ -788,6 +790,7 @@ local slowpoke={
   ptype = "Water",
   atlas = "Pokedex1",
   gen = 1, 
+  knockoff_starter = true,
   blueprint_compat = true,
   calculate = function(self, card, context)
     if context.cardarea == G.jokers and context.scoring_hand then
