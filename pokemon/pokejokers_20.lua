@@ -43,10 +43,10 @@ local zoroark = {
         if card.area ~= G.jokers and not G.SETTINGS.paused then
           card.ability.extra.hidden_key = card.ability.extra.hidden_key or get_random_poke_key('zoroark', nil, 'poke_safari', nil, nil, {j_poke_zoroark = true})
           local _o = G.P_CENTERS[card.ability.extra.hidden_key]
-          card.children.center.atlas = G.ASSET_ATLAS[_o.atlas]
+          card.children.center.atlas = SMODS.get_atlas(_o.atlas)
           card.children.center:set_sprite_pos(_o.pos)
         else
-          card.children.center.atlas = G.ASSET_ATLAS[self.atlas]
+          card.children.center.atlas = SMODS.get_atlas(self.atlas)
           card.children.center:set_sprite_pos(self.pos)
         end
         return true
@@ -68,7 +68,7 @@ local zoroark = {
         textDyna.strings = {}
         textDyna:update_text(true)
       end
-      card.children.center.atlas = G.ASSET_ATLAS[_o.atlas]
+      card.children.center.atlas = SMODS.get_atlas(_o.atlas)
       card.children.center:set_sprite_pos(_o.pos)
       local poketype_list = {Grass = true, Fire = true, Water = true, Lightning = true, Psychic = true, Fighting = true, Colorless = true, Dark = true, Metal = true, Fairy = true, Dragon = true, Earth = true}
       for i = #info_queue, 1, -1 do
@@ -104,13 +104,13 @@ local zoroark = {
           card.children.floating_sprite.atlas = other_joker.children.floating_sprite.atlas
           card.children.floating_sprite:set_sprite_pos(other_joker.children.floating_sprite.sprite_pos)
         else
-          card.children.floating_sprite.atlas = G.ASSET_ATLAS[self.atlas]
+          card.children.floating_sprite.atlas = SMODS.get_atlas(self.atlas)
           card.children.floating_sprite:set_sprite_pos(self.soul_pos)
         end
       else
-        card.children.center.atlas = G.ASSET_ATLAS[card.edition and card.edition.poke_shiny and "poke_AtlasJokersBasicNatdexShiny" or "poke_AtlasJokersBasicNatdex"]
+        card.children.center.atlas = SMODS.get_atlas(card.edition and card.edition.poke_shiny and "poke_AtlasJokersBasicNatdexShiny" or "poke_AtlasJokersBasicNatdex")
         card.children.center:set_sprite_pos(self.pos)
-        card.children.floating_sprite.atlas = G.ASSET_ATLAS[card.edition and card.edition.poke_shiny and "poke_AtlasJokersBasicNatdexShiny" or "poke_AtlasJokersBasicNatdex"]
+        card.children.floating_sprite.atlas = SMODS.get_atlas(card.edition and card.edition.poke_shiny and "poke_AtlasJokersBasicNatdexShiny" or "poke_AtlasJokersBasicNatdex")
         card.children.floating_sprite:set_sprite_pos(self.soul_pos)
       end
     elseif poke_is_in_collection(card) and card.children.center.sprite_pos ~= self.pos and card.children.center.atlas.name ~= self.atlas then

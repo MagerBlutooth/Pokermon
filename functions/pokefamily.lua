@@ -141,6 +141,7 @@ local default_family_list = {
   { "carvanha", "sharpedo"},
   { "duskull", "dusclops", "dusknoir" },
   {"clamperl", "huntail", "gorebyss"},
+  { "baltoy", "claydol"},
   { "lileep", "cradily" },
   { "anorith", "armaldo" },
   { "bagon", "shelgon", "salamence"},

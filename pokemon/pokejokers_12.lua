@@ -302,7 +302,217 @@ local crawdaunt={
   attributes = {"passive", "nature", "rank", "mult"},
 }
 -- Baltoy 343
+local baltoy={
+  name = "baltoy",
+  pos = {x = 0, y = 0},
+  config = {extra = {chips = 0, chip_mod = 1, chip_mod1 = 6, hazard_level = 1,}, evo_rqmt = 40},
+  loc_vars = function(self, info_queue, center)
+    type_tooltip(self, info_queue, center)
+    info_queue[#info_queue+1] = {set = 'Other', key = 'hazard_level', vars = poke_get_hazard_level_vars()}
+    info_queue[#info_queue+1] = G.P_CENTERS.m_poke_hazard
+    local r_chips = {}
+    for i = center.ability.extra.chip_mod, center.ability.extra.chip_mod1 do
+        r_chips[#r_chips + 1] = tostring(i)
+    end
+    local loc_chips = ' '..(localize('k_poke_chips'))..' '..(localize('poke_baltoy_text'))
+    main_start = {
+        {n = G.UIT.R,
+          config = {
+            align = "cm",
+            padding = 0.05,
+            colour = G.C.CLEAR,
+          },
+          nodes = {
+            { n = G.UIT.T, config = { text = '+'..center.ability.extra.hazard_level, colour = G.ARGS.LOC_COLOURS.hazard, scale = 0.32 } },
+              { n = G.UIT.T, config = { text = ' '..localize('k_poke_hazard_layer'), colour = G.C.UI.TEXT_DARK, scale = 0.32 } },
+            }
+        },
+        {n = G.UIT.R,
+        config = {
+          align = "cm",
+          padding = 0.05,
+          colour = G.C.CLEAR,
+        },
+        nodes = {
+            { n = G.UIT.T, config = { text = '  +', colour = G.C.CHIPS, scale = 0.32 } },
+            { n = G.UIT.O, config = { object = DynaText({ string = r_chips, colours = { G.C.CHIPS }, pop_in_rate = 9999999, silent = true, random_element = true, pop_delay = 0.5, scale = 0.32,              min_cycle_time = 0 }) } },
+            {
+                n = G.UIT.O,
+                config = {
+                    object = DynaText({
+                        string = {
+                            loc_chips, loc_chips, loc_chips, loc_chips, loc_chips, loc_chips, loc_chips, loc_chips, loc_chips,
+                            loc_chips, loc_chips, loc_chips, loc_chips },
+                        colours = { G.C.UI.TEXT_DARK },
+                        pop_in_rate = 9999999,
+                        silent = true,
+                        random_element = true,
+                        pop_delay = 0.2011,
+                        scale = 0.32,
+                        min_cycle_time = 0
+                    })
+                }
+            },
+          }
+        },
+    }
+    return { main_start = main_start, vars = {center.ability.extra.chips, center.ability.extra.hazard_level, self.config.evo_rqmt} }
+  end,
+  rarity = 1,
+  cost = 5,
+  gen = 3,
+  stage = "Basic",
+  ptype = "Earth",
+  atlas = "Pokedex3",
+  perishable_compat = true,
+  blueprint_compat = true,
+  eternal_compat = true,
+  calculate = function(self, card, context)
+    if context.discard and SMODS.has_enhancement(context.other_card, "m_poke_hazard") and not context.blueprint then
+        local chip_gain = pseudorandom('baltoy', card.ability.extra.chip_mod, card.ability.extra.chip_mod1)
+        
+        SMODS.scale_card(card, {
+          ref_value = 'chips',
+          scalar_table = {chip_mod = chip_gain},
+          scalar_value = 'chip_mod',
+          operation = function(ref_table, ref_value, initial)
+            ref_table[ref_value] = initial + chip_gain
+          end,
+          message_key = 'a_chips',
+          message_colour = G.C.CHIPS,
+        })
+    end
+    if context.joker_main then
+      return
+      {
+        chips = card.ability.extra.chips
+      }
+    end
+    return scaling_evo(self, card, context, "j_poke_claydol", card.ability.extra.chips, self.config.evo_rqmt)
+  end,
+  add_to_deck = function(self, card, from_debuff)
+    poke_change_hazard_level(card.ability.extra.hazard_level)
+  end,
+  remove_from_deck = function(self, card, from_debuff)
+    poke_change_hazard_level(-card.ability.extra.hazard_level)
+  end,
+}
 -- Claydol 344
+local claydol={
+  name = "claydol",
+  pos = {x = 0, y = 0},
+  config = {extra = {chips = 0, chip_mod = 1, chip_mod1 = 8, hazard_level = 1, num = 1, dem = 3}},
+  loc_vars = function(self, info_queue, center)
+    type_tooltip(self, info_queue, center)
+    info_queue[#info_queue+1] = {set = 'Other', key = 'hazard_level', vars = poke_get_hazard_level_vars()}
+    info_queue[#info_queue+1] = G.P_CENTERS.m_poke_hazard
+    local r_chips = {}
+    for i = center.ability.extra.chip_mod, center.ability.extra.chip_mod1 do
+        r_chips[#r_chips + 1] = tostring(i)
+    end
+    local loc_chips = ' '..(localize('k_poke_chips'))..' '..(localize('poke_baltoy_text'))
+    main_start = {
+        {n = G.UIT.R,
+          config = {
+            align = "cm",
+            padding = 0.05,
+            colour = G.C.CLEAR,
+          },
+          nodes = {
+            { n = G.UIT.T, config = { text = '+'..center.ability.extra.hazard_level, colour = G.ARGS.LOC_COLOURS.hazard, scale = 0.32 } },
+              { n = G.UIT.T, config = { text = ' '..localize('k_poke_hazard_layer'), colour = G.C.UI.TEXT_DARK, scale = 0.32 } },
+            }
+        },
+        {n = G.UIT.R,
+        config = {
+          align = "cm",
+          padding = 0.05,
+          colour = G.C.CLEAR,
+        },
+        nodes = {
+            { n = G.UIT.T, config = { text = '  +', colour = G.C.CHIPS, scale = 0.32 } },
+            { n = G.UIT.O, config = { object = DynaText({ string = r_chips, colours = { G.C.CHIPS }, pop_in_rate = 9999999, silent = true, random_element = true, pop_delay = 0.5, scale = 0.32,              min_cycle_time = 0 }) } },
+            {
+                n = G.UIT.O,
+                config = {
+                    object = DynaText({
+                        string = {
+                            loc_chips, loc_chips, loc_chips, loc_chips, loc_chips, loc_chips, loc_chips, loc_chips, loc_chips,
+                            loc_chips, loc_chips, loc_chips, loc_chips },
+                        colours = { G.C.UI.TEXT_DARK },
+                        pop_in_rate = 9999999,
+                        silent = true,
+                        random_element = true,
+                        pop_delay = 0.2011,
+                        scale = 0.32,
+                        min_cycle_time = 0
+                    })
+                }
+            },
+          }
+        },
+    }
+    local num, dem = SMODS.get_probability_vars(center, center.ability.extra.num, center.ability.extra.dem, 'claydol')
+    return { main_start = main_start, vars = {center.ability.extra.chips, center.ability.extra.hazard_level, num, dem} }
+  end,
+  rarity = "poke_safari",
+  cost = 7,
+  gen = 3,
+  stage = "One",
+  ptype = "Earth",
+  atlas = "Pokedex3",
+  perishable_compat = true,
+  blueprint_compat = true,
+  eternal_compat = true,
+  calculate = function(self, card, context)
+    if context.pre_discard and not context.blueprint then
+      for i = 1, #G.hand.highlighted do
+        local c = G.hand.highlighted[i]
+        if SMODS.has_enhancement(c, "m_poke_hazard") and SMODS.pseudorandom_probability(card, 'claydol', card.ability.extra.num, card.ability.extra.dem, 'claydol') then
+          c.claydoll_discard = true
+        end
+      end
+    end
+    if context.discard and SMODS.has_enhancement(context.other_card, "m_poke_hazard") and not context.blueprint then
+        local chip_gain = pseudorandom('baltoy', card.ability.extra.chip_mod, card.ability.extra.chip_mod1)
+        
+        SMODS.scale_card(card, {
+          ref_value = 'chips',
+          scalar_table = {chip_mod = chip_gain},
+          scalar_value = 'chip_mod',
+          operation = function(ref_table, ref_value, initial)
+            ref_table[ref_value] = initial + chip_gain
+          end,
+          message_key = 'a_chips',
+          message_colour = G.C.CHIPS,
+        })
+    end
+    if context.stay_flipped and context.from_area == G.hand and context.to_area == G.discard and context.other_card.claydoll_discard then
+      context.other_card.claydoll_discard = nil
+      return
+      {
+        modify = {to_area = G.hand}
+      }
+    end
+    if context.joker_main then
+      return
+      {
+        chips = card.ability.extra.chips
+      }
+    end
+    if context.end_of_round and not context.individual and not context.repetition and not context.blueprint then
+      for k, v in pairs(G.deck.cards) do
+        if v.claydoll_discard then v.claydoll_discard = nil end
+      end
+    end
+  end,
+  add_to_deck = function(self, card, from_debuff)
+    poke_change_hazard_level(card.ability.extra.hazard_level)
+  end,
+  remove_from_deck = function(self, card, from_debuff)
+    poke_change_hazard_level(-card.ability.extra.hazard_level)
+  end,
+}
 -- Lileep 345
 local lileep={
   name = "lileep",
@@ -913,5 +1123,5 @@ local wynaut={
   attributes = {"baby", "tarot", "generation", "round_evo"},
 }
 return {name = "Pokemon Jokers 331-360", 
-        list = {cacnea, cacturne, swablu, altaria, corphish, crawdaunt, lileep, cradily, anorith, armaldo, feebas, milotic, duskull, dusclops, chimecho, absol, wynaut},
+        list = {cacnea, cacturne, swablu, altaria, corphish, crawdaunt, baltoy, claydol, lileep, cradily, anorith, armaldo, feebas, milotic, duskull, dusclops, chimecho, absol, wynaut},
 }

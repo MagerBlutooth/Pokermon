@@ -3836,6 +3836,24 @@ return {
                     "{C:inactive}(Currently {C:mult}+#1#{C:inactive} Mult)",
                 } 
             },
+            j_poke_baltoy = {
+              name = "Baltoy",
+              text = {
+                "discarded {C:attention}Hazard{} card",
+                "{C:inactive}(Evolves at {C:chips}+#1#{C:inactive} / #3# Chips",
+              }
+            },
+            j_poke_claydol = {
+              name = "Claydol",
+              text = {
+                "discarded {C:attention}Hazard{} card",
+                "{br:2}ERROR - CONTACT STEAK",
+                "{C:green}#3# in #4#{} chance for",
+                "discarded {C:attention}Hazard{} cards",
+                "to be returned to {C:attention}hand",
+                "{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips",
+              }
+            },
             j_poke_lileep = {
                 name = "Lileep",
                 text = {
@@ -4676,6 +4694,9 @@ return {
             j_poke_shaymin = {
               name = "Shaymin",
               text = {
+                "{C:attention}Flower{} cards give {X:mult,C:white} X3 {} Mult",
+                "instead of {X:mult,C:white} X2 {} Mult",
+                "{br:2}ERROR - CONTACT STEAK",
                 "The rightmost scoring card",
                 "of {C:attention}first hand{} of round",
                 "becomes a {C:attention}Flower{} card",
@@ -4685,6 +4706,9 @@ return {
             j_poke_shaymin_sky = {
               name = "Shaymin (Sky)",
               text = {
+                "{C:attention}Flower{} cards give {X:mult,C:white} X3 {} Mult",
+                "instead of {X:mult,C:white} X2 {} Mult",
+                "{br:2}ERROR - CONTACT STEAK",
                 "{C:attention}Flower{} cards are",
                 "also {C:attention}Wild{} cards",
                 "{C:inactive,s:0.8}(Transforms with a {C:attention,s:0.8}Death{C:inactive,s:0.8} card)"
@@ -7203,6 +7227,8 @@ return {
             k_poke_ignores = "Ignores",
             k_poke_limit = "Limit",
             k_poke_pp = "PP UP",
+            k_poke_chips = "Chips",
+            k_poke_hazard_layer = "hazard layer",
             
             k_poke_baby = "Baby",
             k_poke_safari = "Safari",
@@ -7373,6 +7399,7 @@ return {
             poke_none = "None",
             poke_dawn_info1 = "(Next hand played sets hand type)",
             poke_dawn_info2 = "(Hand type set!)",
+            poke_baltoy_text = "for each",
             poke_make_it_rain = "Make it Rain!",
             poke_val_down = "Value Down!",
             poke_powder_ex = "Powder Snow!",
