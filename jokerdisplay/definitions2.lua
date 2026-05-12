@@ -1075,7 +1075,7 @@ jd_def["j_poke_steelix"] = {
         card.joker_display_values.status = status
     end
 }
-
+--[[
 jd_def["j_poke_mega_steelix"] = {
     text = {
       { text = "+$", colour = G.C.GOLD },
@@ -1094,6 +1094,7 @@ jd_def["j_poke_mega_steelix"] = {
       card.joker_display_values.localized_text = "(" .. localize("k_round") .. ")"
     end
 }
+--]]
 
 --	Snubbull
 jd_def["j_poke_snubbull"] = {

@@ -1427,43 +1427,36 @@ local steelix={
   gen = 2,
   blueprint_compat = false,
   calculate = function(self, card, context)
-    if context.first_hand_drawn and not context.blueprint then
-      local eval = function() return G.GAME.current_round.hands_played == 0 and not G.RESET_JIGGLES end
-      juice_card_until(card, eval, true)
-    end
-    if context.before and context.cardarea == G.jokers and not context.blueprint then
-      if G.GAME.current_round.hands_played == 0 then
-        local card = context.scoring_hand[1]
-        card:set_ability(G.P_CENTERS.m_steel, nil, true)
-        G.E_MANAGER:add_event(Event({
-            func = function()
-                card:juice_up()
-                return true
-            end
-        })) 
+    if context.remove_playing_cards then
+      for _, removed_card in ipairs(context.removed) do
+         local stone_card = SMODS.add_card { set = "Base", enhancement = "m_stone", area = G.deck }
+         SMODS.calculate_context({ playing_card_added = true, cards = { stone_card } })
+         card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_plus_stone'), colour = G.C.SECONDARY_SET.Enhanced})
       end
     end
-    if context.individual and context.cardarea == G.hand and SMODS.has_enhancement(context.other_card, "m_stone") and not context.blueprint then
-      context.other_card:set_ability(G.P_CENTERS.m_steel, nil, true)
-      return
-      {
-        message = localize('poke_iron_tail_ex'),
-        colour = G.ARGS.LOC_COLOURS.metal,
-        card = card
-      }
+    
+    if context.check_enhancement then
+      if SMODS.has_enhancement(context.other_card, 'm_stone') then
+          return {m_steel = true}
+      end
     end
   end,
   megas = { "mega_steelix" },
-  attributes = {"modify_card", "enhancements"},
+  attributes = {"enhancements", "passive"},
 }
 local mega_steelix={
   name = "mega_steelix",
   pos = {x = 2, y = 2},
   soul_pos = {x = 3, y = 2},
-  config = {extra = {money = 1, suit = "Diamonds"}},
+  config = {extra = {stone_held = 4}},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
-    return {vars = {center.ability.extra.money, localize(center.ability.extra.suit, 'suits_singular'), localize(center.ability.extra.suit, 'suits_plural')}}
+    if pokermon_config.detailed_tooltips then
+      info_queue[#info_queue+1] = G.P_CENTERS.m_stone
+      info_queue[#info_queue+1] = G.P_CENTERS.m_steel
+      info_queue[#info_queue+1] = G.P_CENTERS.m_poke_hazard
+    end
+    return {vars = {center.ability.extra.stone_held}}
   end,
   rarity = "poke_mega",
   cost = 12,
@@ -1475,26 +1468,31 @@ local mega_steelix={
   blueprint_compat = false,
   eternal_compat = true,
   calculate = function(self, card, context)
-    if context.individual and context.cardarea == G.hand and SMODS.has_enhancement(context.other_card, "m_steel") 
-       and not context.other_card:is_suit(card.ability.extra.suit) and not context.blueprint then
-      context.other_card:change_suit(card.ability.extra.suit)
-      context.other_card:set_ability(G.P_CENTERS.c_base, nil, true)
-      return
-        {
-          message = localize('poke_autotomize_ex'),
-          colour = G.ARGS.LOC_COLOURS.metal,
+    if context.check_enhancement then
+      if SMODS.has_enhancement(context.other_card, 'm_stone') then
+          return {m_steel = true, m_poke_hazard = true}
+      end
+    end
+    if context.repetition and context.cardarea == G.hand and (next(context.card_effects[1]) or #context.card_effects > 1) then
+      local stone = 0
+      for i=1, #G.hand.cards do
+        if SMODS.has_no_rank(G.hand.cards[i]) then 
+          stone = stone + 1
+        end
+      end
+      
+      local retriggers = math.floor(stone/card.ability.extra.stone_held)
+      
+      if retriggers > 0 then
+        return {
+          message = localize('k_again_ex'),
+          repetitions = retriggers,
           card = card
         }
+      end
     end
   end,
-  calc_dollar_bonus = function(self, card)
-      local diamond_tally = 0
-      for _, playing_card in ipairs(G.playing_cards) do
-          if playing_card:is_suit(card.ability.extra.suit) then diamond_tally = diamond_tally + 1 end
-      end
-      return diamond_tally > 0 and card.ability.extra.money * diamond_tally or nil
-  end,
-  attributes = {"modify_card", "enhancements", "suit", "diamonds", "economy", "full_deck"},
+  attributes = {"enhancements", "retrigger", "hazards", "passive"},
 }
 -- Snubbull 209
 local snubbull = {

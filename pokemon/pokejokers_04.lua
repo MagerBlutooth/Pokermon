@@ -277,22 +277,13 @@ local onix={
   ptype = "Earth",
   atlas = "Pokedex1",
   gen = 1,
-  blueprint_compat = false,
+  blueprint_compat = true,
   calculate = function(self, card, context)
-    if context.first_hand_drawn and not context.blueprint then
-      local eval = function() return G.GAME.current_round.hands_played == 0 and not G.RESET_JIGGLES end
-      juice_card_until(card, eval, true)
-    end
-    if context.before and context.cardarea == G.jokers and not context.blueprint then
-      if G.GAME.current_round.hands_played == 0 then
-        local card = context.scoring_hand[1]
-        card:set_ability(G.P_CENTERS.m_stone, nil, true)
-        G.E_MANAGER:add_event(Event({
-            func = function()
-                card:juice_up()
-                return true
-            end
-        })) 
+    if context.remove_playing_cards then
+      for _, removed_card in ipairs(context.removed) do
+         local stone_card = SMODS.add_card { set = "Base", enhancement = "m_stone", area = G.deck }
+         SMODS.calculate_context({ playing_card_added = true, cards = { stone_card } })
+         card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_plus_stone'), colour = G.C.SECONDARY_SET.Enhanced})
       end
     end
     return type_evo(self, card, context, "j_poke_steelix", "metal")
@@ -1172,10 +1163,10 @@ local tangela={
 local kangaskhan={
   name = "kangaskhan", 
   pos = {x = 10, y = 8},
-  config = {extra = {card_limit = 2, interest_cap = 5}},
+  config = {extra = {card_limit = 2}},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
-		return {vars = {center.ability.extra.card_limit, center.ability.extra.interest_cap/5}}
+		return {vars = {center.ability.extra.card_limit}}
   end,
   rarity = 2, 
   cost = 6, 
@@ -1189,14 +1180,12 @@ local kangaskhan={
     G.E_MANAGER:add_event(Event({func = function()
       G.consumeables.config.card_limit = G.consumeables.config.card_limit + add
       return true end }))
-    G.GAME.interest_cap = G.GAME.interest_cap - card.ability.extra.interest_cap
   end,
   remove_from_deck = function(self, card, from_debuff)
     local remove = card.ability.extra.card_limit
     G.E_MANAGER:add_event(Event({func = function()
       G.consumeables.config.card_limit = G.consumeables.config.card_limit - remove
       return true end }))
-    G.GAME.interest_cap = G.GAME.interest_cap + card.ability.extra.interest_cap
   end, 
   megas = {"mega_kangaskhan"},
   attributes = {"passive", "economy"},

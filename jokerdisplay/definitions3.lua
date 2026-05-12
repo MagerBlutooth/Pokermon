@@ -615,25 +615,17 @@ jd_def["j_poke_ralts"] = {
     { text = "+", colour = G.C.MULT },
     { ref_table = "card.joker_display_values", ref_value = "mult", colour = G.C.MULT },
   },
-  reminder_text = {
-    { text = "(" },
-    { ref_table = "card.joker_display_values", ref_value = "localized_text", colour = G.C.ORANGE },
-    { text = ")" },
-  },
   calc_function = function(card)
     local energized_jokers = 0
+    local planets = #poke_get_consumeables('Planet')
     local mult = 0
-    local _, poker_hands, _ = JokerDisplay.evaluate_hand()
     for k, v in ipairs(G.jokers.cards) do
       if get_total_energy(v) > 0 then
         energized_jokers = energized_jokers + 1
       end
     end
-    if poker_hands['Pair'] and next(poker_hands['Pair']) then
-      mult = card.ability.extra.mult_mod * energized_jokers
-    end
+    mult = card.ability.extra.mult_mod * (energized_jokers + planets)
     card.joker_display_values.mult = mult
-    card.joker_display_values.localized_text = localize('Pair', 'poker_hands')
   end
 }
 
@@ -643,25 +635,17 @@ jd_def["j_poke_kirlia"] = {
     { text = "+", colour = G.C.MULT },
     { ref_table = "card.joker_display_values", ref_value = "mult", colour = G.C.MULT },
   },
-  reminder_text = {
-    { text = "(" },
-    { ref_table = "card.joker_display_values", ref_value = "localized_text", colour = G.C.ORANGE },
-    { text = ")" },
-  },
   calc_function = function(card)
     local energized_jokers = 0
+    local planets = #poke_get_consumeables('Planet')
     local mult = 0
-    local _, poker_hands, _ = JokerDisplay.evaluate_hand()
     for k, v in ipairs(G.jokers.cards) do
       if get_total_energy(v) > 0 then
         energized_jokers = energized_jokers + 1
       end
     end
-    if poker_hands['Pair'] and next(poker_hands['Pair']) then
-      mult = card.ability.extra.mult_mod * energized_jokers
-    end
+    mult = card.ability.extra.mult_mod * (energized_jokers + planets)
     card.joker_display_values.mult = mult
-    card.joker_display_values.localized_text = localize('Pair', 'poker_hands')
   end
 }
 

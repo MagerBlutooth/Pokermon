@@ -738,9 +738,14 @@ local porygonz={
 local gallade={
   name = "gallade",
   pos = {x = 0, y = 0},
-  config = {extra = {Xmult_mod = 0.5, e_limit = 1, num = 1, dem = 3, e_level = 3}},
+  config = {extra = {Xmult_mod = 0.5, e_level = 2}},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
+    if pokermon_config.detailed_tooltips then
+      info_queue[#info_queue+1] = { set = 'Spectral', key = 'c_poke_double_rainbow_energy', 
+                                    vars = {(pokermon_config.unlimited_energy and localize("poke_unlimited_energy")) or energy_max + (G.GAME.energy_plus or 0)}}
+      info_queue[#info_queue+1] = {set = 'Other', key = 'holding', vars = {"Double Rainbow Energy"}}
+    end
     local energized = 0
     if G.jokers then
       for k, v in ipairs(G.jokers.cards) do
@@ -750,8 +755,7 @@ local gallade={
       end
     end
     local total = 1 + (center.ability.extra.Xmult_mod * energized)
-    local num, dem = SMODS.get_probability_vars(center, center.ability.extra.num, center.ability.extra.dem, 'gallade')
-    return {vars = {center.ability.extra.Xmult_mod, center.ability.extra.e_limit, total, num, dem, center.ability.extra.e_level}}
+    return {vars = {center.ability.extra.Xmult_mod, total, center.ability.extra.e_level}}
   end,
   rarity = "poke_safari",
   cost = 10,
@@ -763,7 +767,7 @@ local gallade={
   blueprint_compat = true,
   eternal_compat = true,
   calculate = function(self, card, context)
-    if context.joker_main and next(context.poker_hands['Pair']) then
+    if context.joker_main then
       local energized = 0
       for k, v in ipairs(G.jokers.cards) do
         if get_total_energy(v) >= card.ability.extra.e_level then
@@ -793,20 +797,12 @@ local gallade={
     end
   end,
   add_to_deck = function(self, card, from_debuff)
-    if not G.GAME.energy_plus then
-      G.GAME.energy_plus = card.ability.extra.e_limit
-    else
-      G.GAME.energy_plus = G.GAME.energy_plus + card.ability.extra.e_limit
+    if not from_debuff and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+      local bhole = SMODS.add_card{ set = 'Spectral', key = 'c_poke_double_rainbow_energy'}
+      SMODS.calculate_effect({ message = localize('poke_plus_energy') }, bhole)
     end
   end,
-  remove_from_deck = function(self, card, from_debuff)
-    if not G.GAME.energy_plus then
-      G.GAME.energy_plus = 0
-    else
-      G.GAME.energy_plus = G.GAME.energy_plus - card.ability.extra.e_limit
-    end
-  end,
-  attributes = {"energy_limit", "chance", "energy_count", "item", "xmult", "hand_type", "passive"},
+  attributes = {"energy_count", "item", "xmult", "hand_type", "passive"},
 }
 -- Probopass 476
 local probopass={
