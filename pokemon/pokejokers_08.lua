@@ -238,19 +238,28 @@ local shuckle={
   blueprint_compat = false,
   eternal_compat = true,
   calculate = function(self, card, context)
-    if context.setting_blind and not card.getting_sliced and not context.blueprint and G.consumeables and G.consumeables.cards and #G.consumeables.cards > 0 then
+    if context.setting_blind and not card.getting_sliced and not context.blueprint and G.consumeables and #G.consumeables.cards > 0 then
       local sliced_card = G.consumeables.cards[1]
       if not sliced_card.getting_sliced and not sliced_card.config.center.berry_juice then
         sliced_card.getting_sliced = true
-        G.E_MANAGER:add_event(Event({func = function()
+        G.E_MANAGER:add_event(Event({
+          func = function()
             card:juice_up(0.8, 0.8)
             sliced_card:start_dissolve({HEX("57ecab")}, nil, 1.6)
-            play_sound('slice1', 0.96+math.random()*0.08)
-            local _card = create_card('Item', G.consumeables, nil, nil, nil, nil, pokermon.juice_list[sliced_card.config.center.set] or 'c_poke_berry_juice_mystery')
-            _card:add_to_deck()
-            G.consumeables:emplace(_card)
-            card_eval_status_text(_card, 'extra', nil, nil, nil, {message = localize('poke_plus_pokeitem'), colour = G.C.FILTER})
-        return true end }))
+            play_sound('slice1', 0.96 + math.random() * 0.08)
+
+            local key
+            if sliced_card.config.center.key == 'c_poke_megastone' then
+              key = 'c_poke_berry_juice_mega'
+            else
+              key = pokermon.juice_list[sliced_card.config.center.set] or 'c_poke_berry_juice_mystery'
+            end
+
+            local berry_juice = SMODS.add_card({set = 'Item', key = key})
+            SMODS.calculate_effect({message = localize('poke_plus_pokeitem')}, berry_juice)
+            return true
+          end
+        }))
       end
     end
   end,

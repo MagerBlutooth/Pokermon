@@ -780,21 +780,6 @@ local gallade={
         Xmult = total
       }
     end
-    
-    if context.using_consumeable and context.consumeable.ability.set == 'Item' then
-      if SMODS.pseudorandom_probability(card, 'gallade', card.ability.extra.num, card.ability.extra.dem, 'gallade') then
-        local e_jokers = {}
-        for k, v in ipairs(G.jokers.cards) do
-          if can_apply_energy(v, 'Trans') then
-            e_jokers[#e_jokers + 1] = v
-          end
-        end
-        if #e_jokers > 0 then
-          local energize_joker = pseudorandom_element(e_jokers, "gallade_energy")
-          energy_increase(energize_joker, "Trans")
-        end
-      end
-    end
   end,
   add_to_deck = function(self, card, from_debuff)
     if not from_debuff and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then

@@ -516,6 +516,13 @@ return {
                     "and earn {C:money}$#1#{}",
                 },
             },
+            c_poke_berry_juice_mega = {
+                name = "Mega Berry Juice",
+                text = {
+                    "{C:attention}Mega Evolves{} leftmost",
+                    "or selected Joker",
+                },
+            },
             c_poke_berry_juice_mystery = {
                 name = "Mystery Berry Juice",
                 text = {

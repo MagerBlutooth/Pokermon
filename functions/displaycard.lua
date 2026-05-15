@@ -304,12 +304,15 @@ poke_input_manager:add_listener('double_click', function(target)
 end)
 
 function poke_create_art_display_card(args, ...)
+  args = copy_table(args)
+
   if args.existing_key then
     -- here we grab default args early so we can decide which components to add
     -- you can still pass `existing_key` directly to the PokeDisplayCard constructor
     -- -- if you need values from existing_obj in your component, consider setting them in `Component:apply()`
     local default_args = get_default_args_from_existing(args.existing_key, args.set)
-    args = SMODS.merge_defaults(args, default_args)
+
+    args = SMODS.merge_defaults(args, default_args) or {}
     args.existing_key = nil
   end
 

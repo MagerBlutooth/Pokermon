@@ -986,10 +986,7 @@ local mudkip={
   end,
   remove_from_deck = function(self, card, from_debuff)
     G.GAME.round_resets.hands = G.GAME.round_resets.hands - card.ability.extra.hands
-    local to_decrease = math.min(G.GAME.current_round.hands_left - 1, card.ability.extra.hands)
-    if to_decrease > 0 then
-      ease_hands_played(-to_decrease)
-    end
+    poke_ease_hands_played(-card.ability.extra.hands)
   end,
   set_ability = function(self, card, initial, delay_sprites)
     if initial then
@@ -1050,10 +1047,7 @@ local marshtomp={
   end,
   remove_from_deck = function(self, card, from_debuff)
     G.GAME.round_resets.hands = G.GAME.round_resets.hands - card.ability.extra.hands
-    local to_decrease = math.min(G.GAME.current_round.hands_left - 1, card.ability.extra.hands)
-    if to_decrease > 0 then
-      ease_hands_played(-to_decrease)
-    end
+    poke_ease_hands_played(-card.ability.extra.hands)
   end,
   set_ability = function(self, card, initial, delay_sprites)
     if initial then
@@ -1142,10 +1136,7 @@ local swampert={
   end,
   remove_from_deck = function(self, card, from_debuff)
     G.GAME.round_resets.hands = G.GAME.round_resets.hands - card.ability.extra.hands
-    local to_decrease = math.min(G.GAME.current_round.hands_left - 1, card.ability.extra.hands)
-    if to_decrease > 0 then
-      ease_hands_played(-to_decrease)
-    end
+    poke_ease_hands_played(-card.ability.extra.hands)
   end,
   set_ability = function(self, card, initial, delay_sprites)
     if initial then

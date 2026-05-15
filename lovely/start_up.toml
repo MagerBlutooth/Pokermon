@@ -42,8 +42,8 @@ target = "game.lua"
 pattern = '''
 G.SPLASH_LOGO = Sprite(0, 0, 
     13*SC_scale, 
-    13*SC_scale*(SMODS.get_atlas("balatro").py/SMODS.get_atlas("balatro").px),
-    SMODS.get_atlas("balatro"), {x=0,y=0})
+    13*SC_scale*(G.ASSET_ATLAS["balatro"].py/G.ASSET_ATLAS["balatro"].px),
+    G.ASSET_ATLAS["balatro"], {x=0,y=0})
 '''
 position = "after"
 payload = '''
@@ -51,8 +51,8 @@ payload = '''
       local poke_logo = pokermon_config.pokemon_aprilfools and "poke_smeargle_logo" or "poke_logo"
       G.SPLASH_LOGO = Sprite(0, 0, 
           13/333*389*SC_scale, 
-          13/333*389*SC_scale*(SMODS.get_atlas(poke_logo).py/SMODS.get_atlas(poke_logo).px),
-          SMODS.get_atlas(poke_logo), {x=0.0,y=0})
+          13/333*389*SC_scale*(G.ASSET_ATLAS[poke_logo].py/G.ASSET_ATLAS[poke_logo].px),
+          G.ASSET_ATLAS[poke_logo], {x=0.0,y=0})
     end
 '''
 match_indent = true
