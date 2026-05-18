@@ -763,6 +763,14 @@ return {
                     "{s:0.8}Applies all previous Stakes"
                 }
             },
+            stake_poke_elite = {
+              name = "Elite Stake",
+              text = {
+                "{X:gray,C:attention}+2{} Ante win requirement",
+                "Last {C:attention}4{} Antes are {C:attention}Showdown Boss Blinds",
+                "{s:0.8}Applies all previous Stakes"
+              },
+            },
         },
         Joker = {
             j_poke_bulbasaur = {
@@ -2032,8 +2040,8 @@ return {
                     "{C:chips}+#2#{} Chips for each",
                     "{C:attention}Blind{} skipped this run",
                     "{br:2}ERROR - CONTACT STEAK",
-                    "Visit the {C:attention}shop{}",
-                    "after skipping",
+                    "Skipping {C:attention}Blinds{} no",
+                    "longer skips {C:attention}Shops{}",
                     "{C:inactive}(Currently {C:chips}+#1# {C:inactive}Chips)"
                 } 
             },
@@ -2095,7 +2103,7 @@ return {
                     "{C:attention}Ancient #1#s{}",
                     "{X:attention,C:white}1+{} : Create a {C:tarot}Tarot{} card",
                     "{X:attention,C:white}2+{} : Earn {C:money}$#2#{}",
-                    "{X:attention,C:white}3+{} : Create a {C:item}Item{} card",
+                    "{X:attention,C:white}3+{} : Create an {C:item}Item{} card",
                     "{C:inactive,s:0.8}(Must have room)",
                     "{C:inactive,s:0.8}(Trigger {X:attention,C:white,s:0.8}3+{C:inactive,s:0.8} ability {C:attention,s:0.8}#3#{C:inactive,s:0.8} times to evolve)"
                 } 
@@ -3853,7 +3861,7 @@ return {
                 "{C:green}#3# in #4#{} chance for",
                 "discarded {C:attention}Hazard{} cards",
                 "to be returned to {C:attention}hand",
-                "{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips",
+                "{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)",
               }
             },
             j_poke_lileep = {
@@ -3917,7 +3925,7 @@ return {
                 name = "Milotic",
                 text = {
                   "Retrigger all cards played if",
-                  "poker hand is {C:attention}mono-suit{}"
+                  "they share the same {C:attention}suit{}"
                 }
             },
             j_poke_duskull = {
@@ -7192,6 +7200,14 @@ return {
                     "{C:attention}#1#{} unenhanced cards in deck",
                     "become {C:attention}Hazard Cards{}",
                 },
+            },
+            poke_elite_sticker = {
+              name = "Elite Sticker",
+              text = {
+                "Used this {C:attention}Joker{}",
+                "to win on {C:attention}Elite{}",
+                "{C:attention}Stake{} difficulty",
+              },
             },
         },
     },
