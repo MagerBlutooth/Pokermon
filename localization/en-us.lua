@@ -4000,8 +4000,8 @@ return {
                 "{C:attention}Holding {C:spectral}Ethereal {C:attention}Tag",
                 "Gain {C:attention}+#1#{} hand size while",
                 "opening {C:attention}Booster Packs{}",
-                "{C:inactive,s:0.8}(Evolves with a {C:attention,s:0.8}Linking Cord{C:inactive,s:0.8})",
                 "{C:inactive,s:0.8}(Evolves after selling a {C:attention,s:0.8}Linking Cord{C:inactive,s:0.8})",
+                "{C:inactive,s:0.8}(Evolves with a {C:attention,s:0.8}Linking Cord{C:inactive,s:0.8})",
               }
             },
             j_poke_huntail = {
@@ -5103,6 +5103,7 @@ return {
                 "{C:green}#1# in #2#{} chance to create a",
                 "{C:tarot}Tarot{} card when you",
                 "{C:attention}deplete{} a {C:attention}rank{}",
+                "{C:inactive}(Must have room)",
 								"{C:inactive,s:0.8}(Evolves after triggering {C:attention,s:0.8}#3#{C:inactive,s:0.8} times)",
 							}
 						},
@@ -5112,6 +5113,7 @@ return {
                 "{C:green}#1# in #2#{} chance to create a",
                 "{C:tarot}Tarot{} card and gain {C:mult}+#4#{} Mult",
                 "when you {C:attention}deplete{} a {C:attention}rank{}",
+                "{C:inactive}(Must have room)",
 								"{C:inactive}(Currently {C:mult}+#3#{C:inactive} Mult)",
 							}
 						},
@@ -5475,6 +5477,34 @@ return {
                   "{C:inactive,s:0.8}(If rank is highest, it becomes lowest)",
                   "{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)",
                 }
+            },
+            j_poke_smoliv = {
+              name = "Smoliv",
+              text = {
+                "Gain {C:money}$#1#{} of sell value",
+                "at end of round",
+                "{C:inactive,s:0.8}(Evolves at {C:money,s:0.8}$#3#{C:inactive,s:0.8} / $#2# Sell Value)"
+              }
+            },
+            j_poke_dolliv = {
+              name = "Dolliv",
+              text = {
+                "Adds {C:money}$#1#{} of sell value to",
+                "{C:attention}self{} and {C:attention}adjacent{} Jokers",
+                "at end of round",
+                "{C:inactive,s:0.8}(Evolves at {C:money,s:0.8}$#3#{C:inactive,s:0.8} / $#2# Sell Value)"
+              }
+            },
+            j_poke_arboliva = {
+              name = "Arboliva",
+              text = {
+                "Adds {C:money}$#1#{} of sell value to",
+                "{C:attention}every{} Joker and {C:attention}Consumable{}",
+                "at end of round",
+                "{br:2.5}ERROR - CONTACT STEAK",
+                "Adds {C:attention}double{} to {X:grass,C:white}Grass{} Jokers",
+                "and {X:grass,C:white}Grass{} {C:pink}Energy"
+              }
             },
             j_poke_charcadet = {
               name = "Charcadet",
