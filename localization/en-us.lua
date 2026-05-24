@@ -2912,18 +2912,20 @@ return {
             j_poke_slugma = {
               name = "Slugma",
               text = {
-                "Every {C:attention}4{} {C:inactive}[#4#]{} hands played, destroy",
-                "first card {C:attention}held{} in hand after scoring",
-                "and this Joker gains {C:chips}+#2#{} Chips",
+                "Gains {C:chips}+#2#{} Chips and destroys {C:attention}first{}",
+                "card {C:attention}held{} in hand after scoring",
+                "every {C:attention}#4#{} hands played",
+                "{C:inactive}(#5#){}",
                 "{C:inactive}(Evolves at {C:chips}+#1#{C:inactive} / #3# Chips)",
               }
             },
             j_poke_magcargo = {
                 name = "Magcargo",
                 text = {
-                  "Every {C:attention}3{} {C:inactive}[#3#]{} hands played, destroy",
-                  "first card {C:attention}held{} in hand after scoring",
-                  "and this Joker gains {C:chips}+#2#{} Chips",
+                  "Gains {C:chips}+#2#{} Chips and destroys {C:attention}first{}",
+                  "card {C:attention}held{} in hand after scoring",
+                  "every {C:attention}#3#{} hands played",
+                  "{C:inactive}(#4#){}",
                   "{C:inactive}(Currently {C:chips}+#1#{C:inactive} Chips)",
                 }
             },
@@ -4139,8 +4141,9 @@ return {
             j_poke_jirachi_power = {
                 name = 'Jirachi',
                 text = {
-                    "Every {C:attention}#2#{} hands, played cards",
-                    "give {X:mult,C:white}X#1#{} Mult when scored",
+                    "Played cards give {X:mult,C:white}X#1#{} Mult",
+                    "when scored every",
+                    "{C:attention}#2#{} hands played",
                     "{C:inactive}(#3#){}",
                 }
             },
@@ -5556,6 +5559,28 @@ return {
                 "{C:inactive,s:0.8}(Rank changes every round){}",
               }
             },
+						j_poke_rellor = {
+							name = 'Rellor',      
+							text = {
+								"{C:mult}+#1#{} Mult per {C:item}Item{}",
+								"card used this run",
+								"{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)",
+								"{C:inactive,s:0.8}(Evolves after using {C:attention,s:0.8}#3#{C:inactive,s:0.8} Items)",
+							}
+						},
+						j_poke_rabsca = {
+							name = 'Rabsca',      
+							text = {
+                "{C:green}#3# in #4#{} chance to create",
+                "a {C:tarot}Tarot{} card when you",
+                "use an {C:item}Item{} card",
+                "{C:inactive}(Must have room){}",
+                "{br:2}ERROR - CONTACT STEAK",
+								"{C:mult}+#1#{} Mult per {C:item}Item{}",
+								"card used this run",
+								"{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)",
+							} 
+						},
             j_poke_tinkatink = {
                 name = "Tinkatink",
                 text = {
