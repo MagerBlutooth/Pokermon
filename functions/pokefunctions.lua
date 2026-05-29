@@ -1316,7 +1316,6 @@ end
 reset_espeon_card = function()
   G.GAME.current_round.espeon_rank = 'Ace'
   G.GAME.current_round.espeon_id = 14
-  G.GAME.current_round.espeon_suit = 'Spades'
   
   local valid_espeon_cards = {}
   for _, playing_card in ipairs(G.playing_cards) do
@@ -1328,7 +1327,6 @@ reset_espeon_card = function()
   if espeon_card then
     G.GAME.current_round.espeon_rank = espeon_card.base.value
     G.GAME.current_round.espeon_id = espeon_card.base.id
-    G.GAME.current_round.espeon_suit = espeon_card.base.suit
   end
 end
 
@@ -1434,4 +1432,17 @@ poke_drain_chips = function(card, amount)
   card.ability.perma_bonus = (card.ability.perma_bonus or 0) - bonus_drain
 
   return base_drain + bonus_drain
+end
+
+pokermon.get_available_planet_cards = function()
+  local planets = {}
+  for _, v in ipairs(G.P_CENTER_POOLS.Planet) do
+    if not G.GAME.banned_keys[v.key]
+        and (not v.config.softlock or G.GAME.hands[v.config.hand_type].played > 0)
+        and SMODS.add_to_pool(v)
+        and (type(v.mp_include) ~= 'function' or v.mp_include()) then
+      planets[#planets+1] = v
+    end
+  end
+  return planets
 end
