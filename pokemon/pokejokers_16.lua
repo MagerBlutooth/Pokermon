@@ -257,21 +257,17 @@ local tangrowth={
             mult = card.ability.extra.mult,
             chips = card.ability.extra.chips,
             dollars = ease_poke_dollars(card, "tangrowth", card.ability.extra.money_mod, true),
-            card = card
+            remove_default_message = true,
           }
         else
           local scoring_bonuses = {"Mult", "Chips", "Money"}
           local bonus = pseudorandom_element(scoring_bonuses, pseudoseed('tangela'))
           if bonus == "Mult" then
             return {
-              message = localize{type = 'variable', key = 'a_mult', vars = {card.ability.extra.mult}}, 
-              colour = G.C.MULT,
               mult = card.ability.extra.mult
             }
           elseif bonus == "Chips" then
             return {
-              message = localize{type = 'variable', key = 'a_chips', vars = {card.ability.extra.chips}}, 
-              colour = G.C.CHIPS,
               chips = card.ability.extra.chips
             }
           elseif bonus == "Money" then
@@ -279,7 +275,6 @@ local tangrowth={
             G.E_MANAGER:add_event(Event({func = (function() G.GAME.dollar_buffer = 0; return true end)}))
             return {
               dollars = ease_poke_dollars(card, "tangrowth", card.ability.extra.money_mod, true),
-              card = card
             }
           end
         end
@@ -478,14 +473,14 @@ local yanmega={
 local leafeon={
   name = "leafeon", 
   pos = {x = 13, y = 5},
-  config = {extra = {Xmult = 1, Xmult_mod = 1, money_mod = 3, trigger_goal = 5, triggers_remaining = 5}},
+  config = {extra = {}},
   loc_vars = function(self, info_queue, center)
     type_tooltip(self, info_queue, center)
     if pokermon_config.detailed_tooltips then
       info_queue[#info_queue+1] = G.P_CENTERS.m_lucky
     end
     local abbr = center.ability.extra
-    return {vars = {abbr.Xmult, abbr.Xmult_mod, abbr.money_mod, abbr.trigger_goal, abbr.triggers_remaining}}
+    return {vars = {}}
   end,
   rarity = "poke_safari", 
   cost = 7, 
