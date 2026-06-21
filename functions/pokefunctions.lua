@@ -428,7 +428,7 @@ pokermon.get_highest_evo = function(card)
   local prefix = "j_"..(card.config.center.poke_custom_prefix or "poke").."_"
 
   -- if there's an override then return early
-  if next(pokermon.get_evo_overrides(name)) then
+  if next(pokermon.get_evo_overrides(name)) and pokermon.get_evo_overrides(name).highest_evo then
     local evos = pokermon.get_evo_overrides(name).highest_evo
     return (#evos == 1 and evos[1]) or pseudorandom_element(evos, pseudoseed('highest'))
   end
@@ -500,7 +500,7 @@ pokermon.get_previous_evo_from_center = function(center, full_key)
   local index, prev
   local prefix = center.poke_custom_prefix or "poke"
 
-  if next(pokermon.get_evo_overrides(name)) then
+  if next(pokermon.get_evo_overrides(name)) and pokermon.get_evo_overrides(name).previous_evo then
     prev = pokermon.get_evo_overrides(name).previous_evo
     return full_key and "j_"..prefix.."_"..prev or prev
   end
@@ -1425,4 +1425,24 @@ pokermon.get_available_planet_cards = function()
     end
   end
   return planets
+end
+
+pokermon.create_held_item = function(args)
+  if type(args) == 'string' then args = { key = args } end
+  if not G.GAME.banned_keys[args.key]
+      and (#G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit or args.edition == 'e_negative') then
+    local card = SMODS.add_card(args)
+    local set = card.ability.set
+    local loc_keys = {
+      ['Tarot'] = 'k_plus_tarot',
+      ['Planet'] = 'k_plus_planet',
+      ['Spectral'] = 'k_plus_spectral',
+      ['poke_item'] = 'poke_plus_pokeitem',
+      ['poke_energy'] = 'poke_plus_pokeitem',
+    }
+    SMODS.calculate_effect({
+      message = localize(loc_keys[set]),
+      colour = G.C.SECONDARY_SET[set]
+    }, card)
+  end
 end
