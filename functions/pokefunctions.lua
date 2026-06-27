@@ -63,93 +63,84 @@ pokermon.copy_scaled_values = function(card)
   return values
 end
 
+---@deprecated use pokermon.do_evolution_anim instead
 pokermon.fake_evolve = function(card, evolve_message, set_sprites)
-    G.E_MANAGER:add_event(Event({
-      func = function()
-        if card.poke_evolution_timer then return true end
-        card.poke_evolution_timer = 0
-        G.E_MANAGER:add_event(Event({
-            trigger = 'ease',
-            ref_table = card,
-            ref_value = 'poke_evolution_timer',
-            ease_to = 1.5,
-            delay = 2.0,
-            func = (function(t) return t end)
-        }))
-        if set_sprites then
-          G.E_MANAGER:add_event(Event({
-            func = function()
-              card:set_sprites(card.config.center)
-              return true
-            end
-          }))
-        end
-        G.E_MANAGER:add_event(Event({
-            trigger = 'ease',
-            ref_table = card,
-            ref_value = 'poke_evolution_timer',
-            ease_to = 2.25,
-            delay = 1.0,
-            func = (function(t) return t end)
-        }))
+  local on_complete = function()
+    if set_sprites then
+      card:set_sprites(card.config.center)
+    end
+  end
+
+  pokermon.do_evolution_anim(card, on_complete, evolve_message)
+end
+
+pokermon.do_evolution_anim = function(card, on_complete, evo_message)
+  G.E_MANAGER:add_event(Event({
+    func = function()
+      if card.poke_evolution_timer then return true end
+      card.poke_evolution_timer = 0
+      G.E_MANAGER:add_event(Event({
+        trigger = 'ease',
+        ref_table = card,
+        ref_value = 'poke_evolution_timer',
+        ease_to = 1.5,
+        delay = 2.0,
+        func = (function(t) return t end)
+      }))
+      if type(on_complete) == 'function' then
         G.E_MANAGER:add_event(Event({
           func = function()
-            card.poke_evolution_timer = nil
-            play_sound('tarot1')
-            card_eval_status_text(card, 'extra', nil, nil, nil, { message = evolve_message or localize("poke_evolve_success"), colour = G.C.FILTER, instant = true})
+            on_complete(card)
             return true
           end
         }))
-        return true
       end
-    }))
+      G.E_MANAGER:add_event(Event({
+        trigger = 'ease',
+        ref_table = card,
+        ref_value = 'poke_evolution_timer',
+        ease_to = 2.25,
+        delay = 1.0,
+        func = (function(t) return t end)
+      }))
+      G.E_MANAGER:add_event(Event({
+        func = function()
+          card.poke_evolution_timer = nil
+          play_sound('tarot1')
+          card_eval_status_text(card, 'extra', nil, nil, nil, {message = evo_message or localize("poke_evolve_success"), colour = G.C.FILTER, instant = true})
+          return true
+        end
+      }))
+      return true
+    end
+  }))
+end
+
+local call_backend_evolve = function(card, to_key, immediate, message, energize_amount)
+  if immediate then
+    pokermon.backend_evolve(card, to_key, energize_amount)
+  elseif G.P_CENTERS[to_key] ~= card.config.center then
+    pokermon.do_evolution_anim(
+      card,
+      function() pokermon.backend_evolve(card, to_key, energize_amount) end,
+      message)
+  end
 end
 
 pokermon.evolve = function(card, to_key, immediate, evolve_message, transformation, energize_amount)
   if G.GAME.modifiers.poke_apply_randomizer and not transformation then
     to_key = pokermon.get_random_poke_key('randomizer')
   end
-  if immediate then
-    pokermon.backend_evolve(card, to_key, energize_amount)
-  else
-    G.E_MANAGER:add_event(Event({
-      func = function()
-        if card.poke_evolution_timer or G.P_CENTERS[to_key] == card.config.center then return true end
-        card.poke_evolution_timer = 0
-        G.E_MANAGER:add_event(Event({
-            trigger = 'ease',
-            ref_table = card,
-            ref_value = 'poke_evolution_timer',
-            ease_to = 1.5,
-            delay = 2.0,
-            func = (function(t) return t end)
-        }))
-        G.E_MANAGER:add_event(Event({
-          func = function()
-            pokermon.backend_evolve(card, to_key, energize_amount)
-            return true
-          end
-        }))
-        G.E_MANAGER:add_event(Event({
-            trigger = 'ease',
-            ref_table = card,
-            ref_value = 'poke_evolution_timer',
-            ease_to = 2.25,
-            delay = 1.0,
-            func = (function(t) return t end)
-        }))
-        G.E_MANAGER:add_event(Event({
-          func = function()
-            card.poke_evolution_timer = nil
-            play_sound('tarot1')
-            card_eval_status_text(card, 'extra', nil, nil, nil, { message = evolve_message or localize("poke_evolve_success"), colour = G.C.FILTER, instant = true})
-            return true
-          end
-        }))
-        return true
-      end
-    }))
-  end
+
+  call_backend_evolve(card, to_key, immediate, evolve_message, energize_amount)
+end
+
+pokermon.devolve = function(card, to_key, immediate, devolve_message)
+  call_backend_evolve(card, to_key, immediate, devolve_message or localize('poke_devolve_success'))
+end
+
+pokermon.change_form = function(card, to_key, immediate, transform_message)
+  call_backend_evolve(card, to_key, immediate, transform_message or localize('poke_transform_success'))
 end
 
 -- Stolen from Cardsauce
@@ -697,56 +688,62 @@ pokermon.evo_item_in_pool = function(self)
     return false
 end
 
-pokermon.type_tooltip = function(self, info_queue, center)
-  local percent
-  if (center.ability and center.ability.extra and type(center.ability.extra) == "table" and (pokermon.energy.get_total_energy(center) ~= 0)) then
-      info_queue[#info_queue+1] = {set = 'Other', key = "energy", vars = {pokermon.energy.get_total_energy(center), pokermon.energy.max + (G.GAME.poke_energy_plus or 0) + (center.ability.extra.e_limit_up or 0)}}
-      if center.ability.money_frac and center.ability.money_frac > 0 then
-        percent = tonumber(string.format('%.3f', center.ability.money_frac)) * 100
-        if percent ~= 100 and percent ~= 0 then
-          info_queue[#info_queue+1] = {set = 'Other', key = "money_chance", vars = {percent}}
-        end
-      end
-      if center.ability.money_mod_frac and center.ability.money_mod_frac > 0 then
-        percent = tonumber(string.format('%.3f', center.ability.money_mod_frac)) * 100
-        if percent ~= 100 and percent ~= 0 then
-          info_queue[#info_queue+1] = {set = 'Other', key = "money_progress", vars = {percent}}
-        end
-      end
-      if center.ability.mult_mod_frac and center.ability.mult_mod_frac > 0 then
-        percent = tonumber(string.format('%.3f', center.ability.mult_mod_frac)) * 100
-        if percent ~= 100 and percent ~= 0 then
-          info_queue[#info_queue+1] = {set = 'Other', key = "mult_progress", vars = {percent}}
-        end
-      end
-      if center.ability.chip_mod_frac and center.ability.chip_mod_frac > 0 then
-        percent = tonumber(string.format('%.3f', center.ability.chip_mod_frac)) * 100
-        if percent ~= 100 and percent ~= 0 then
-          info_queue[#info_queue+1] = {set = 'Other', key = "chip_progress", vars = {percent}}
-        end
-      end
-  elseif (center.ability and (pokermon.energy.get_total_energy(center) > 0)) then
-      info_queue[#info_queue+1] = {set = 'Other', key = "energy", vars = {pokermon.energy.get_total_energy(center), pokermon.energy.max + (G.GAME.poke_energy_plus or 0)}}
-      if center.ability.money_frac then
-        percent = tonumber(string.format('%.3f', center.ability.money_frac)) * 100
-        if percent ~= 100 and percent ~= 0 then
-          info_queue[#info_queue+1] = {set = 'Other', key = "money_chance", vars = {percent}}
-        end
-      end
+pokermon.add_frac_tooltip = function(info_queue, card, frac_var, loc_key)
+  if card.ability[frac_var] and card.ability[frac_var] > 0 then
+    local percent = tonumber(string.format('%.3f', card.ability[frac_var])) * 100
+    if percent ~= 100 and percent ~= 0 then
+      info_queue[#info_queue + 1] = {set = 'Other', key = loc_key, vars = {percent}}
+    end
   end
-  if self.megas and pokermon_config.detailed_tooltips then
+end
+
+pokermon.add_energy_tooltip = function(info_queue, card)
+  if card.ability and type(card.ability.extra) == 'table' and pokermon.energy.get_total_energy(card) ~= 0 then
+    local energy = pokermon.energy.get_total_energy(card)
+    local energy_max = pokermon.energy.max + (G.GAME.poke_energy_plus or 0) + (card.ability.extra.e_limit_up or 0)
+
+    info_queue[#info_queue+1] = {set = 'Other', key = 'energy', vars = {energy, energy_max}}
+
+    pokermon.add_frac_tooltip(info_queue, card, 'money_frac', 'money_chance')
+    pokermon.add_frac_tooltip(info_queue, card, 'money_mod_frac', 'money_progress')
+    pokermon.add_frac_tooltip(info_queue, card, 'mult_mod_frac', 'mult_progress')
+    pokermon.add_frac_tooltip(info_queue, card, 'chip_mod_frac', 'chip_progress')
+  elseif card.ability and pokermon.energy.get_total_energy(card) > 0 then
+    local energy = pokermon.energy.get_total_energy(card)
+    local energy_max = pokermon.energy.max + (G.GAME.poke_energy_plus or 0)
+
+    info_queue[#info_queue+1] = {set = 'Other', key = 'energy', vars = {energy, energy_max}}
+
+    pokermon.add_frac_tooltip(info_queue, card, 'money_frac', 'money_chance')
+  end
+end
+
+pokermon.add_mega_evolution_tooltip = function(center, info_queue)
+  if center.megas and pokermon_config.detailed_tooltips then
     info_queue[#info_queue+1] = {set = 'Other', key = 'mega_poke'}
-    if #self.megas > 1 and next(SMODS.find_card('c_poke_megastone')) then
+    if #center.megas > 1 and next(SMODS.find_card('c_poke_megastone')) then
       local mega_names = {}
-      for _, mega in ipairs(self.megas) do
-        local prefix = self.poke_custom_prefix or "poke"
-        local key = "j_"..prefix.."_"..mega
-        mega_names[#mega_names+1] = localize({type = "name_text", set = "Joker", key = key})
+      for _, mega in ipairs(center.megas) do
+        local prefix = center.poke_custom_prefix or 'poke'
+        local key = 'j_' .. prefix .. '_' .. mega
+        mega_names[#mega_names+1] = localize({type = 'name_text', set = 'Joker', key = key})
       end
       info_queue[#info_queue+1] = {set = 'Other', key = 'split_mega', vars = mega_names}
     end
   end
 end
+
+pokermon.add_joker_tooltips = function(self, info_queue, card)
+  if self.stage then
+    if not card then card = self:create_fake_card() end
+
+    pokermon.add_energy_tooltip(info_queue, card)
+    pokermon.add_mega_evolution_tooltip(self, info_queue)
+  end
+end
+
+---@deprecated functionality has been made baseline
+pokermon.type_tooltip = function(self, info_queue, center) end
 
 pokermon.set_type_badge = function(self, card, badges)
   local ptype = pokermon.get_type(card)
@@ -763,7 +760,7 @@ pokermon.set_type_badge = function(self, card, badges)
     if lower_ptype == "bird" then
       if math.random(0,5) == 5 then ptype = nil end
     end
-    badges[#badges+1] = create_badge(ptype, G.ARGS.LOC_COLOURS[lower_ptype], text_colour, 1.2 )
+    badges[#badges+1] = create_badge(ptype, pokermon.colours[lower_ptype], text_colour, 1.2 )
   end
 end
 
