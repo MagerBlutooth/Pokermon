@@ -364,8 +364,9 @@ return {
                 text = {
                     "{C:attention}Evolution Card{}",
                     "{br:2}ERROR - CONTACT STEAK",
-                    "Gives {C:attention}#1#{} selected cards",
-                    "a random {C:attention}non-Stone Enhancement{}",
+                    "{C:attention}Enhances{} {C:attention}#1#{} selected",
+                    "cards to a random",
+                    "{C:attention}non-Stone Enhancement{}",
                 }
             },
             c_poke_dubious_disc = {
@@ -5105,6 +5106,33 @@ return {
                     "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}",
                 }
             },
+            j_poke_axew = {
+                name = "Axew",
+                text = {
+                  "{C:attention}Nature:{} {C:inactive}({C:attention}#1#, #2#{C:inactive})",
+                  "Base {C:chips}Chips{} and {C:mult}Mult{} are",
+                  "{C:attention}doubled{} for first {C:attention}Nature{}",
+                  "hand of round",
+                  "{C:inactive,s:0.7}(Evolves after playing {C:attention,s:0.7}#3# Nature{C:inactive,s:0.7} hands)",
+                }
+            },
+            j_poke_fraxure = {
+                name = "Fraxure",
+                text = {
+                  "{C:attention}Nature:{} {C:inactive}({C:attention}#1#, #2#{C:inactive})",
+                  "Base {C:chips}Chips{} and {C:mult}Mult{} are",
+                  "{C:attention}doubled{} for {C:attention}Nature{} hands",
+                  "{C:inactive,s:0.7}(Evolves after playing {C:attention,s:0.7}#3# Nature{C:inactive,s:0.7} hands)",
+                }
+            },
+            j_poke_haxorus = {
+                name = "Haxorus",
+                text = {
+                  "{C:attention}Nature:{} {C:inactive}({C:attention}#1#, #2#{C:inactive})",
+                  "Base {C:chips}Chips{} and {C:mult}Mult{} are",
+                  "{C:attention}tripled{} for {C:attention}Nature{} hands",
+                }
+            },
             j_poke_golett = {
                 name = "Golett",
                 text = {
@@ -6637,9 +6665,8 @@ return {
             nature = {
                 name = "Nature",
                 text = {
-                    "A unique {C:attention}#1#{} or set of {C:attention}#1#s{}",
-                    "that trigger this Joker",
-                    "Set once upon Joker creation",
+                    "A value or values",
+                    "set upon {C:attention}creation",
                 }
             },
             hazard_level = {
@@ -7157,9 +7184,9 @@ return {
             poke_silver_seal = {
                 name = "Silver Seal",
                 text = {
-                  "Creates an {C:poke_item}Item{} card",
-                  "and is {C:attention}discarded{} if {C:attention}held{}",
-                  "in hand when cards are scored"
+                  "Creates an {C:poke_item}Item{} card and",
+                  "is {C:attention}discarded{} if {C:attention}held{} in",
+                  "hand during scoring"
                 }
             },
                         
@@ -7169,7 +7196,7 @@ return {
               text = {
                 "If played hand is",
                 "exactly {C:attention}1{} card, creates",
-                "a {C:attention}Sealess{} copy",
+                "a {C:attention}Sealless{} copy",
               }
             },
             
