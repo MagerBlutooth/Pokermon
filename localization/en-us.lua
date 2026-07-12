@@ -703,8 +703,7 @@ return {
                 name = "Shiny",
                 label = "Shiny",
                 text = {
-                    "{C:attention}+1{} Booster Pack slot",
-                    "available in shop",
+                    "{C:attention}+1{} Booster Pack in shop",
                 }
             },
         },
@@ -2695,12 +2694,10 @@ return {
             j_poke_espeon = {
                 name = 'Espeon',
                 text = {
-                    "Retrigger each played {C:attention}#3#{}",
-                    "{br:3}ERROR - CONTACT STEAK",
-                    "Each played {C:attention}Wild{} card",
-                    "gives {X:mult,C:white}X#2#{} Mult",
-                    "when scored",
-                    "{C:inactive,s:0.7}Rank changes every round{}"
+                    "{C:purple}+#1# Foresight",
+                    "{X:mult,C:white}X#2#{} Mult if the top card",
+                    "of your deck is a {V:1}#3#{}",
+                    "{C:inactive,s:0.7}Suit changes every round{}"
                 } 
             },
             j_poke_umbreon = {
@@ -4409,6 +4406,27 @@ return {
                     "{C:inactive,s:0.8}(Evolves after {C:attention,s:0.8}#2#{C:inactive,s:0.8} rounds)",
                 }
             },
+            j_poke_bronzor = {
+                name = 'Bronzor',
+                text = {
+                    "Each played {V:1}#3#{} gives",
+                    "{X:mult,C:white}X#1#{} Mult when scored",
+                    "{C:inactive,s:0.8}(Evolves after scoring {C:attention,s:0.8}#4# #2#s{C:inactive,s:0.8})",
+                    "{C:inactive,s:0.7}Rank and Suit changes every round{}",
+                    
+                } 
+            },
+            j_poke_bronzong = {
+                name = 'Bronzong',
+                text = {
+                    "Retrigger each played {C:attention}#3#{}",
+                    "{br:3}ERROR - CONTACT STEAK",
+                    "Each played {V:1}#4#{} gives",
+                    "{X:mult,C:white}X#2#{} Mult when scored",
+                    "{C:inactive,s:0.7}Rank and Suit changes every round{}"
+                    
+                } 
+            },
             j_poke_bonsly = {
                 name = "Bonsly",
                 text = {
@@ -5409,6 +5427,25 @@ return {
                   "{C:inactive}(#3#){}"
                 }
             },
+            j_poke_drampa = {
+                name = "Drampa",
+                text = {
+                    "{C:attention}+#1#{} Booster Pack in shop",
+                    "{C:attention}Booster Packs{} are always",
+                    "{C:attention}Jumbo{} or better",
+                }
+            },
+            j_poke_mega_drampa = {
+                name = "Mega Drampa",
+                text = {
+                    "{C:attention}+#1#{} Booster Pack in shop",
+                    "{C:attention}Booster Packs{} are",
+                    "always {C:attention}Mega",
+                    "{br:2}ERROR - CONTACT STEAK",
+                    "{C:attention}+#2#{} card selection limit",
+                    "in {C:attention}Booster Packs",
+                }
+            },
             j_poke_nickit = {
                 name = "Nickit",
                 text = {
@@ -5742,18 +5779,18 @@ return {
             j_poke_dudunsparce = {
                 name = 'Dudunsparce',
                 text = {
-                  "{C:attention}+#1#{} card slot available in shop",
-                  "{C:attention}+#1#{} Booster Pack slot available in shop",
-                  "{C:attention}+#1#{} Voucher slot available in shop",
+                  "{C:attention}+#1#{} card slot in shop",
+                  "{C:attention}+#1#{} Booster Pack in shop",
+                  "{C:attention}+#1#{} Voucher in shop",
                 }
             },
             j_poke_dudunsparce2 = {
                 name = 'Dudunsparce',
                 text = {
                   "{C:attention}Holding Coupon Tag{}",
-                  "{C:attention}+#1#{} card slot available in shop",
-                  "{C:attention}+#1#{} Booster Pack slot available in shop",
-                  "{C:attention}+#1#{} Voucher slot available in shop",
+                  "{C:attention}+#1#{} card slot in shop",
+                  "{C:attention}+#1#{} Booster Pack in shop",
+                  "{C:attention}+#1#{} Voucher in shop",
                 }
             },
             j_poke_kingambit = {
