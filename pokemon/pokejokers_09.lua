@@ -525,9 +525,7 @@ local celebi = {
       if context.joker_main then
         local Xmult = 1 + (G.GAME.round * card.ability.extra.Xmult_mod)
         return {
-          message = localize{type = 'variable', key = 'a_xmult', vars = {Xmult}}, 
-          colour = G.C.XMULT,
-          Xmult_mod = Xmult
+          Xmult = Xmult
         }
       end
     end
@@ -542,7 +540,7 @@ local treecko={
   loc_vars = function(self, info_queue, card)
     pokermon.type_tooltip(self, info_queue, card)
     if pokermon_config.detailed_tooltips then
-      info_queue[#info_queue+1] = {set = 'Other', key = 'nature'}
+      info_queue[#info_queue+1] = {set = 'Other', key = 'nature', vars = {"rank"}}
     end
     local triggers_left = math.max(0, self.config.evo_rqmt - card.ability.extra.triggers)
     local card_vars = {card.ability.extra.money_mod, triggers_left, card.ability.extra.h_size}
@@ -607,7 +605,7 @@ local grovyle={
   loc_vars = function(self, info_queue, card)
     pokermon.type_tooltip(self, info_queue, card)
     if pokermon_config.detailed_tooltips then
-      info_queue[#info_queue+1] = {set = 'Other', key = 'nature'}
+      info_queue[#info_queue+1] = {set = 'Other', key = 'nature', vars = {"rank"}}
     end
     local triggers_left = math.max(0, self.config.evo_rqmt - card.ability.extra.triggers)
     local card_vars = {card.ability.extra.money_mod, triggers_left, card.ability.extra.h_size, card.ability.extra.money_mod + 1}
@@ -677,7 +675,7 @@ local sceptile={
   loc_vars = function(self, info_queue, center)
     pokermon.type_tooltip(self, info_queue, center)
     if pokermon_config.detailed_tooltips then
-      info_queue[#info_queue+1] = {set = 'Other', key = 'nature'}
+      info_queue[#info_queue+1] = {set = 'Other', key = 'nature', vars = {"rank"}}
     end
     local card_vars = {center.ability.extra.money_mod, center.ability.extra.money_earned, center.ability.extra.h_size, 
                        center.ability.extra.money_mod + (#pokermon.find_pokemon_type("Grass", center) * center.ability.extra.money_increase), center.ability.extra.money_increase}
@@ -738,7 +736,7 @@ local torchic={
   loc_vars = function(self, info_queue, card)
     pokermon.type_tooltip(self, info_queue, card)
     if pokermon_config.detailed_tooltips then
-      info_queue[#info_queue+1] = {set = 'Other', key = 'nature',}
+      info_queue[#info_queue+1] = {set = 'Other', key = 'nature', vars = {"rank"}}
     end
     local triggers_left = math.max(0, self.config.evo_rqmt - card.ability.extra.triggers)
     local card_vars = {card.ability.extra.mult_mod, triggers_left, card.ability.extra.d_size}
@@ -797,7 +795,7 @@ local combusken={
   loc_vars = function(self, info_queue, card)
     pokermon.type_tooltip(self, info_queue, card)
     if pokermon_config.detailed_tooltips then
-      info_queue[#info_queue+1] = {set = 'Other', key = 'nature'}
+      info_queue[#info_queue+1] = {set = 'Other', key = 'nature', vars = {"rank"}}
     end
     local triggers_left = math.max(0, self.config.evo_rqmt - card.ability.extra.triggers)
     local card_vars = {card.ability.extra.mult_mod, triggers_left, card.ability.extra.d_size}
@@ -856,7 +854,7 @@ local blaziken={
   loc_vars = function(self, info_queue, center)
     pokermon.type_tooltip(self, info_queue, center)
     if pokermon_config.detailed_tooltips then
-      info_queue[#info_queue+1] = {set = 'Other', key = 'nature'}
+      info_queue[#info_queue+1] = {set = 'Other', key = 'nature', vars = {"rank"}}
     end
     local card_vars = {center.ability.extra.mult_mod, center.ability.extra.Xmult_multi, center.ability.extra.d_size, center.ability.extra.discard_target, 
                        math.max(0, center.ability.extra.discard_target - center.ability.extra.cards_discarded)}
@@ -897,22 +895,13 @@ local blaziken={
         end
       end
     end
-    
+
     if context.other_joker and (pokermon.is_type(context.other_joker, "Fire") or pokermon.is_type(context.other_joker, "Fighting")) and card.ability.extra.cards_discarded >= card.ability.extra.discard_target then
-      G.E_MANAGER:add_event(Event({
-        func = function()
-            context.other_joker:juice_up(0.5, 0.5)
-            return true
-        end
-      })) 
       return {
-        message = localize{type = 'variable', key = 'a_xmult', vars = {card.ability.extra.Xmult_multi}}, 
-        colour = G.C.XMULT,
-        Xmult_mod = card.ability.extra.Xmult_multi, 
-        card = context.other_joker
+        Xmult = card.ability.extra.Xmult_multi,
       }
     end
-    
+
     if context.end_of_round and not context.individual and not context.repetition then
       card.ability.extra.cards_discarded = 0
       card:juice_up()
@@ -945,7 +934,7 @@ local mudkip={
   loc_vars = function(self, info_queue, card)
     pokermon.type_tooltip(self, info_queue, card)
     if pokermon_config.detailed_tooltips then
-      info_queue[#info_queue+1] = {set = 'Other', key = 'nature'}
+      info_queue[#info_queue+1] = {set = 'Other', key = 'nature', vars = {"rank"}}
     end
     local triggers_left = math.max(0, self.config.evo_rqmt - card.ability.extra.triggers)
     local card_vars = {card.ability.extra.chip_mod, triggers_left, card.ability.extra.hands}
@@ -1006,7 +995,7 @@ local marshtomp={
   loc_vars = function(self, info_queue, card)
     pokermon.type_tooltip(self, info_queue, card)
     if pokermon_config.detailed_tooltips then
-      info_queue[#info_queue+1] = {set = 'Other', key = 'nature'}
+      info_queue[#info_queue+1] = {set = 'Other', key = 'nature', vars = {"rank"}}
     end
     local triggers_left = math.max(0, self.config.evo_rqmt - card.ability.extra.triggers)
     local card_vars = {card.ability.extra.chip_mod, triggers_left, card.ability.extra.hands}
@@ -1067,7 +1056,7 @@ local swampert={
   loc_vars = function(self, info_queue, center)
     pokermon.type_tooltip(self, info_queue, center)
     if pokermon_config.detailed_tooltips then
-      info_queue[#info_queue+1] = {set = 'Other', key = 'nature'}
+      info_queue[#info_queue+1] = {set = 'Other', key = 'nature', vars = {"rank"}}
     end
     local card_vars = {center.ability.extra.chip_mod, center.ability.extra.hands, center.ability.extra.nature_target}
     pokermon.add_target_cards_to_vars(card_vars, center.ability.extra.targets)
@@ -1328,7 +1317,7 @@ local wurmple={
   loc_vars = function(self, info_queue, center)
     pokermon.type_tooltip(self, info_queue, center)
     if pokermon_config.detailed_tooltips then
-      info_queue[#info_queue+1] = {set = 'Other', key = 'nature'}
+      info_queue[#info_queue+1] = {set = 'Other', key = 'nature', vars = {"suit"}}
     end
     local suit_colours = (center.ability.extra.nature_scored <= 0) and {G.C.UI.TEXT_INACTIVE} or {G.C.SUITS[center.ability.extra.targets[1].suit or "Spades"]}
     local suits_message = (center.ability.extra.nature_scored <= 0) and '??? '..localize('poke_suit') or localize(center.ability.extra.targets[1].suit, 'suits_plural')
@@ -1436,7 +1425,7 @@ local beautifly={
   loc_vars = function(self, info_queue, center)
     pokermon.type_tooltip(self, info_queue, center)
     if pokermon_config.detailed_tooltips then
-      info_queue[#info_queue+1] = {set = 'Other', key = 'nature'}
+      info_queue[#info_queue+1] = {set = 'Other', key = 'nature', vars = {"suit"}}
     end
     local num, dem = SMODS.get_probability_vars(center, center.ability.extra.num, center.ability.extra.dem, 'beautifly')
     return {vars = {center.ability.extra.mult, localize(center.ability.extra.targets[1].suit, 'suits_plural'), num, dem, 
@@ -1497,7 +1486,7 @@ local cascoon={
   loc_vars = function(self, info_queue, center)
     pokermon.type_tooltip(self, info_queue, center)
     if pokermon_config.detailed_tooltips then
-      info_queue[#info_queue+1] = {set = 'Other', key = 'nature'}
+      info_queue[#info_queue+1] = {set = 'Other', key = 'nature', vars = {"suit"}}
     end
     return {vars = {center.ability.extra.chips, localize(center.ability.extra.targets[1].suit, 'suits_plural'), math.max(0, self.config.evo_rqmt - center.ability.extra.nature_scored), 
             colours = {G.C.SUITS[center.ability.extra.targets[1].suit or "Spades"]}}}
@@ -1544,7 +1533,7 @@ local dustox={
   loc_vars = function(self, info_queue, center)
     pokermon.type_tooltip(self, info_queue, center)
     if pokermon_config.detailed_tooltips then
-      info_queue[#info_queue+1] = {set = 'Other', key = 'nature'}
+      info_queue[#info_queue+1] = {set = 'Other', key = 'nature', vars = {"suit"}}
     end
     return {vars = {center.ability.extra.chips, localize(center.ability.extra.targets[1].suit, 'suits_plural'), center.ability.extra.Xmult, 
             colours = {G.C.SUITS[center.ability.extra.targets[1].suit or "Spades"]}}}
@@ -1569,16 +1558,14 @@ local dustox={
         end
         if all_nature then
           return {
-            message = localize('poke_bug_buzz_ex'), 
-            colour = G.C.XMULT,
+            message = localize('poke_bug_buzz_ex'),
             chip_mod = card.ability.extra.chips,
             Xmult_mod = card.ability.extra.Xmult,
+            sound = 'multhit2'
           }
         else
           return {
-            message = localize{type = 'variable', key = 'a_chips', vars = {card.ability.extra.chips}}, 
-            colour = G.C.CHIPS,
-            chip_mod = card.ability.extra.chips
+            chips = card.ability.extra.chips
           }
         end
       end

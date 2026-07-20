@@ -64,9 +64,7 @@ local mega_ampharos={
     end
     if context.joker_main and card.ability.extra.Xmult > 0 and card.ability.extra.Xmult ~= 1  then
       return {
-        message = localize{type = 'variable', key = 'a_xmult', vars = {card.ability.extra.Xmult}}, 
-        colour = G.C.XMULT,
-        Xmult_mod = card.ability.extra.Xmult
+        Xmult = card.ability.extra.Xmult
       }
     end
   end,
@@ -195,9 +193,7 @@ local marill={
         end
         if enhanced and unenhanced then
           return {
-            message = localize{type = 'variable', key = 'a_xmult', vars = {card.ability.extra.Xmult}}, 
-            colour = G.C.XMULT,
-            Xmult_mod = card.ability.extra.Xmult
+            Xmult = card.ability.extra.Xmult
           }
         end
       end
@@ -242,9 +238,7 @@ local azumarill={
           Xmult = Xmult * 2
         end
         return {
-          message = localize{type = 'variable', key = 'a_xmult', vars = {Xmult}}, 
-          colour = G.C.XMULT,
-          Xmult_mod = Xmult
+          Xmult = Xmult
         }
       end
     end
@@ -857,9 +851,7 @@ local murkrow={
         local Xmult = math.max(1, 1 + card.ability.extra.Xmult * #pokermon.find_pokemon_type("Dark"))
         if Xmult > 1 then
           return {
-            message = localize{type = 'variable', key = 'a_xmult', vars = {Xmult}}, 
-            colour = G.C.XMULT,
-            Xmult_mod = Xmult
+            Xmult = Xmult
           }
         end
       end
@@ -967,7 +959,7 @@ local unown={
   loc_vars = function(self, info_queue, center)
     pokermon.type_tooltip(self, info_queue, center)
     if pokermon_config.detailed_tooltips then
-      info_queue[#info_queue+1] = {set = 'Other', key = 'nature'}
+      info_queue[#info_queue+1] = {set = 'Other', key = 'nature', vars = {"rank"}}
     end
     local card_vars = {center.ability.extra.mult}
     pokermon.add_target_cards_to_vars(card_vars, center.ability.extra.targets)
@@ -1403,9 +1395,11 @@ local steelix={
   calculate = function(self, card, context)
     if context.remove_playing_cards then
       for _, removed_card in ipairs(context.removed) do
-         local stone_card = SMODS.add_card { set = "Base", enhancement = "m_stone", area = G.deck }
-         SMODS.calculate_context({ playing_card_added = true, cards = { stone_card } })
-         card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_plus_stone'), colour = G.C.SECONDARY_SET.Enhanced})
+        if not SMODS.has_enhancement(removed_card, 'm_stone') then
+          local stone_card = SMODS.add_card { set = "Base", enhancement = "m_stone", area = G.deck }
+          SMODS.calculate_context({ playing_card_added = true, cards = { stone_card } })
+          card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil, {message = localize('k_plus_stone'), colour = G.C.SECONDARY_SET.Enhanced})
+        end
       end
     end
     

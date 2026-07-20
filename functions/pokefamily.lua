@@ -10,11 +10,11 @@ local default_family_list = {
   { "rattata", "raticate" },
   { "spearow", "fearow" },
   { "ekans", "arbok" },
-  { "pichu", "pikachu", "raichu" },
+  { "pichu", "pikachu", "raichu", "mega_raichu_x", "mega_raichu_y" },
   { "sandshrew", "sandslash" },
   { "nidoranf", "nidorina", "nidoqueen" },
   { "nidoranm", "nidorino", "nidoking" },
-  { "cleffa", "clefairy", "clefable" },
+  { "cleffa", "clefairy", "clefable", "mega_clefable" },
   { "vulpix", "ninetales" },
   { "igglybuff", "jigglypuff", "wigglytuff" },
   { "zubat", "golbat", "crobat" },
@@ -50,7 +50,7 @@ local default_family_list = {
   { "rhyhorn", "rhydon", "rhyperior" },
   { "horsea", "seadra", "kingdra" },
   { "goldeen", "seaking" },
-  { "staryu", "starmie" },
+  { "staryu", "starmie", "mega_starmie" },
   { "scyther", "scizor", "mega_scizor", "kleavor" },
   { "mimejr", "mrmime" },
   { "tauros", "taurosh" },
@@ -280,7 +280,7 @@ end
 
 --- Returns whether any cards present share a family with the provided center
 pokermon.family_present = function(center)
-  if next(find_joker("Showman")) or next(find_joker("pokedex")) then return false end
+  if SMODS.showman(center.key) or next(SMODS.find_card("j_poke_pokedex")) then return false end
   local family_list = pokermon.get_family_list(center.name)
   local prefix = center.poke_custom_prefix or 'poke'
   for _, fam in pairs(family_list) do

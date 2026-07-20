@@ -262,7 +262,7 @@ end
 
 pokermon.can_evolve = function(self, card, context, forced_key, ignore_step, allow_level)
   if not G.P_CENTERS[forced_key] then return false end
-  if next(find_joker("everstone")) and not allow_level then return false end
+  if next(SMODS.find_card("j_poke_everstone")) and not allow_level then return false end
   if (context.evolution or ignore_step) and not context.blueprint and not card.gone then
     return true
   else
@@ -292,7 +292,7 @@ pokermon.level_evo = function(self, card, context, forced_key)
     end
     if pokermon.can_evolve(self, card, context, forced_key, true) and card.ability.extra.rounds <= 1 and not card.ability.extra.juiced then
       card.ability.extra.juiced = true
-      local eval = function(card) return card.ability.extra.rounds and card.ability.extra.rounds <= 1 and not next(find_joker("everstone")) and card.ability.extra.juiced end
+      local eval = function(card) return card.ability.extra.rounds and card.ability.extra.rounds <= 1 and not next(SMODS.find_card("j_poke_everstone")) and card.ability.extra.juiced end
       juice_card_until(card, eval, true)
     end
 end
@@ -1459,6 +1459,7 @@ pokermon.create_consumeable = function(args, in_event, message_card)
   if type(args) == 'string' then args = { key = args } end
   if not G.GAME.banned_keys[args.key]
       and (#G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit or args.edition == 'e_negative') then
+    args.skip_materialize = true
     local card = SMODS.create_card(args)
     local set = card.ability.set
     local loc_keys = {
@@ -1468,8 +1469,8 @@ pokermon.create_consumeable = function(args, in_event, message_card)
       ['poke_item'] = 'poke_plus_pokeitem',
       ['poke_energy'] = 'poke_plus_pokeitem',
     }
+    card.states.visible = nil
     if in_event then
-      card.states.visible = nil
       G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
       G.E_MANAGER:add_event(Event({
         func = (function()
@@ -1481,6 +1482,7 @@ pokermon.create_consumeable = function(args, in_event, message_card)
       }))
     else
       SMODS.add_to_deck(card, args)
+      card:start_materialize()
     end
     SMODS.calculate_effect({
       message = loc_keys[set] and localize(loc_keys[set]) or "+1 " .. card.ability.set,
