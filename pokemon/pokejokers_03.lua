@@ -1342,7 +1342,7 @@ local shellder={
       info_queue[#info_queue+1] = G.P_CENTERS.c_poke_waterstone
     end
     local num, dem = SMODS.get_probability_vars(center, center.ability.extra.num, center.ability.extra.dem, 'shellder')
-    return {vars = {num, dem}}
+    return {vars = {num, dem, center.ability.extra.retriggers}}
   end,
   rarity = 2, 
   cost = 5, 

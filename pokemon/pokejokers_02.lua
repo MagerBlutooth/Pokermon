@@ -1059,6 +1059,13 @@ local golduck={
   gen = 1,
   blueprint_compat = true,
   calculate = function(self, card, context)
+    if context.setting_ability and not context.unchanged and context.new == 'm_gold' then  
+      local earned = pokermon.ease_poke_dollars(card, "golduck", card.ability.extra.money)
+      return {
+        message = '$'..earned,
+        colour = G.C.MONEY
+      }
+    end
     if context.before and context.cardarea == G.jokers and context.scoring_hand and context.full_hand and #context.full_hand == 1 and context.scoring_hand[1]:is_face() then
       local face = context.scoring_hand[1]
       face:set_ability(G.P_CENTERS.m_gold, nil, true)
@@ -1072,13 +1079,6 @@ local golduck={
         message = localize('k_gold'),
         colour = G.C.MONEY,
         card = card
-      }
-    end
-    if context.joker_main and context.cardarea == G.jokers and context.scoring_hand and context.full_hand and #context.full_hand == 1 and context.scoring_hand[1]:is_face()  then
-      local earned = pokermon.ease_poke_dollars(card, "golduck", card.ability.extra.money)
-      return {
-        message = '$'..earned,
-        colour = G.C.MONEY
       }
     end
   end,
@@ -1213,7 +1213,6 @@ local arcanine={
     if context.before and not context.blueprint then
       local scoring_card = nil
       for i = 1, #context.scoring_hand do
-        --sendDebugMessage("Card "..i.." enhancement:"..tostring(context.scoring_hand[i].config.center_key))
         if tostring(context.scoring_hand[i].config.center_key) == "c_base" and not context.scoring_hand[i].config.center.debuff then
           scoring_card = context.scoring_hand[i]
           break
