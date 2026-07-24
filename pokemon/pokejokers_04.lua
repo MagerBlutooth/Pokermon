@@ -8,7 +8,7 @@ local cloyster={
   loc_vars = function(self, info_queue, center)
     pokermon.type_tooltip(self, info_queue, center)
     local num, dem = SMODS.get_probability_vars(center, center.ability.extra.num, center.ability.extra.dem, 'cloyster')
-    return {vars = {num, dem}}
+    return {vars = {num, dem, center.ability.extra.retriggers}}
   end,
   rarity = "poke_safari", 
   cost = 8, 
