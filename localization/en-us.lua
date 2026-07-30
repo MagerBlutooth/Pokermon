@@ -1324,12 +1324,12 @@ return {
             j_poke_golduck = {
                 name = "Golduck",
                 text = {
-                    "Earn {C:money}$#1#{} when a",
-                    "card becomes {C:attention}Gold{}",
-                    "{br:2}ERROR - CONTACT STEAK",
                     "If played hand is",
                     "exactly {C:attention}1 face{} card",
                     "it becomes a {C:attention}Gold{} card",
+                    "{br:2}ERROR - CONTACT STEAK",
+                    "Earn {C:money}$#1#{} when a",
+                    "card becomes {C:attention}Gold{}",
                 } 
             },
             j_poke_mankey = {
@@ -2443,9 +2443,9 @@ return {
             j_poke_sentret = {
                 name = 'Sentret',
                 text = {
-                    "{C:mult}+#2#{} Mult per",
-                    "{C:attention}consecutive{} hand played that",
-                    "isn't the last played hand",
+                    "{C:mult}+#2#{} Mult per {C:attention}consecutive{}",
+                    "hand played that isn't",
+                    "the last played hand",
                     "{C:inactive}(Last hand: {C:attention}#3#{C:inactive})",
                     "{C:inactive}(Evolves at {C:mult}+#1#{C:inactive} / +15 Mult)",
                 }
@@ -3879,6 +3879,26 @@ return {
                   "{br:2}ERROR - CONTACT STEAK",
                   "{X:red,C:white}X#1#{} Mult if played {C:attention}poker hand{} has",
                   "already been played this round",
+                }
+            },
+            j_poke_wailmer = {
+                name = "Wailmer",
+                text = {
+                  "{C:chips}+#1#{} Chips for each remaining",
+                  "{C:clubs}#4#{} in {C:active}deck",
+                  "{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips){}",
+                  "{C:inactive,s:0.8}(Evolves after {C:attention,s:0.8}#3#{C:inactive,s:0.8} rounds)",
+                }
+            },
+            j_poke_wailord = {
+                name = "Wailord",
+                text = {
+                  "All cards opened in {C:attention}Standard",
+                  "{C:attention}Packs{} become {C:clubs}#4#{}",
+                  "{br:2}ERROR - CONTACT STEAK",
+                  "{C:chips}+#1#{} Chips for each remaining",
+                  "{C:clubs}#3#{} in {C:attention}deck",
+                  "{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips){}",
                 }
             },
             j_poke_numel = {

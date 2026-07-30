@@ -82,28 +82,6 @@ if _type == 'Joker' and G.GAME.modifiers.poke_apply_type then pokermon.apply_typ
 '''
 match_indent = true
 
-# Elite Stake Functionality
-[[patches]]
-[patches.pattern]
-target = "functions/common_events.lua"
-pattern = '''
-elseif not v.boss.showdown and (v.boss.min <= math.max(1, G.GAME.round_resets.ante) and ((math.max(1, G.GAME.round_resets.ante))%G.GAME.win_ante ~= 0 or G.GAME.round_resets.ante < 2)) then
-    eligible_bosses[k] = res and true or nil
-'''
-position = "before"
-payload = '''
-elseif G.GAME.modifiers.poke_elite4 then
-    if v.boss.showdown and G.GAME.round_resets.ante >= 2 and
-            (G.GAME.round_resets.ante % G.GAME.win_ante >= G.GAME.win_ante - 3 or G.GAME.round_resets.ante % G.GAME.win_ante == 0) then
-        eligible_bosses[k] = res and true
-    elseif not v.boss.showdown and v.boss.min <= math.max(1, G.GAME.round_resets.ante) and
-            (math.max(1, G.GAME.round_resets.ante) % G.GAME.win_ante ~= 0 and not
-            (math.max(1, G.GAME.round_resets.ante) % G.GAME.win_ante >= G.GAME.win_ante - 3) or G.GAME.round_resets.ante < 2) then
-        eligible_bosses[k] = res and true
-    end
-'''
-match_indent = true
-
 ## Foresight / Scry functionality
 # Scry Functionality 1
 [[patches]]
@@ -180,21 +158,6 @@ match_indent = true
 
 
 ### Game Modifiers
-
-
-# Pokemon only functionality
-[[patches]]
-[patches.pattern]
-target = "functions/common_events.lua"
-pattern = "if v.yes_pool_flag and not G.GAME.pool_flags[v.yes_pool_flag] then add = nil end"
-position = "after"
-payload = '''
-if v.set == 'Joker' and not v.stage and pokermon_config and pokermon_config.pokemon_only then add = nil end
-if v.set == 'Joker' and v.stage and not pokermon.get_gen_allowed(v) then add = nil end
-if v.set == 'Joker' and v.stage and pokermon_config and not pokermon_config.hazards_on and v.hazard_poke then add = nil end
-if add and v.set == 'Joker' and v.stage and pokermon.family_present(v) then add = nil end
-'''
-match_indent = true
 
 
 # Enhance bonus

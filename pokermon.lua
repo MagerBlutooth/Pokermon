@@ -6,7 +6,7 @@ if SMODS.current_mod then
 end
 
 pokermon = { energy = {}, ui = {}, sprites = {} }
-SMODS.current_mod.optional_features = { quantum_enhancements = true }
+SMODS.current_mod.optional_features = { quantum_enhancements = true, object_weights = true }
 
 --Undiscovered sprites, mostly for testing some localization things since the game crashes without them
 --This can probably have a better integration or just be removed altogether since everything is discovered anyways
@@ -347,6 +347,10 @@ function SMODS.current_mod.calculate(self, context)
       end
     end
   end
+
+  if context.modify_weights then
+    pokermon.modify_pool(context.pool)
+  end
 end
 
 local old_end = end_round
@@ -361,6 +365,14 @@ function end_round()
     end
   }))
 
+end
+
+local is_showdown_ante_ref = SMODS.is_showdown_ante
+function SMODS.is_showdown_ante(...)
+  return (G.GAME.modifiers.poke_elite4
+        and G.GAME.round_resets.ante > 0
+        and G.GAME.round_resets.ante % G.GAME.win_ante >= G.GAME.win_ante - 3)
+      or is_showdown_ante_ref(...)
 end
 
 function SMODS.current_mod.menu_cards()
