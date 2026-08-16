@@ -4,7 +4,6 @@ local klinklang = {
 	--pos = {x = 0, y = 40},
 	config = {extra = {money = 1, Xmult = 1, Xmult_mod = 0.4, Xmult2 = 1, drawn = 0, to_draw = 8}},
 	loc_vars = function(self, info_queue, card)
-		pokermon.type_tooltip(self, info_queue, card)
 		local abbr = card.ability.extra
 	  return {vars = {abbr.money, abbr.to_draw, math.max(0, abbr.to_draw - abbr.drawn), abbr.Xmult, abbr.Xmult_mod}}
 	end,
@@ -61,7 +60,6 @@ local elgyem={
   pos = {x = 13, y = 7},
   config = {extra = {top_planets = 5,  current_planet_count = 0}, evo_rqmt = 5},
   loc_vars = function(self, info_queue, card)
-    pokermon.type_tooltip(self, info_queue, card)
     if pokermon_config.detailed_tooltips then
       info_queue[#info_queue+1] = {key = 'e_negative_consumable', set = 'Edition', config = {extra = 1}}
     end
@@ -142,7 +140,6 @@ local beheeyem={
   pos = {x = 0, y = 8},
   config = {extra = {top_planets = 3, boosters_to_open = 9}},
   loc_vars = function(self, info_queue, center)
-    pokermon.type_tooltip(self, info_queue, center)
     if pokermon_config.detailed_tooltips then
       info_queue[#info_queue+1] = {key = 'e_negative_consumable', set = 'Edition', config = {extra = 1}}
     end
@@ -243,7 +240,6 @@ local litwick={
   pos = {x = 1, y = 8},
   config = {extra = {mult = 3, money_minus = 1, sell_goal = 7}, evo_rqmt = 13},
   loc_vars = function(self, info_queue, center)
-    pokermon.type_tooltip(self, info_queue, center)
     if pokermon_config.detailed_tooltips then
       info_queue[#info_queue+1] = {set = 'Other', key = 'poke_drain'}
     end
@@ -284,7 +280,6 @@ local lampent={
   pos = {x = 2, y = 8},
   config = {extra = {money_minus = 1}},
   loc_vars = function(self, info_queue, center)
-    pokermon.type_tooltip(self, info_queue, center)
     if pokermon_config.detailed_tooltips then
       info_queue[#info_queue+1] = {set = 'Other', key = 'poke_drain'}
     end
@@ -323,7 +318,6 @@ local chandelure={
   pos = {x = 3, y = 8},
   config = {extra = {Xmult_multi = 1.3}},
   loc_vars = function(self, info_queue, center)
-    pokermon.type_tooltip(self, info_queue, center)
     return {vars = {center.ability.extra.Xmult_multi, center.sell_cost}}
   end,
   rarity = "poke_safari",
@@ -353,12 +347,11 @@ local chandelure={
 local axew={
   name = "axew",
   pos = {x = 0, y = 0},
-  config = {extra = {targets = {"High Card", "Pair"}, nature_played = 0, active = true}, evo_rqmt = 7},
+  config = {extra = {targets = {{"High Card"}, {"Pair"}}, nature_played = 0, active = true}, evo_rqmt = 7},
   loc_vars = function(self, info_queue, center)
-    pokermon.type_tooltip(self, info_queue, center)
     info_queue[#info_queue+1] = {set = 'Other', key = 'nature', vars = {"poker hand"}}
-    return {vars = {center.ability.extra.targets[1] and localize(center.ability.extra.targets[1], 'poker_hands') or localize('poke_none'),
-                    center.ability.extra.targets[2] and localize(center.ability.extra.targets[2], 'poker_hands') or localize('poke_none'), 
+    return {vars = {center.ability.extra.targets[1][1] and localize(center.ability.extra.targets[1][1], 'poker_hands') or localize('poke_none'),
+                    center.ability.extra.targets[2][1] and localize(center.ability.extra.targets[2][1], 'poker_hands') or localize('poke_none'), 
                     math.max(0, self.config.evo_rqmt - center.ability.extra.nature_played), }}
   end,
   rarity = 2,
@@ -371,11 +364,11 @@ local axew={
   blueprint_compat = true,
   eternal_compat = true,
   calculate = function(self, card, context)
-    if context.joker_main and (context.scoring_name == card.ability.extra.targets[1] or context.scoring_name == card.ability.extra.targets[2]) and not context.blueprint then
+    if context.joker_main and (context.scoring_name == card.ability.extra.targets[1][1] or context.scoring_name == card.ability.extra.targets[2][1]) and not context.blueprint then
       card.ability.extra.nature_played = card.ability.extra.nature_played + 1
     end
     
-    if context.modify_hand and (context.scoring_name == card.ability.extra.targets[1] or context.scoring_name == card.ability.extra.targets[2]) and card.ability.extra.active then
+    if context.modify_hand and (context.scoring_name == card.ability.extra.targets[1][1] or context.scoring_name == card.ability.extra.targets[2][1]) and card.ability.extra.active then
       mult = mod_mult(mult * 2)
       hand_chips = mod_chips(hand_chips * 2)
       update_hand_text({ sound = 'gong'}, { chips = hand_chips, mult = mult })
@@ -402,20 +395,19 @@ local axew={
     
     pseudoshuffle(visible_hands, pseudoseed('axew'))
     
-    if visible_hands[1] then card.ability.extra.targets[1] = visible_hands[1].key end
-    if visible_hands[2] then card.ability.extra.targets[2] = visible_hands[2].key end
+    if visible_hands[1] then card.ability.extra.targets[1][1] = visible_hands[1].key end
+    if visible_hands[2] then card.ability.extra.targets[2][1] = visible_hands[2].key end
   end,
 }
 -- Fraxure 611
 local fraxure={
   name = "fraxure",
   pos = {x = 0, y = 0},
-  config = {extra = {targets = {"High Card", "Pair"}, nature_played = 0,}, evo_rqmt = 7},
+  config = {extra = {targets = {{"High Card"}, {"Pair"}}, nature_played = 0,}, evo_rqmt = 7},
   loc_vars = function(self, info_queue, center)
-    pokermon.type_tooltip(self, info_queue, center)
     info_queue[#info_queue+1] = {set = 'Other', key = 'nature', vars = {"poker hand"}}
-    return {vars = {center.ability.extra.targets[1] and localize(center.ability.extra.targets[1], 'poker_hands') or localize('poke_none'),
-                    center.ability.extra.targets[2] and localize(center.ability.extra.targets[2], 'poker_hands') or localize('poke_none'), 
+    return {vars = {center.ability.extra.targets[1][1] and localize(center.ability.extra.targets[1][1], 'poker_hands') or localize('poke_none'),
+                    center.ability.extra.targets[2][1] and localize(center.ability.extra.targets[2][1], 'poker_hands') or localize('poke_none'), 
                     math.max(0, self.config.evo_rqmt - center.ability.extra.nature_played), }}
   end,
   rarity = "poke_safari",
@@ -428,11 +420,11 @@ local fraxure={
   blueprint_compat = true,
   eternal_compat = true,
   calculate = function(self, card, context)
-    if context.joker_main and (context.scoring_name == card.ability.extra.targets[1] or context.scoring_name == card.ability.extra.targets[2]) and not context.blueprint then
+    if context.joker_main and (context.scoring_name == card.ability.extra.targets[1][1] or context.scoring_name == card.ability.extra.targets[2][1]) and not context.blueprint then
       card.ability.extra.nature_played = card.ability.extra.nature_played + 1
     end
     
-    if context.modify_hand and (context.scoring_name == card.ability.extra.targets[1] or context.scoring_name == card.ability.extra.targets[2]) then
+    if context.modify_hand and (context.scoring_name == card.ability.extra.targets[1][1] or context.scoring_name == card.ability.extra.targets[2][1]) then
       mult = mod_mult(mult * 2)
       hand_chips = mod_chips(hand_chips * 2)
       update_hand_text({ sound = 'gong' }, { chips = hand_chips, mult = mult })
@@ -455,20 +447,19 @@ local fraxure={
     
     pseudoshuffle(visible_hands, pseudoseed('fraxure'))
     
-    if visible_hands[1] then card.ability.extra.targets[1] = visible_hands[1].key end
-    if visible_hands[2] then card.ability.extra.targets[2] = visible_hands[2].key end
+    if visible_hands[1] then card.ability.extra.targets[1][1] = visible_hands[1].key end
+    if visible_hands[2] then card.ability.extra.targets[2][1] = visible_hands[2].key end
   end,
 }
 -- Haxorus 612
 local haxorus={
   name = "haxorus",
   pos = {x = 0, y = 0},
-  config = {extra = {targets = {"High Card", "Pair"}, rounds = 5}},
+  config = {extra = {targets = {{"High Card"}, {"Pair"}}, rounds = 5}},
   loc_vars = function(self, info_queue, center)
-    pokermon.type_tooltip(self, info_queue, center)
     info_queue[#info_queue+1] = {set = 'Other', key = 'nature', vars = {"poker hand"}}
-    return {vars = {center.ability.extra.targets[1] and localize(center.ability.extra.targets[1], 'poker_hands') or localize('poke_none'), 
-                    center.ability.extra.targets[2] and localize(center.ability.extra.targets[2], 'poker_hands') or localize('poke_none'), }}
+    return {vars = {center.ability.extra.targets[1][1] and localize(center.ability.extra.targets[1][1], 'poker_hands') or localize('poke_none'), 
+                    center.ability.extra.targets[2][1] and localize(center.ability.extra.targets[2][1], 'poker_hands') or localize('poke_none'), }}
   end,
   rarity = "poke_safari",
   cost = 10,
@@ -480,7 +471,7 @@ local haxorus={
   blueprint_compat = true,
   eternal_compat = true,
   calculate = function(self, card, context)
-    if context.modify_hand and (context.scoring_name == card.ability.extra.targets[1] or context.scoring_name == card.ability.extra.targets[2]) then
+    if context.modify_hand and (context.scoring_name == card.ability.extra.targets[1][1] or context.scoring_name == card.ability.extra.targets[2][1]) then
       mult = mod_mult(mult * 3)
       hand_chips = mod_chips(hand_chips * 3)
       update_hand_text({ sound = 'gong'}, { chips = hand_chips, mult = mult })
@@ -502,8 +493,8 @@ local haxorus={
     
     pseudoshuffle(visible_hands, pseudoseed('haxorus'))
     
-    if visible_hands[1] then card.ability.extra.targets[1] = visible_hands[1].key end
-    if visible_hands[2] then card.ability.extra.targets[2] = visible_hands[2].key end
+    if visible_hands[1] then card.ability.extra.targets[1][1] = visible_hands[1].key end
+    if visible_hands[2] then card.ability.extra.targets[2][1] = visible_hands[2].key end
   end,
 }
 -- Cubchoo 613
@@ -521,7 +512,6 @@ local golett={
   pos = {x = 2, y = 9},
   config = {extra = {hazard_level = 1, Xmult_multi = 1.2, rounds = 5, num = 1, dem = 4}},
   loc_vars = function(self, info_queue, center)
-    pokermon.type_tooltip(self, info_queue, center)
     -- just to shorten function
     local abbr = center.ability.extra
     info_queue[#info_queue+1] = {set = 'Other', key = 'hazard_level', vars = pokermon.get_hazard_level_vars()}
@@ -539,7 +529,6 @@ local golett={
   perishable_compat = true,
   blueprint_compat = true,
   eternal_compat = true,
-  hazard_poke = true,
   calculate = function(self, card, context)
     if context.individual and not context.end_of_round and context.cardarea == G.hand then
       if SMODS.has_enhancement(context.other_card, "m_poke_hazard") or SMODS.pseudorandom_probability(card, 'golett', card.ability.extra.num, card.ability.extra.dem, 'golett') then
@@ -573,7 +562,6 @@ local golurk={
   pos = {x = 3, y = 9},
   config = {extra = {hazard_level = 1, interval = 3, Xmult_multi = 1.3, num = 1, dem = 3}},
   loc_vars = function(self, info_queue, center)
-    pokermon.type_tooltip(self, info_queue, center)
     -- just to shorten function
     local abbr = center.ability.extra
     info_queue[#info_queue+1] = {set = 'Other', key = 'hazard_level', vars = pokermon.get_hazard_level_vars()}
@@ -588,7 +576,6 @@ local golurk={
   ptype = "Psychic",
   atlas = "Pokedex5",
   gen = 5,
-  hazard_poke = true,
   perishable_compat = true,
   blueprint_compat = true,
   eternal_compat = true,
@@ -624,7 +611,6 @@ local pawniard={
   pos = {x = 0, y = 0},
   config = {extra = {Xmult = 1,Xmult_mod = 0.25,}, evo_rqmt = 2},
   loc_vars = function(self, info_queue, center)
-    pokermon.type_tooltip(self, info_queue, center)
     return {vars = {center.ability.extra.Xmult, center.ability.extra.Xmult_mod, self.config.evo_rqmt}}
   end,
   rarity = 3,
@@ -669,7 +655,6 @@ local bisharp={
   pos = {x = 0, y = 0},
   config = {extra = {Xmult = 1,Xmult_mod = 0.25,kings_destroyed = 0}, evo_rqmt = 3},
   loc_vars = function(self, info_queue, center)
-    pokermon.type_tooltip(self, info_queue, center)
     return {vars = {center.ability.extra.Xmult, center.ability.extra.Xmult_mod, math.max(0, self.config.evo_rqmt - center.ability.extra.kings_destroyed)}}
   end,
   rarity = "poke_safari",

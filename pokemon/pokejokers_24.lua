@@ -13,7 +13,6 @@ local sylveon={
   pos = {x = 8, y = 3},
   config = { extra = {} },
   loc_vars = function(self, info_queue, card)
-    pokermon.type_tooltip(self, info_queue, card)
     
     if pokermon_config.detailed_tooltips then
       info_queue[#info_queue+1] = G.P_CENTERS.e_foil
@@ -30,19 +29,21 @@ local sylveon={
   gen = 6,
   blueprint_compat = true,
   calculate = function(self, card, context)
-    if context.first_hand_drawn then
+    if context.first_hand_drawn and #G.deck.cards > 0 then
       local card_to_copy = pseudorandom_element(G.deck.cards, pseudoseed('sylveon'))
-      local copy = SMODS.copy_card(card_to_copy, {area = G.hand})
-      copy.states.visible = nil
-      G.E_MANAGER:add_event(Event({
-          func = function()
-              local edition = poll_edition('aura', nil, true, true)
-              copy:set_edition(edition, true)
-              copy:start_materialize()
-              save_run()
-              return true
-          end
-      }))
+      if card_to_copy then
+        local copy = SMODS.copy_card(card_to_copy, {area = G.hand})
+        copy.states.visible = nil
+        G.E_MANAGER:add_event(Event({
+            func = function()
+                local edition = poll_edition('aura', nil, true, true)
+                copy:set_edition(edition, true)
+                copy:start_materialize()
+                save_run()
+                return true
+            end
+        }))
+      end
     end
   end,
   attributes = {"generation", "editions"},

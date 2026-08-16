@@ -4,7 +4,6 @@ local pansage = {
   pos = { x = 3, y = 1 },
   config = { extra = {} },
   loc_vars = function(self, info_queue, card)
-    pokermon.type_tooltip(self, info_queue, card)
     info_queue[#info_queue + 1] = { set = 'Joker', key = 'j_shortcut', config = {} }
     info_queue[#info_queue + 1] = G.P_CENTERS.c_poke_leafstone
     return { vars = {} }
@@ -29,7 +28,6 @@ local simisage = {
   pos = { x = 4, y = 1 },
   config = { extra = { num = 1, dem = 3 } },
   loc_vars = function(self, info_queue, card)
-    pokermon.type_tooltip(self, info_queue, card)
     info_queue[#info_queue + 1] = { set = 'Joker', key = 'j_shortcut', config = {} }
     info_queue[#info_queue + 1] = G.P_CENTERS.m_lucky
     local num, dem = SMODS.get_probability_vars(card, card.ability.extra.num, card.ability.extra.dem, 'simisage')
@@ -75,7 +73,6 @@ local pansear = {
   pos = { x = 5, y = 1 },
   config = { extra = {} },
   loc_vars = function(self, info_queue, card)
-    pokermon.type_tooltip(self, info_queue, card)
     info_queue[#info_queue + 1] = { set = 'Joker', key = 'j_four_fingers', config = {} }
     info_queue[#info_queue + 1] = G.P_CENTERS.c_poke_firestone
     return { vars = {} }
@@ -100,7 +97,6 @@ local simisear = {
   pos = { x = 6, y = 1 },
   config = { extra = { destroy = false} },
   loc_vars = function(self, info_queue, card)
-    pokermon.type_tooltip(self, info_queue, card)
     info_queue[#info_queue + 1] = { set = 'Joker', key = 'j_four_fingers', config = {} }
     info_queue[#info_queue + 1] = G.P_CENTERS.c_empress
     local active = G.GAME and G.GAME.current_round and G.GAME.current_round.hands_played == 0
@@ -149,7 +145,6 @@ local panpour = {
   pos = { x = 7, y = 1 },
   config = { extra = {} },
   loc_vars = function(self, info_queue, card)
-    pokermon.type_tooltip(self, info_queue, card)
     info_queue[#info_queue + 1] = { set = 'Joker', key = 'j_pareidolia', config = {} }
     info_queue[#info_queue + 1] = G.P_CENTERS.c_poke_waterstone
     return { vars = {} }
@@ -174,7 +169,6 @@ local simipour = {
   pos = { x = 8, y = 1 },
   config = { extra = {} },
   loc_vars = function(self, info_queue, card)
-    pokermon.type_tooltip(self, info_queue, card)
     info_queue[#info_queue + 1] = { set = 'Joker', key = 'j_pareidolia', config = {} }
     info_queue[#info_queue + 1] = G.P_CENTERS.m_bonus
     return { vars = {} }
@@ -217,7 +211,6 @@ local munna={
   pos = {x = 0, y = 0},
   config = {extra = {Xmult_multi = 1, Xmult_mod = 0.05, scry = 2}},
   loc_vars = function(self, info_queue, center)
-    pokermon.type_tooltip(self, info_queue, center)
     return {vars = {center.ability.extra.Xmult_multi, center.ability.extra.Xmult_mod, center.ability.extra.scry}}
   end,
   rarity = 3,
@@ -283,7 +276,6 @@ local musharna={
   pos = {x = 0, y = 0},
   config = {extra = {Xmult_multi = 1, scry = 2, scry_added = 0}},
   loc_vars = function(self, info_queue, center)
-    pokermon.type_tooltip(self, info_queue, center)
     return {vars = {center.ability.extra.Xmult_multi, center.ability.extra.scry,}}
   end,
   rarity = "poke_safari",
@@ -332,7 +324,6 @@ local roggenrola = {
   pos = {x = 2, y = 2},
   config = {extra = {hazard_level = 1, mult_mod = 5, hazard_triggered = 0}, evo_rqmt = 10},
   loc_vars = function(self, info_queue, card)
-    pokermon.type_tooltip(self, info_queue, card)
     -- just to shorten function
     local abbr = card.ability.extra
     info_queue[#info_queue+1] = {set = 'Other', key = 'hazard_level', vars = pokermon.get_hazard_level_vars()}
@@ -346,7 +337,6 @@ local roggenrola = {
   ptype = "Earth",
   atlas = "Pokedex5",
   gen = 5,
-  hazard_poke = true,
   blueprint_compat = true,
   calculate = function(self, card, context)
     if context.individual and not context.end_of_round and context.cardarea == G.hand and SMODS.has_no_rank(context.other_card) then
@@ -382,7 +372,6 @@ local boldore = {
   pos = {x = 3, y = 2},
   config = {extra = {hazard_level = 1, mult_mod = 10}},
   loc_vars = function(self, info_queue, card)
-    pokermon.type_tooltip(self, info_queue, card)
     -- just to shorten function
     local abbr = card.ability.extra
     info_queue[#info_queue+1] = {set = 'Other', key = 'hazard_level', vars = pokermon.get_hazard_level_vars()}
@@ -400,7 +389,6 @@ local boldore = {
   atlas = "Pokedex5",
   gen = 5,
   item_req = "linkcable",
-  hazard_poke = true,
   blueprint_compat = true,
   calculate = function(self, card, context)
     if context.individual and not context.end_of_round and context.cardarea == G.hand and SMODS.has_no_rank(context.other_card) then
@@ -433,7 +421,6 @@ local gigalith = {
   pos = {x = 4, y = 2},
   config = {extra = {hazard_level = 1, mult_mod = 7, retriggers = 1}},
   loc_vars = function(self, info_queue, card)
-    pokermon.type_tooltip(self, info_queue, card)
     -- just to shorten function
     local abbr = card.ability.extra
     info_queue[#info_queue+1] = {set = 'Other', key = 'hazard_level', vars = pokermon.get_hazard_level_vars()}
@@ -448,7 +435,6 @@ local gigalith = {
   atlas = "Pokedex5",
   gen = 5,
   blueprint_compat = true,
-  hazard_poke = true,
   calculate = function(self, card, context)
     if context.individual and not context.end_of_round and context.cardarea == G.hand and SMODS.has_no_rank(context.other_card) then
       if context.other_card.debuff then
@@ -488,7 +474,6 @@ local drilbur={
   pos = {x = 0, y = 0},
   config = {extra = {active = true, stones_destroyed = 0}, evo_rqmt = 4},
   loc_vars = function(self, info_queue, center)
-    pokermon.type_tooltip(self, info_queue, center)
     info_queue[#info_queue+1] = {set = 'Other', key = 'dril_treasure'}
     return {vars = {math.max(0, self.config.evo_rqmt - center.ability.extra.stones_destroyed)}}
   end,
@@ -529,7 +514,6 @@ local excadrill={
   pos = {x = 0, y = 0},
   config = {extra = {mult_mod = 2},},
   loc_vars = function(self, info_queue, center)
-    pokermon.type_tooltip(self, info_queue, center)
     info_queue[#info_queue+1] = {set = 'Other', key = 'exdril_treasure'}
     return {vars = {center.ability.extra.mult_mod, G.GAME.starting_deck_size,  
                     math.max(0, center.ability.extra.mult_mod * (G.playing_cards and (G.GAME.starting_deck_size - #G.playing_cards) or 0))}}
