@@ -2610,8 +2610,11 @@ return {
                     "{C:planet}Planet{} cards upgrade level of",
                     "hand an extra time",
                     "{br:2}ERROR - CONTACT STEAK",
-                    "{C:planet}Celestial Packs{} contain every",
-                    "{C:attention}available{} {C:planet}Planet{} card"
+                    "Creates the {C:planet}Planet{} card for",
+                    "your last played hand when",
+                    "opening a {C:planet}Celestial Pack",
+                    "{C:inactive}(Must have room){}",
+                    "{C:inactive}(Last hand: {C:attention}#1#{C:inactive})",
                 }
             },
             j_poke_mareep = {
@@ -2808,7 +2811,7 @@ return {
                 name = 'Umbreon',
                 text = {
                     "If {C:attention}first discard{} of",
-                    "round has only {C:attention}1{} card",
+                    "round has only {C:attention}1{} card,",
                     "destroy it and upgrade",
                     "level of {C:attention}#1#{}",
                     "{C:inactive,s:0.7}Hand changes after scoring{}"
@@ -3655,6 +3658,24 @@ return {
                 "{X:mult,C:white}X#1#{} Mult for each {C:poke_pink}Energized{}",
                 "Joker and each level {C:attention}#3#+{} hand",
                 "{C:inactive}(Currently {X:mult,C:white} X#2#{C:inactive} Mult)",
+              }
+            }, 
+            j_poke_surskit = {
+              name = "Surskit",
+              text = {
+                "Allows {C:attention}Straights{} to be made",
+                "with {C:attention}duplicate ranks",
+                "{C:inactive}(ex: {C:attention}10 9 9 8 7{C:inactive})",
+                "{C:inactive,s:0.8}(Evolves after playing {C:attention,s:0.8}#1#{C:inactive,s:0.8} Straights){}"
+              }
+            }, 
+            j_poke_masquerain = {
+              name = "Masquerain",
+              text = {
+                "{C:purple}+#1# Foresight",
+                "Allows {C:attention}Straights{} to be made",
+                "with {C:attention}duplicate ranks",
+                "{C:inactive}(ex: {C:attention}10 9 9 8 7{C:inactive})"
               }
             }, 
             j_poke_shroomish = {
@@ -7322,6 +7343,20 @@ return {
                 "the collection",
               }
             },
+            poke_energy_ui_tooltip = {
+              name = "Energy Count",
+              text = {
+                "Displays a Joker's {C:poke_pink}Energy{}",
+                "count under its description",
+              }
+            },
+            poke_sell_value_ui_tooltip = {
+              name = "Sell Value",
+              text = {
+                "Displays a Joker's {C:money}sell value{}",
+                "under its description",
+              }
+            },
             legacycontent_tooltip = {
               name = "Legacy Content",
               text = {
@@ -7663,6 +7698,8 @@ return {
             c_poke_delibird_delimma = "Delibird Dilemma",
             c_poke_safety_first = "Safety First",
             c_poke_mystery_dungeon = "Mystery Dungeon",
+            c_poke_imposter_syndrome = "Imposter Syndrome",
+            c_poke_mean_look = "Mean Look",
         },
         dictionary = {
             k_energy = "Energy",
@@ -7699,6 +7736,8 @@ return {
             poke_settings_previous_evo_stickers = "Previous Evo Stickers?",
             poke_settings_order_jokers = "Order Jokers by Dex No.?",
             poke_settings_pokemon_only_collection = "Only Pokermon Jokers in Collection?",
+            poke_settings_pokemon_energy_ui = "Display Energy Count on Jokers?",
+            poke_settings_pokemon_sell_value_ui = "Display Sell Value on Jokers?",
             poke_settings_jokers_only = "Jokers only?",
             poke_settings_no_evolutions = "No Evolutions?",
             poke_settings_pokeballs = "Allow Pokéballs?",
@@ -7967,15 +8006,20 @@ return {
         },
         v_dictionary = {
           poke_discards = "+#1# Discards",
+          poke_unforeseen_debuff = '#1# is Foreseen',
         },
         v_text = {
-           ch_c_poke_add_joker_slots = {"{C:attention}+1{} Joker Slot when Boss Blind defeated {C:inactive}(up to 5)"},
+           ch_c_poke_add_joker_slots = {"{C:attention}+1{} Joker Slot when {C:attention}Boss Blind{} defeated {C:inactive}(up to 5)"},
            ch_c_poke_nuzlocke = {"First shop of each Ante contains a {C:attention}Buffoon Pack"},
            ch_c_apply_randomizer = {"Pokemon Jokers evolve into random Pokemon Jokers"},
            ch_c_no_energy = {"Energy cards no longer appear in the {C:attention}shop"},
            ch_c_poke_mystery_dungeon = {"Start with an Eternal Joker"},
            ch_c_poke_mystery_dungeon2 = {"Applies a random Pokermon Deck effect"},
            ch_c_poke_mystery_dungeon3 = {"Resets at {C:attention}"..tostring(os.date("%I:%M %p", 0)).."{} every day"},
+           ch_c_poke_noncolorless = {"All {C:attention}non-{X:poke_colorless,C:white}Colorless{} Jokers are debuffed"},
+           ch_c_poke_add_ditto = {"Create a {C:attention}Ditto{} when {C:attention}Boss Blind{} defeated"},
+           ch_c_poke_foresight_plus = {"{C:purple}+7 Foresight"},
+           ch_c_poke_unforeseen_hand = {"Must play an {C:attention}Unforeseen{} hand"},
         },
     }
 }

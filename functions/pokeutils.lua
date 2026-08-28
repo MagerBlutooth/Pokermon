@@ -250,25 +250,23 @@ pokermon.vary_rank = function(card, decrease, seed, immediate)
   -- if it doesn't have a rank/suit within SMODS, don't do anything
   if not card.base or not card.base.value or not card.base.suit or not SMODS.Ranks[card.base.value] then return end
 
-  local next_rank = nil
-  if decrease == nil then
-    next_rank = pseudorandom_element(SMODS.Ranks, pseudoseed(seed or 'random_rank')).key
-  elseif decrease then
-    if #SMODS.Ranks[card.base.value].prev > 0 then
-      next_rank = pseudorandom_element(SMODS.Ranks[card.base.value].prev, pseudoseed(seed or 'decrease_rank'))
-    end
-  else
-    if #SMODS.Ranks[card.base.value].next > 0 then
-      next_rank = pseudorandom_element(SMODS.Ranks[card.base.value].next, pseudoseed(seed or 'increase_rank'))
+  local change_rank = function(_card, _decrease, _seed)
+    if _decrease == nil then
+      -- randomize rank
+      local new_rank = pseudorandom_element(SMODS.Ranks, pseudoseed(_seed or 'random_rank')).key
+      assert(SMODS.change_base(_card, nil, new_rank))
+    else
+      local amount = _decrease and -1 or 1
+      assert(SMODS.modify_rank(_card, amount))
     end
   end
 
   if immediate then
-    SMODS.change_base(card, nil, next_rank)
+    change_rank(card, decrease, seed)
   else
     G.E_MANAGER:add_event(Event({
       func = function()
-        SMODS.change_base(card, nil, next_rank)
+        change_rank(card, decrease, seed)
         return true
       end
     }))
@@ -476,14 +474,6 @@ pokermon.stabilize_chip_drain = function(card)
   card.ability.perma_bonus = math.max(card.ability.perma_bonus, -card.ability.bonus)
 end
 
-tdmsg = function(tablename)
-  if tablename and type(tablename) == "table" then
-    sendDebugMessage(inspect(tablename))
-  else
-    sendDebugMessage("Not a table, Function: tdmsg")
-  end
-end
-
 pokermon.add_hazards = function(ratio, flat, area)
   local hazards = {}
   flat = flat or 0
@@ -545,7 +535,7 @@ end
 
 pokermon.is_same_suit = function(hand)
   local ret = {}
-  local suits = SMODS.Suit.obj_buffer
+  local suits = SMODS.Suit.obj_buffer or {}
   for j = 1, #suits do
     local suit = suits[j]
     local flush_count = 0
@@ -653,9 +643,31 @@ end
 SMODS.PokerHandPart:take_ownership('_straight',
   {
     func = function(hand)
-      local min
+      local min = 5
+      local _5 = nil
+      local _4 = nil
+      local _3 = nil
+      local _2 = nil
+      
       if (next(SMODS.find_card('j_poke_aipom')) or (#hand == 3 and next(SMODS.find_card('j_poke_ambipom')))) then min = 3 end
-      return get_straight(hand, min or SMODS.four_fingers('straight'), SMODS.shortcut(), SMODS.wrap_around_straight())
+      if (next(SMODS.find_card('j_poke_surskit')) or next(SMODS.find_card('j_poke_masquerain'))) then
+          _5 = get_X_same(5,hand)
+          _4 = get_X_same(4,hand)
+          _3 = get_X_same(3,hand)
+          _2 = get_X_same(2,hand)
+          
+          min = min - #_2
+          
+          min = min - (#_3 * 2)
+          
+          min = min - (#_4 * 3)
+          
+          min = min - (#_5 * 4)
+          
+          min = math.max(2, min)
+      end
+      min = math.min(min, SMODS.four_fingers('straight'))
+      return get_straight(hand, min, SMODS.shortcut(), SMODS.wrap_around_straight())
     end
   },
   true
