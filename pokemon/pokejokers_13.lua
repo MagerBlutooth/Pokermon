@@ -404,7 +404,7 @@ local luvdisc={
   end,
   add_to_deck = function(self, card, from_debuff)
     if not from_debuff then
-      pokermon.create_held_item("c_poke_heartscale")
+      pokermon.create_consumeable("c_poke_heartscale")
     end
   end,
   attributes = {"holding", "passive", "applies"},
@@ -821,7 +821,7 @@ local jirachi_invis = {
       if other_joker then
         local energized = 0
         for k, v in ipairs(G.jokers.cards) do
-          if get_total_energy(v) > 0 then
+          if pokermon.energy.get_total_energy(v) > 0 then
             energized = energized + 1
           end
         end

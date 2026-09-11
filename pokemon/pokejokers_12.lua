@@ -173,7 +173,6 @@ local zangoose={
   pos = {x = 0, y = 0},
   config = {extra = {amount = 2}},
   loc_vars = function(self, info_queue, center)
-    type_tooltip(self, info_queue, center)
     return {vars = {center.ability.extra.amount}}
   end,
   rarity = 3,
@@ -215,7 +214,6 @@ local seviper={
   pos = {x = 0, y = 0},
   config = {extra = {req_size = 3, h_size = 1}},
   loc_vars = function(self, info_queue, center)
-    type_tooltip(self, info_queue, center)
     return {vars = {center.ability.extra.req_size, center.ability.extra.h_size}}
   end,
   rarity = 3,
@@ -1003,7 +1001,7 @@ local kecleon = {
       if pokermon.get_type(card) ~= other_type then
         self:set_type(card, other_type)
       end
-    elseif not is_type(card, 'Colorless') then
+    elseif not pokermon.is_type(card, 'Colorless') then
       self:set_type(card, 'Colorless')
     end
   end,
@@ -1042,7 +1040,7 @@ local shuppet={
         message_colour = G.C.MULT,
       })
     end
-    return scaling_evo(self, card, context, "j_poke_banette", card.ability.extra.mult, self.config.evo_rqmt)
+    return pokermon.scaling_evo(self, card, context, "j_poke_banette", card.ability.extra.mult, self.config.evo_rqmt)
   end,
   attributes = {"hand_type", "mult", "scaling", "on_sell"},
 }
