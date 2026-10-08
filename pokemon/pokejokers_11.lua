@@ -113,6 +113,61 @@ local sableye={
   attributes = {"xmult", "scaling", "reset", "deplete", "enhancements"},
 }
 -- Mawile 303
+local mawile={
+  name = "mawile",
+  pos = {x = 0, y = 0},
+  config = { extra = { copy = 1 } },
+  loc_vars = function(self, info_queue, card)
+    if pokermon_config.detailed_tooltips then
+      info_queue[#info_queue+1] = G.P_CENTERS.m_steel
+    end
+      return { vars = { card.ability.extra.copy } }
+  end,
+  rarity = 2,
+  cost = 6,
+  stage = "Basic",
+  ptype = "Metal",
+  atlas = "Pokedex3",
+  designer = "Gem",
+  gen = 3,
+  blueprint_compat = true,
+  calculate = function(self, card, context)
+    if context.first_hand_drawn and not context.blueprint then
+      local eval = function() return G.GAME.current_round.hands_played == 0 and not G.RESET_JIGGLES end
+      juice_card_until(card, eval, true)
+    end
+    if context.before and #context.full_hand == 1 and G.GAME.current_round.hands_played == 0 then
+        G.playing_card = (G.playing_card and G.playing_card + 1) or 1
+          local copy = copy_card(context.full_hand[1], nil, nil, G.playing_card)
+          copy:set_ability(G.P_CENTERS.m_steel, nil, true)
+          pokermon.add_card(copy, card)
+        return {
+            message = localize('k_copied_ex'),
+            colour = G.C.CHIPS,
+            func = function() -- This is for timing purposes, it runs after the message
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        SMODS.calculate_context({ playing_card_added = true, cards = { card_copied } })
+                        return true
+                    end
+                }))
+            end
+        }
+    end
+    
+    if context.final_scoring_step and #context.full_hand == 1 and G.GAME.current_round.hands_played == 0 and not context.blueprint then
+         context.full_hand[1].mawile_remove = card
+         card:juice_up()
+    end
+    
+    if context.destroy_card and context.destroy_card.mawile_remove == card and not context.blueprint then
+    context.destroy_card.to_be_removed_by = nil
+    return {
+      remove = true
+    }
+    end
+   end,
+}
 -- Aron 304
 local aron = {
   name = "aron",
@@ -362,7 +417,96 @@ local medicham={
   attributes = {"mult", "discard", "applies"},
 }
 -- Electrike 309
+local electrike={
+  name = "electrike",
+  pos = {x = 0, y = 0},
+  config = {extra = {money_mod = 3, scored = 0}, evo_rqmt = 15},
+  loc_vars = function(self, info_queue, center)
+    return {vars = {center.ability.extra.money_mod, math.max(0, self.config.evo_rqmt - center.ability.extra.scored)}}
+  end,
+  rarity = 1,
+  cost = 5,
+  gen = 3,
+  enhancement_gate = "m_gold",
+  stage = "Basic",
+  ptype = "Lightning",
+  atlas = "Pokedex3",
+  perishable_compat = true,
+  blueprint_compat = true,
+  eternal_compat = true,
+  calculate = function(self, card, context)
+    if context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, 'm_gold') then
+      
+      if not context.blueprint then card.ability.extra.scored = card.ability.extra.scored + 1 end
+      
+      G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + card.ability.extra.money_mod
+      return {
+          dollars = card.ability.extra.money_mod,
+          func = function() -- This is for timing purposes, it runs after the dollar manipulation
+              G.E_MANAGER:add_event(Event({
+                  func = function()
+                      G.GAME.dollar_buffer = 0
+                      return true
+                  end
+              }))
+          end
+      }
+    end
+    return pokermon.scaling_evo(self, card, context, "j_poke_manectric", card.ability.extra.scored, self.config.evo_rqmt)
+  end,
+}
 -- Manectric 310
+local manectric={
+  name = "manectric",
+  pos = {x = 0, y = 0},
+  config = {extra = {money_mod = 4}},
+  loc_vars = function(self, info_queue, center)
+    return {vars = {center.ability.extra.money_mod}}
+  end,
+  rarity = "poke_safari",
+  cost = 7,
+  gen = 3,
+  enhancement_gate = "m_gold",
+  stage = "One",
+  ptype = "Lightning",
+  atlas = "Pokedex3",
+  perishable_compat = true,
+  blueprint_compat = true,
+  eternal_compat = true,
+  calculate = function(self, card, context)
+    if context.before then
+      for i = 1, #context.scoring_hand do
+        if SMODS.has_enhancement(context.scoring_hand[i], 'm_gold') then
+          context.scoring_hand[i].poke_manectric_return = true
+          break
+        end
+      end
+    end
+    
+    if context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, 'm_gold') then      
+      G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + card.ability.extra.money_mod
+      return {
+          dollars = card.ability.extra.money_mod,
+          func = function() -- This is for timing purposes, it runs after the dollar manipulation
+              G.E_MANAGER:add_event(Event({
+                  func = function()
+                      G.GAME.dollar_buffer = 0
+                      return true
+                  end
+              }))
+          end
+      }
+    end
+    
+    if context.stay_flipped and context.from_area == G.play and context.other_card.poke_manectric_return then
+      context.other_card.poke_manectric_return = nil
+      
+      return {
+        modify = {to_area = G.hand}
+      }
+    end
+  end,
+}
 -- Plusle 311
 local plusle={
   name = "plusle",
@@ -1007,6 +1151,7 @@ local spinda={
 -- Flygon 330
 return {
   name = "Pokemon Jokers 301-330",
-  list = {delcatty, sableye, aron, lairon, aggron, meditite, medicham, plusle, minun, volbeat, illumise, roselia, carvanha, sharpedo, wailmer, wailord, numel, camerupt, mega_camerupt, 
-          torkoal, spinda},
+
+  list = {delcatty, sableye, mawile, aron, lairon, aggron, meditite, medicham, electrike, manectric, plusle, minun, volbeat, illumise, roselia, carvanha, sharpedo, 
+          wailmer, wailord, numel, camerupt, mega_camerupt, torkoal, spinda},
 }
