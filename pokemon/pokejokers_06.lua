@@ -901,10 +901,9 @@ local crobat={
       return {
         message = localize("poke_screech_ex"),
         colour = G.C.BLACK,
-        mult_mod = card.ability.extra.mult,
-        chip_mod = card.ability.extra.chips,
-        Xmult_mod = card.ability.extra.Xmult,
-        sound = card.ability.extra.Xmult > 1 and 'multhit2'
+        mult = card.ability.extra.mult,
+        chips = card.ability.extra.chips,
+        xmult = card.ability.extra.Xmult,
       }
     end
   end,
@@ -1175,6 +1174,7 @@ local togetic={
   perishable_compat = true,
   blueprint_compat = true,
   eternal_compat = true,
+  enhancement_gate = 'm_lucky',
   calculate = function(self, card, context)
     if context.individual and context.cardarea == G.play and context.other_card and context.other_card.ability.effect == "Lucky Card" then
       local score_chips = SMODS.pseudorandom_probability(card, 'togetic', card.ability.extra.num, card.ability.extra.chip_dem, 'togetic_chips')

@@ -332,7 +332,7 @@ pokermon.item_evo = function(self, card, context, forced_key)
       if pokermon.can_evolve(self, card, context, forced_key, true) then
         if not card.ability.extra.juiced then
           card.ability.extra.juiced = true
-          local eval = function(card) return card.ability.extra.evolve and not card.REMOVED and card.ability.extra.juiced end
+          local eval = function(card) return card.ability.extra.evolve and card.ability.extra.juiced and not next(SMODS.find_card("j_poke_everstone")) end
           juice_card_until(card, eval, true)
         end
       end
@@ -353,7 +353,7 @@ pokermon.scaling_evo = function (self, card, context, forced_key, current, targe
   if pokermon.can_evolve(self, card, context, forced_key, true) and current >= target then
     if not card.ability.extra.juiced then
       card.ability.extra.juiced = true
-      local eval = function(card) return current >= target and not card.REMOVED and card.ability.extra.juiced end
+      local eval = function(card) return current >= target and card.ability.extra.juiced and not next(SMODS.find_card("j_poke_everstone")) end
       juice_card_until(card, eval, true)
     end
   end
@@ -367,7 +367,7 @@ pokermon.type_evo  = function (self, card, context, forced_key, type_req)
   elseif pokermon.can_evolve(self, card, context, forced_key, true) and card.ability[type_req.."_sticker"] then
     if not card.ability.extra.juiced then
       card.ability.extra.juiced = true
-      local eval = function(card) return card.ability[type_req.."_sticker"] and not card.REMOVED and card.ability.extra.juiced end
+      local eval = function(card) return card.ability[type_req.."_sticker"] and card.ability.extra.juiced and not next(SMODS.find_card("j_poke_everstone")) end
       juice_card_until(card, eval, true)
     end
   end
@@ -637,8 +637,6 @@ pokermon.evo_item_use = function(self, card, area, copier)
         if evolve then
           v.ability.extra.evolve = evolve
           applied = true
-          local eval = function(v) return v.ability.extra.evolve end
-          juice_card_until(v, eval, true)
         end
       end
     end
@@ -663,8 +661,6 @@ pokermon.highlighted_evo_item = function(self, card, area, copier)
     
     if evolve then
       choice.ability.extra.evolve = evolve
-      local eval = function(choice) return choice.ability.extra.evolve end
-      juice_card_until(choice, eval, true)
     end
     return evolve
 end
@@ -1513,7 +1509,9 @@ pokermon.create_consumeable = function(args, in_event, message_card)
     }
     card.states.visible = nil
     if in_event then
-      G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+      if args.edition ~= 'e_negative' then
+        G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+      end
       G.E_MANAGER:add_event(Event({
         func = (function()
           SMODS.add_to_deck(card, args)

@@ -334,7 +334,7 @@ local magmortar={
       local eval = function() return G.GAME.current_round.discards_used == 0 and not G.RESET_JIGGLES end
       juice_card_until(card, eval, true)
     end
-    if context.pre_discard and not context.blueprint then
+    if context.pre_discard and not context.blueprint and not context.hook then
       SMODS.scale_card(card, {
         ref_value = 'Xmult',
         scalar_value = 'Xmult_mod'
@@ -657,7 +657,7 @@ local porygonz={
           trigger = 'immediate',
           delay = 0.0,
           func = (function()
-                  SMODS.add_card{set = 'poke_energy'}
+                  SMODS.add_card{set = 'poke_energy', key = energy_key}
                   G.GAME.consumeable_buffer = 0
               return true
           end)}))
