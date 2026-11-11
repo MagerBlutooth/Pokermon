@@ -340,8 +340,9 @@ return {
                 text = {
                     "{C:attention}Type Changer:{} {X:poke_metal,C:white}Metal{}",
                     "{br:2}ERROR - CONTACT STEAK",
-                    "Creates a {C:attention}Steel{} copy of",
-                    "{C:attention}1{} selected card",
+                    "Creates a copy of",
+                    "{C:attention}1{} selected card, then",
+                    "it becomes {C:attention}Steel"
                 },
             },
             c_poke_dragonscale = {
@@ -1334,8 +1335,9 @@ return {
                     "exactly {C:attention}1 face{} card",
                     "it becomes a {C:attention}Gold{} card",
                     "{br:2}ERROR - CONTACT STEAK",
-                    "Earn {C:money}$#1#{} when a",
-                    "card becomes {C:attention}Gold{}",
+                    "Earn {C:money}$#1#{} when a card",
+                    "becomes {C:attention}Gold{} or when",
+                    "a {C:attention}Gold{} card is copied"
                 } 
             },
             j_poke_mankey = {
@@ -4071,6 +4073,35 @@ return {
                 "Each played card with a",
                 "{C:attention}Nature rank{} becomes a random",
                 "{C:attention}Nature Enhancement{} when scored",
+              }
+            },
+            j_poke_trapinch = {
+              name = "Trapinch",
+              text = {
+                "If {C:attention}poker hand{} has {C:attention}#1#+",
+                "{C:attention}Desert{} cards, destroy a",
+                "random held {C:attention}non-Desert{} card",
+                "{C:inactive,s:0.8}(Evolves with a {C:poke_dragon,s:0.8}Dragon{C:inactive,s:0.8} sticker)"
+              }
+            },
+            j_poke_vibrava = {
+              name = "Vibrava",
+              text = {
+                "If {C:attention}poker hand{} has {C:attention}#1#+ Desert",
+                "cards, held cards give {C:chips}+#2#{}",
+                "Chips plus their total Chips",
+                "{C:inactive,s:0.8}(Evolves after scoring {C:attention,s:0.8}#3#{C:inactive,s:0.8} Desert cards)"
+              }
+            },
+            j_poke_flygon = {
+              name = "Flygon",
+              text = {
+                "If {C:attention}poker hand{} has {C:attention}#1#+ Desert",
+                "cards, held cards give {C:chips}+#2#{}",
+                "Chips plus their total Chips",
+                "{br:3}ERROR - CONTACT STEAK",
+                "Retrigger all {C:attention}Desert{} card",
+                "{C:attention}held in hand{} abilities",
               }
             },
             j_poke_cacnea = {
@@ -6995,6 +7026,13 @@ return {
                     "card remaining in deck",
                 }
             },
+            desert_card = {
+                name = "Desert Card",
+                text = {
+                    "A {C:attention}Stone{}, {C:attention}Steel{} or",
+                    "{C:diamonds}Diamond{} card",
+                }
+            },
             energize = {
                 name = "Energize",
                 text = {
@@ -8139,7 +8177,9 @@ return {
             poke_m_gold = "Gold",
             poke_m_lucky = "Lucky",
             poke_m_poke_seed = "Seed",
-
+            
+            poke_glass_ex = "Glass!",
+            
             poke_ludicolo_ex = "Ludicolo!",
             
         },
